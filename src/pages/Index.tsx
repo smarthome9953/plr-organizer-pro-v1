@@ -1,13 +1,41 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React from 'react';
+import Header from '@/components/Header';
+import FolderNavigation from '@/components/FolderNavigation';
+import ScannerControls from '@/components/ScannerControls';
+import ScanProgressBar from '@/components/ScanProgressBar';
+import ResultsDisplay from '@/components/ResultsDisplay';
+import Footer from '@/components/Footer';
+import { ThemeProvider } from '@/context/ThemeContext';
+import { FileExplorerProvider } from '@/context/FileExplorerContext';
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <ThemeProvider>
+      <FileExplorerProvider>
+        <div className="flex flex-col min-h-screen h-screen overflow-hidden">
+          <Header />
+          
+          <div className="flex-1 flex overflow-hidden">
+            {/* Left sidebar - Folder Navigation */}
+            <div className="w-64 hidden md:block overflow-y-auto">
+              <FolderNavigation />
+            </div>
+            
+            {/* Main content area */}
+            <div className="flex-1 flex flex-col overflow-hidden">
+              <ScannerControls />
+              <ScanProgressBar />
+              <div className="flex-1 overflow-auto">
+                <ResultsDisplay />
+              </div>
+            </div>
+          </div>
+          
+          <Footer />
+        </div>
+      </FileExplorerProvider>
+    </ThemeProvider>
   );
 };
 
