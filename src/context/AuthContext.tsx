@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           toast("Signed in", {
             description: "You have successfully logged in",
           });
-          navigate('/');
+          navigate('/dashboard');
         } else if (event === 'SIGNED_OUT') {
           toast("Signed out", {
             description: "You have been logged out",
@@ -60,7 +60,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error: any) {
       toast("Sign in failed", {
         description: error.message || "An error occurred during sign in",
-        variant: "destructive",
       });
       throw error;
     }
@@ -77,7 +76,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error: any) {
       toast("Sign up failed", {
         description: error.message || "An error occurred during sign up",
-        variant: "destructive",
       });
       throw error;
     }
@@ -90,7 +88,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error: any) {
       toast("Sign out failed", {
         description: error.message || "An error occurred during sign out",
-        variant: "destructive",
       });
       throw error;
     }

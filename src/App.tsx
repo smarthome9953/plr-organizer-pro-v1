@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
+import Landing from "./pages/Landing";
 import { AuthProvider } from "./context/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
@@ -20,9 +21,10 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <Routes>
+            <Route path="/" element={<Landing />} />
             <Route path="/auth" element={<Auth />} />
             <Route element={<ProtectedRoute />}>
-              <Route path="/" element={<Index />} />
+              <Route path="/dashboard" element={<Index />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
