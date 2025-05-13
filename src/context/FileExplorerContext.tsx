@@ -1,5 +1,4 @@
-
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 // Types for our file system
 export interface FileSystemNode {
@@ -18,6 +17,19 @@ export interface FileSystemNode {
   confidence?: number;
 }
 
+export interface ScanOptions {
+  includeSubfolders: boolean;
+  scanDepth: string;
+  fileTypes: string[];
+  scanSpeed: 'quick' | 'deep';
+}
+
+export interface ScanProfile {
+  id: string;
+  name: string;
+  options: ScanOptions;
+}
+
 interface FileExplorerContextType {
   fileSystem: FileSystemNode[];
   selectedFolders: FileSystemNode[];
@@ -30,20 +42,14 @@ interface FileExplorerContextType {
   scanResults: FileSystemNode[];
   startScan: () => void;
   cancelScan: () => void;
-  scanOptions: {
-    includeSubfolders: boolean;
-    scanDepth: string;
-    fileTypes: string[];
-    scanSpeed: 'quick' | 'deep';
-  };
+  scanOptions: ScanOptions;
   updateScanOptions: (options: Partial<ScanOptions>) => void;
-}
-
-interface ScanOptions {
-  includeSubfolders: boolean;
-  scanDepth: string;
-  fileTypes: string[];
-  scanSpeed: 'quick' | 'deep';
+  savedScanProfiles: ScanProfile[];
+  saveScanProfile: (name: string) => void;
+  loadScanProfile: (profileId: string) => void;
+  deleteScanProfile: (profileId: string) => void;
+  theme: 'light' | 'dark';
+  toggleTheme: () => void;
 }
 
 // Mock data for initial filesystem
@@ -189,6 +195,17 @@ const mockPlrFiles: FileSystemNode[] = [
   }
 ];
 
+// Load saved profiles from localStorage
+const loadSavedProfiles = (): ScanProfile[] => {
+  try {
+    const savedProfiles = localStorage.getItem('plrScanProfiles');
+    return savedProfiles ? JSON.parse(savedProfiles) : [];
+  } catch (error) {
+    console.error('Error loading saved profiles:', error);
+    return [];
+  }
+};
+
 const FileExplorerContext = createContext<FileExplorerContextType | undefined>(undefined);
 
 export const FileExplorerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -198,12 +215,28 @@ export const FileExplorerProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const [scanProgress, setScanProgress] = useState<number>(0);
   const [currentScannedFolder, setCurrentScannedFolder] = useState<string>('');
   const [scanResults, setScanResults] = useState<FileSystemNode[]>([]);
+  const [savedScanProfiles, setSavedScanProfiles] = useState<ScanProfile[]>(loadSavedProfiles());
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    const savedTheme = localStorage.getItem('plrOrganizerTheme');
+    return savedTheme === 'dark' ? 'dark' : 'light';
+  });
   const [scanOptions, setScanOptions] = useState<ScanOptions>({
     includeSubfolders: true,
     scanDepth: 'unlimited',
-    fileTypes: ['pdf', 'zip', 'rar', 'docx', 'jpg', 'png'],
+    fileTypes: ['pdf', 'zip', 'rar', 'docx', 'jpg', 'png', 'html', 'txt'],
     scanSpeed: 'quick'
   });
+
+  // Save profiles to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('plrScanProfiles', JSON.stringify(savedScanProfiles));
+  }, [savedScanProfiles]);
+
+  // Save theme preference to localStorage
+  useEffect(() => {
+    localStorage.setItem('plrOrganizerTheme', theme);
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+  }, [theme]);
 
   // Update file system node at any depth
   const updateNodeInTree = (nodes: FileSystemNode[], nodeId: string, updater: (node: FileSystemNode) => FileSystemNode): FileSystemNode[] => {
@@ -262,6 +295,14 @@ export const FileExplorerProvider: React.FC<{ children: React.ReactNode }> = ({ 
     setScanProgress(0);
     setCurrentScannedFolder(selectedFolders[0].path);
 
+    // Filter results based on file types
+    const filteredMockPlrFiles = scanOptions.scanSpeed === 'deep' 
+      ? mockPlrFiles 
+      : mockPlrFiles.filter(file => {
+          // For quick scan we only return high confidence results
+          return file.confidence && file.confidence > 0.9;
+        });
+
     // Simulate scanning process
     let progress = 0;
     const interval = setInterval(() => {
@@ -271,7 +312,7 @@ export const FileExplorerProvider: React.FC<{ children: React.ReactNode }> = ({ 
       if (progress >= 100) {
         clearInterval(interval);
         setIsScanning(false);
-        setScanResults(mockPlrFiles);
+        setScanResults(filteredMockPlrFiles);
       } else if (progress > 50 && progress < 75) {
         setCurrentScannedFolder(selectedFolders.length > 1 ? selectedFolders[1].path : selectedFolders[0].path);
       }
@@ -293,6 +334,35 @@ export const FileExplorerProvider: React.FC<{ children: React.ReactNode }> = ({ 
     }));
   };
 
+  // Save scan profile
+  const saveScanProfile = (name: string) => {
+    const newProfile: ScanProfile = {
+      id: `profile-${Date.now()}`,
+      name,
+      options: {...scanOptions}
+    };
+    
+    setSavedScanProfiles(prev => [...prev, newProfile]);
+  };
+
+  // Load scan profile
+  const loadScanProfile = (profileId: string) => {
+    const profile = savedScanProfiles.find(p => p.id === profileId);
+    if (profile) {
+      setScanOptions(profile.options);
+    }
+  };
+
+  // Delete scan profile
+  const deleteScanProfile = (profileId: string) => {
+    setSavedScanProfiles(prev => prev.filter(p => p.id !== profileId));
+  };
+
+  // Toggle theme
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  };
+
   return (
     <FileExplorerContext.Provider
       value={{
@@ -308,7 +378,13 @@ export const FileExplorerProvider: React.FC<{ children: React.ReactNode }> = ({ 
         startScan,
         cancelScan,
         scanOptions,
-        updateScanOptions
+        updateScanOptions,
+        savedScanProfiles,
+        saveScanProfile,
+        loadScanProfile,
+        deleteScanProfile,
+        theme,
+        toggleTheme
       }}
     >
       {children}

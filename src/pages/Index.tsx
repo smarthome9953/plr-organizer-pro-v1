@@ -8,6 +8,7 @@ import ResultsDisplay from '@/components/ResultsDisplay';
 import Footer from '@/components/Footer';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { FileExplorerProvider } from '@/context/FileExplorerContext';
+import { ThemeToggle } from '@/components/Header';
 
 const Index = () => {
   return (
@@ -15,6 +16,9 @@ const Index = () => {
       <FileExplorerProvider>
         <div className="flex flex-col min-h-screen h-screen overflow-hidden">
           <Header />
+          <div className="absolute right-4 top-4 z-10">
+            <ThemeToggle />
+          </div>
           
           <div className="flex-1 flex overflow-hidden">
             {/* Left sidebar - Folder Navigation */}
