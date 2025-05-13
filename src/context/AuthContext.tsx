@@ -30,14 +30,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(session?.user ?? null);
         
         if (event === 'SIGNED_IN') {
-          toast({
-            title: "Signed in",
+          toast("Signed in", {
             description: "You have successfully logged in",
           });
           navigate('/');
         } else if (event === 'SIGNED_OUT') {
-          toast({
-            title: "Signed out",
+          toast("Signed out", {
             description: "You have been logged out",
           });
           navigate('/auth');
@@ -60,8 +58,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
     } catch (error: any) {
-      toast({
-        title: "Sign in failed",
+      toast("Sign in failed", {
         description: error.message || "An error occurred during sign in",
         variant: "destructive",
       });
@@ -74,13 +71,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const { error } = await supabase.auth.signUp({ email, password });
       if (error) throw error;
       
-      toast({
-        title: "Sign up successful",
+      toast("Sign up successful", {
         description: "Please check your email for verification",
       });
     } catch (error: any) {
-      toast({
-        title: "Sign up failed",
+      toast("Sign up failed", {
         description: error.message || "An error occurred during sign up",
         variant: "destructive",
       });
@@ -93,8 +88,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
     } catch (error: any) {
-      toast({
-        title: "Sign out failed",
+      toast("Sign out failed", {
         description: error.message || "An error occurred during sign out",
         variant: "destructive",
       });
