@@ -25,10 +25,8 @@ export default function BlogHeader() {
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <Link to="/blog" legacyBehavior passHref>
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                      Blog Home
-                    </NavigationMenuLink>
+                  <Link to="/blog" className={navigationMenuTriggerStyle()}>
+                    Blog Home
                   </Link>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
@@ -36,41 +34,31 @@ export default function BlogHeader() {
                   <NavigationMenuContent>
                     <ul className="grid gap-3 p-4 w-[400px] md:w-[500px] lg:w-[600px] grid-cols-2">
                       <li>
-                        <Link to="/blog/organization" legacyBehavior passHref>
-                          <NavigationMenuLink className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
-                            PLR Organization Strategies
-                          </NavigationMenuLink>
+                        <Link to="/blog/organization" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
+                          PLR Organization Strategies
                         </Link>
                       </li>
                       <li>
-                        <Link to="/blog/rights-licensing" legacyBehavior passHref>
-                          <NavigationMenuLink className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
-                            PLR Rights & Licensing
-                          </NavigationMenuLink>
+                        <Link to="/blog/rights-licensing" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
+                          PLR Rights & Licensing
                         </Link>
                       </li>
                       <li>
-                        <Link to="/blog/content-enhancement" legacyBehavior passHref>
-                          <NavigationMenuLink className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
-                            PLR Content Enhancement
-                          </NavigationMenuLink>
+                        <Link to="/blog/content-enhancement" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
+                          PLR Content Enhancement
                         </Link>
                       </li>
                       <li>
-                        <Link to="/blog/monetization" legacyBehavior passHref>
-                          <NavigationMenuLink className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
-                            PLR Monetization Strategies
-                          </NavigationMenuLink>
+                        <Link to="/blog/monetization" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
+                          PLR Monetization Strategies
                         </Link>
                       </li>
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <Link to="/dashboard" legacyBehavior passHref>
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                      Dashboard
-                    </NavigationMenuLink>
+                  <Link to="/dashboard" className={navigationMenuTriggerStyle()}>
+                    Dashboard
                   </Link>
                 </NavigationMenuItem>
               </NavigationMenuList>

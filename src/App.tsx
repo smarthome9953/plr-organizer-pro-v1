@@ -14,6 +14,7 @@ import BlogPost from "./pages/BlogPost";
 import { AuthProvider } from "./context/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { ThemeProvider } from "./context/ThemeContext";
+import { FileExplorerProvider } from "./context/FileExplorerContext";
 
 const queryClient = new QueryClient();
 
@@ -21,23 +22,25 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <ThemeProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <AuthProvider>
-            <Routes>
-              <Route path="/" element={<Landing />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/blog/:categorySlug" element={<BlogCategory />} />
-              <Route path="/blog/:categorySlug/:postSlug" element={<BlogPost />} />
-              <Route element={<ProtectedRoute />}>
-                <Route path="/dashboard" element={<Index />} />
-              </Route>
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </AuthProvider>
-        </BrowserRouter>
+        <FileExplorerProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <AuthProvider>
+              <Routes>
+                <Route path="/" element={<Landing />} />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:categorySlug" element={<BlogCategory />} />
+                <Route path="/blog/:categorySlug/:postSlug" element={<BlogPost />} />
+                <Route element={<ProtectedRoute />}>
+                  <Route path="/dashboard" element={<Index />} />
+                </Route>
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </AuthProvider>
+          </BrowserRouter>
+        </FileExplorerProvider>
       </ThemeProvider>
     </TooltipProvider>
   </QueryClientProvider>
