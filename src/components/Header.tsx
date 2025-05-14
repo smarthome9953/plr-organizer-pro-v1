@@ -1,14 +1,21 @@
 
-// This file is read-only and cannot be modified directly.
-// Instead, let's implement the dark mode toggle functionality in a new component
-
 import React from 'react';
-import { useFileExplorer } from '@/context/FileExplorerContext';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { useTheme } from '@/context/ThemeContext';
 import { Moon, Sun } from 'lucide-react';
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle
+} from "@/components/ui/navigation-menu";
 
 export function ThemeToggle() {
-  const { theme, toggleTheme } = useFileExplorer();
+  const { theme, toggleTheme } = useTheme();
   
   return (
     <Button 
@@ -24,5 +31,139 @@ export function ThemeToggle() {
         <Moon className="h-5 w-5" />
       )}
     </Button>
+  );
+}
+
+export default function Header() {
+  return (
+    <header className="border-b">
+      <div className="container mx-auto px-4 py-2">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center">
+            <Link to="/" className="flex items-center">
+              <img 
+                src="/lovable-uploads/34f6c58f-7ead-48ed-8bf9-bed0734b95c5.png" 
+                alt="PLR Organizer Pro Logo" 
+                className="h-10 mr-2" 
+              />
+            </Link>
+          </div>
+          
+          <div className="flex items-center space-x-4">
+            <NavigationMenu>
+              <NavigationMenuList>
+                <NavigationMenuItem>
+                  <Link to="/" className={navigationMenuTriggerStyle()}>
+                    Home
+                  </Link>
+                </NavigationMenuItem>
+                
+                <NavigationMenuItem>
+                  <Link to="/scan" className={navigationMenuTriggerStyle()}>
+                    Scan & Organize
+                  </Link>
+                </NavigationMenuItem>
+                
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger>Tools</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                      <li className="row-span-3">
+                        <NavigationMenuLink asChild>
+                          <Link to="/tools" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                            <div className="text-sm font-medium leading-none">All Tools</div>
+                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                              Explore all PLR management tools in one place
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                      <li>
+                        <Link to="/tools/analyzer" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
+                          Content Analyzer
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/tools/editor" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
+                          PLR Editor
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/tools/converter" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
+                          Format Converter
+                        </Link>
+                      </li>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+                
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger>Resources</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid gap-3 p-4 w-[400px] md:w-[500px] md:grid-cols-2">
+                      <li>
+                        <Link to="/resources/guides" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
+                          PLR Guides
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/resources/templates" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
+                          Templates
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/resources/faq" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
+                          FAQ
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/resources/support" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
+                          Support Center
+                        </Link>
+                      </li>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+                
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger>Blog</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid gap-3 p-4 w-[400px] md:w-[500px] md:grid-cols-2">
+                      <li>
+                        <Link to="/blog/organization" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
+                          PLR Organization Strategies
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/blog/rights-licensing" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
+                          PLR Rights & Licensing
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/blog/content-enhancement" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
+                          PLR Content Enhancement
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/blog/monetization" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
+                          PLR Monetization Strategies
+                        </Link>
+                      </li>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
+            
+            <div className="flex items-center space-x-4">
+              <ThemeToggle />
+              <Link to="/auth">
+                <Button variant="default">Sign In</Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
   );
 }

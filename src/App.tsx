@@ -11,6 +11,9 @@ import Landing from "./pages/Landing";
 import Blog from "./pages/Blog";
 import BlogCategory from "./pages/BlogCategory";
 import BlogPost from "./pages/BlogPost";
+import Tools from "./pages/Tools";
+import Resources from "./pages/Resources";
+import Scan from "./pages/Scan";
 import { AuthProvider } from "./context/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { ThemeProvider } from "./context/ThemeContext";
@@ -33,6 +36,9 @@ const App = () => (
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:categorySlug" element={<BlogCategory />} />
                 <Route path="/blog/:categorySlug/:postSlug" element={<BlogPost />} />
+                <Route path="/tools" element={<Tools />} />
+                <Route path="/resources/*" element={<Resources />} />
+                <Route path="/scan" element={<Scan />} />
                 <Route element={<ProtectedRoute />}>
                   <Route path="/dashboard" element={<Index />} />
                 </Route>
