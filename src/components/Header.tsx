@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -44,30 +43,30 @@ export default function Header() {
               <img 
                 src="/lovable-uploads/34f6c58f-7ead-48ed-8bf9-bed0734b95c5.png" 
                 alt="PLR Organizer Pro Logo" 
-                className="h-12.5 mr-2" /* Increased logo size by 25% from h-10 to h-12.5 */
+                className="h-11 mr-2" /* Adjusted logo size from h-12.5 to h-11 */
               />
             </Link>
           </div>
           
-          <div className="flex-1 flex justify-center items-center"> {/* Added flex-1 and justify-center to center the menu */}
+          <div className="flex-1 flex justify-center items-center"> 
             <NavigationMenu>
-              <NavigationMenuList className="text-lg"> {/* Increased font size from base to text-lg */}
+              <NavigationMenuList className="text-lg"> 
                 <NavigationMenuItem>
-                  <Link to="/" className={`${navigationMenuTriggerStyle()} text-lg`}> {/* Added text-lg class */}
+                  <Link to="/" className={`${navigationMenuTriggerStyle()} text-lg`}>
                     Home
                   </Link>
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
-                  <Link to="/scan" className={`${navigationMenuTriggerStyle()} text-lg`}> {/* Added text-lg class */}
+                  <Link to="/scan" className={`${navigationMenuTriggerStyle()} text-lg`}>
                     Scan & Organize
                   </Link>
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-lg">Tools</NavigationMenuTrigger> {/* Added text-lg class */}
+                  <NavigationMenuTrigger className="text-lg">Tools</NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] text-base"> {/* Keep text-base for dropdown */}
+                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] text-base">
                       <li className="row-span-3">
                         <NavigationMenuLink asChild>
                           <Link to="/tools" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
@@ -98,9 +97,9 @@ export default function Header() {
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-lg">Resources</NavigationMenuTrigger> {/* Added text-lg class */}
+                  <NavigationMenuTrigger className="text-lg">Resources</NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <ul className="grid gap-3 p-4 w-[400px] md:w-[500px] md:grid-cols-2 text-base"> {/* Keep text-base for dropdown */}
+                    <ul className="grid gap-3 p-4 w-[400px] md:w-[500px] md:grid-cols-2 text-base">
                       <li>
                         <Link to="/resources/guides" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
                           PLR Guides
@@ -126,9 +125,9 @@ export default function Header() {
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-lg">Blog</NavigationMenuTrigger> {/* Added text-lg class */}
+                  <NavigationMenuTrigger className="text-lg">Blog</NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <ul className="grid gap-3 p-4 w-[400px] md:w-[500px] md:grid-cols-2 text-base"> {/* Keep text-base for dropdown */}
+                    <ul className="grid gap-3 p-4 w-[400px] md:w-[500px] md:grid-cols-2 text-base">
                       <li>
                         <Link to="/blog/organization" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
                           PLR Organization Strategies
