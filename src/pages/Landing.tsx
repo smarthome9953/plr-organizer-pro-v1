@@ -37,18 +37,6 @@ const Landing = () => {
     <div className="flex flex-col min-h-screen" itemScope itemType="https://schema.org/WebPage">
       {/* Header */}
       <Header showAuthButtons={true} />
-      
-      {/* Breadcrumb for SEO */}
-      <nav aria-label="Breadcrumb" className="container px-4 py-2">
-        <ol className="flex text-sm" itemScope itemType="https://schema.org/BreadcrumbList">
-          <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-            <Link to="/" className="text-primary" itemProp="item">
-              <span itemProp="name">Home</span>
-            </Link>
-            <meta itemProp="position" content="1" />
-          </li>
-        </ol>
-      </nav>
 
       {/* Hero Section */}
       <HeroSection />
