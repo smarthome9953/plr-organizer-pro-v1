@@ -113,7 +113,7 @@ const Auth = () => {
       <div className="w-full md:w-1/2 bg-gradient-to-br from-purple-600 to-indigo-800 flex justify-center items-center p-8">
         <Card className="w-full max-w-md bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm shadow-xl">
           <div className="flex justify-center my-6">
-            <Logo size="lg" />
+            <Logo size="lg" showText={false} />
           </div>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-4">
