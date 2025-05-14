@@ -3,12 +3,12 @@
 // Instead, let's implement the dark mode toggle functionality in a new component
 
 import React from 'react';
-import { useTheme } from '@/context/ThemeContext';
+import { useFileExplorer } from '@/context/FileExplorerContext';
 import { Button } from '@/components/ui/button';
 import { Moon, Sun } from 'lucide-react';
 
 export function ThemeToggle() {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme } = useFileExplorer();
   
   return (
     <Button 
