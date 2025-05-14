@@ -48,7 +48,7 @@ export default function Header({ showAuthButtons }: HeaderProps) {
               <img 
                 src="/lovable-uploads/34f6c58f-7ead-48ed-8bf9-bed0734b95c5.png" 
                 alt="PLR Organizer Pro - Private Label Rights Content Management Software" 
-                className="h-8 mr-2" 
+                className="h-12 mr-3" 
               />
             </Link>
           </div>
