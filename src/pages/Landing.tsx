@@ -17,7 +17,6 @@ import UseCases from '@/components/landing/UseCases';
 import PricingSection from '@/components/landing/PricingSection';
 import FaqSection from '@/components/landing/FaqSection';
 import FinalCta from '@/components/landing/FinalCta';
-import PopularResources from '@/components/landing/PopularResources';
 import ExitIntentCta from '@/components/landing/ExitIntentCta';
 import QuickNavigation from '@/components/landing/QuickNavigation';
 
@@ -95,9 +94,6 @@ const Landing = () => {
 
       {/* Final CTA Section */}
       <FinalCta />
-
-      {/* Popular Resources Section */}
-      <PopularResources />
 
       {/* Footer */}
       <Footer />
