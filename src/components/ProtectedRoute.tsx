@@ -6,6 +6,7 @@ export const ProtectedRoute = () => {
   const { user, loading } = useAuth();
   const location = useLocation();
   
+  // Don't render anything until authentication state is checked
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -14,5 +15,6 @@ export const ProtectedRoute = () => {
     );
   }
   
+  // Only after loading is complete, decide whether to show the protected content or navigate away
   return user ? <Outlet /> : <Navigate to="/auth" state={{ from: location }} replace />;
 };

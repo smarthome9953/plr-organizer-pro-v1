@@ -20,6 +20,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [initialized, setInitialized] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -30,22 +31,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setSession(session);
         setUser(session?.user ?? null);
         
-        // Only show notifications for intentional sign-in/sign-out events, not initial session checks
-        if (event === 'SIGNED_IN' && !loading) {
-          toast("Signed in", {
-            description: "You have successfully logged in",
-          });
-          // Only redirect if not already on dashboard
-          if (location.pathname === '/auth') {
-            navigate('/dashboard');
-          }
-        } else if (event === 'SIGNED_OUT' && !loading) {
-          toast("Signed out", {
-            description: "You have been logged out",
-          });
-          // Only redirect if on a protected route
-          if (location.pathname.startsWith('/dashboard')) {
-            navigate('/auth');
+        // Only show notifications and redirect for intentional sign-in/sign-out events
+        // And only after initial loading is complete
+        if (initialized) {
+          if (event === 'SIGNED_IN') {
+            toast("Signed in", {
+              description: "You have successfully logged in",
+            });
+            // Only redirect if not already on dashboard
+            if (location.pathname === '/auth') {
+              navigate('/dashboard');
+            }
+          } else if (event === 'SIGNED_OUT') {
+            toast("Signed out", {
+              description: "You have been logged out",
+            });
+            // Only redirect if on a protected route
+            if (location.pathname.startsWith('/dashboard')) {
+              navigate('/auth');
+            }
           }
         }
       }
@@ -56,10 +60,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
+      setInitialized(true);
     });
 
     return () => subscription.unsubscribe();
-  }, [navigate, location.pathname, loading]);
+  }, [navigate, location.pathname, initialized]);
 
   const signIn = async (email: string, password: string) => {
     try {
