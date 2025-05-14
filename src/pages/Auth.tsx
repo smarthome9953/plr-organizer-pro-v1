@@ -1,11 +1,11 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -21,8 +21,9 @@ type FormValues = z.infer<typeof formSchema>;
 
 const Auth = () => {
   const [activeTab, setActiveTab] = useState("login");
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<FormValues>({
@@ -32,16 +33,21 @@ const Auth = () => {
       password: "",
     },
   });
+  
+  // Redirect if user is already logged in
+  useEffect(() => {
+    if (user) {
+      navigate('/dashboard');
+    }
+  }, [user, navigate]);
 
   const onSubmit = async (values: FormValues) => {
     setIsLoading(true);
     try {
       if (activeTab === "login") {
         await signIn(values.email, values.password);
-        navigate('/');
       } else {
         await signUp(values.email, values.password);
-        // We don't navigate here because the user needs to verify their email
       }
     } catch (error) {
       console.error("Auth error:", error);

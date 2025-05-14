@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from "@/components/ui/sonner";
 
 interface AuthContextProps {
@@ -21,6 +21,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     // Set up auth state listener FIRST
@@ -29,16 +30,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setSession(session);
         setUser(session?.user ?? null);
         
-        if (event === 'SIGNED_IN') {
+        // Only show notifications for intentional sign-in/sign-out events, not initial session checks
+        if (event === 'SIGNED_IN' && !loading) {
           toast("Signed in", {
             description: "You have successfully logged in",
           });
-          navigate('/dashboard');
-        } else if (event === 'SIGNED_OUT') {
+          // Only redirect if not already on dashboard
+          if (location.pathname === '/auth') {
+            navigate('/dashboard');
+          }
+        } else if (event === 'SIGNED_OUT' && !loading) {
           toast("Signed out", {
             description: "You have been logged out",
           });
-          navigate('/auth');
+          // Only redirect if on a protected route
+          if (location.pathname.startsWith('/dashboard')) {
+            navigate('/auth');
+          }
         }
       }
     );
@@ -51,7 +59,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     });
 
     return () => subscription.unsubscribe();
-  }, [navigate]);
+  }, [navigate, location.pathname, loading]);
 
   const signIn = async (email: string, password: string) => {
     try {
