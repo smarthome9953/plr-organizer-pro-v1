@@ -47,8 +47,8 @@ export default function Header({ showAuthButtons }: HeaderProps) {
             <Link to="/" className="flex items-center">
               <img 
                 src="/lovable-uploads/34f6c58f-7ead-48ed-8bf9-bed0734b95c5.png" 
-                alt="PLR Organizer Pro Logo" 
-                className="h-10 mr-2" 
+                alt="PLR Organizer Pro - Private Label Rights Content Management Software" 
+                className="h-8 mr-2" 
               />
             </Link>
           </div>
