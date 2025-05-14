@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
@@ -6,13 +7,16 @@ import { Separator } from '@/components/ui/separator';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Facebook, Twitter, Linkedin, Youtube } from 'lucide-react';
 import { useFileExplorer } from '@/context/FileExplorerContext';
+
 const Footer = () => {
   const {
     scanResults,
     selectedFolders
   } = useFileExplorer();
+  
   const [email, setEmail] = useState('');
   const [consentChecked, setConsentChecked] = useState(false);
+  
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Subscribed with email:', email, 'Consent:', consentChecked);
@@ -20,7 +24,9 @@ const Footer = () => {
     setEmail('');
     setConsentChecked(false);
   };
+  
   const currentYear = new Date().getFullYear();
+  
   return <footer className="border-t bg-background">
       <div className="container mx-auto px-4 py-8">
         {/* Top Footer Section with Logo, Newsletter, and Social Icons */}
@@ -151,4 +157,5 @@ const Footer = () => {
     }} />
     </footer>;
 };
+
 export default Footer;

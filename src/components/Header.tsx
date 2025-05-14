@@ -156,6 +156,12 @@ export default function Header({ showAuthButtons }: HeaderProps) {
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
+
+                <NavigationMenuItem>
+                  <Link to="/contact" className={`${navigationMenuTriggerStyle()} text-lg`}>
+                    Contact
+                  </Link>
+                </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
           </div>

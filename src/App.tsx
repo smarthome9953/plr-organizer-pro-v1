@@ -20,6 +20,8 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import CookiePolicy from "./pages/CookiePolicy";
 import GdprCompliance from "./pages/GdprCompliance";
+import Careers from "./pages/Careers";
+import Contact from "./pages/Contact";
 import { AuthProvider } from "./context/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { ThemeProvider } from "./context/ThemeContext";
@@ -51,6 +53,8 @@ const App = () => (
                   <Route path="/terms-of-service" element={<TermsOfService />} />
                   <Route path="/cookie-policy" element={<CookiePolicy />} />
                   <Route path="/gdpr-compliance" element={<GdprCompliance />} />
+                  <Route path="/careers" element={<Careers />} />
+                  <Route path="/contact" element={<Contact />} />
                   <Route element={<ProtectedRoute />}>
                     <Route path="/dashboard" element={<Index />} />
                   </Route>
