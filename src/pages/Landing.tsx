@@ -18,7 +18,6 @@ import PricingSection from '@/components/landing/PricingSection';
 import FaqSection from '@/components/landing/FaqSection';
 import FinalCta from '@/components/landing/FinalCta';
 import ExitIntentCta from '@/components/landing/ExitIntentCta';
-import QuickNavigation from '@/components/landing/QuickNavigation';
 
 const Landing = () => {
   // Refs for scroll navigation
@@ -50,14 +49,6 @@ const Landing = () => {
           </li>
         </ol>
       </nav>
-
-      {/* Quick Navigation */}
-      <QuickNavigation 
-        scrollToSection={scrollToSection}
-        featuresRef={featuresRef}
-        howItWorksRef={howItWorksRef}
-        pricingRef={pricingRef}
-      />
 
       {/* Hero Section */}
       <HeroSection />
