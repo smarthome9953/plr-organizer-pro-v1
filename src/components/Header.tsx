@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -33,7 +34,11 @@ export function ThemeToggle() {
   );
 }
 
-export default function Header() {
+interface HeaderProps {
+  showAuthButtons?: boolean;
+}
+
+export default function Header({ showAuthButtons }: HeaderProps) {
   return (
     <header className="border-b">
       <div className="container mx-auto px-4 py-2">
@@ -43,7 +48,7 @@ export default function Header() {
               <img 
                 src="/lovable-uploads/34f6c58f-7ead-48ed-8bf9-bed0734b95c5.png" 
                 alt="PLR Organizer Pro Logo" 
-                className="h-11 mr-2" /* Adjusted logo size from h-12.5 to h-11 */
+                className="h-10 mr-2" 
               />
             </Link>
           </div>
@@ -157,9 +162,20 @@ export default function Header() {
           
           <div className="flex items-center space-x-4">
             <ThemeToggle />
-            <Link to="/auth">
-              <Button variant="default">Sign In</Button>
-            </Link>
+            {showAuthButtons ? (
+              <div className="flex items-center gap-4">
+                <Link to="/auth">
+                  <Button variant="outline">Sign In</Button>
+                </Link>
+                <Link to="/auth">
+                  <Button>Start Free Trial</Button>
+                </Link>
+              </div>
+            ) : (
+              <Link to="/auth">
+                <Button variant="default">Sign In</Button>
+              </Link>
+            )}
           </div>
         </div>
       </div>

@@ -1,8 +1,9 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import {
   Check,
   Star,
@@ -24,22 +25,7 @@ const Landing = () => {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Header */}
-      <header className="sticky top-0 z-40 w-full border-b bg-background">
-        <div className="container flex h-16 items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Folder className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold">Ultimate PLR Organizer Pro</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <Link to="/auth">
-              <Button variant="outline">Sign In</Button>
-            </Link>
-            <Link to="/auth">
-              <Button>Start Free Trial</Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+      <Header showAuthButtons={true} />
 
       {/* Hero Section */}
       <section className="py-16 md:py-24 bg-gradient-to-br from-background to-muted">
@@ -553,51 +539,7 @@ const Landing = () => {
       </section>
 
       {/* Footer */}
-      <footer className="border-t py-12 bg-muted/30">
-        <div className="container px-4 md:px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="font-bold mb-4">Product</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-muted-foreground hover:text-foreground">Features</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-foreground">Pricing</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-foreground">Download</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-foreground">Updates</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-bold mb-4">Resources</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-muted-foreground hover:text-foreground">PLR Guide</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-foreground">Blog</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-foreground">Documentation</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-foreground">Community</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-bold mb-4">Company</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-muted-foreground hover:text-foreground">About</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-foreground">Careers</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-foreground">Contact</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-foreground">Partners</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-bold mb-4">Legal</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-muted-foreground hover:text-foreground">Privacy Policy</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-foreground">Terms of Service</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-foreground">Cookie Policy</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-foreground">GDPR</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="mt-12 pt-8 border-t text-center text-muted-foreground">
-            <p>© 2025 Ultimate PLR Organizer Pro. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

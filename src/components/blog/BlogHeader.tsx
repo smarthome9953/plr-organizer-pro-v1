@@ -1,5 +1,5 @@
 
-import { useNavigate } from "react-router-dom";
+import React from 'react';
 import Header from "@/components/Header";
 
 export default function BlogHeader() {
