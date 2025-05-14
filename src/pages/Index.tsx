@@ -1,45 +1,20 @@
 
 import React from 'react';
-import Header from '@/components/Header';
-import FolderNavigation from '@/components/FolderNavigation';
-import ScannerControls from '@/components/ScannerControls';
-import ScanProgressBar from '@/components/ScanProgressBar';
-import ResultsDisplay from '@/components/ResultsDisplay';
-import Footer from '@/components/Footer';
-import { ThemeProvider } from '@/context/ThemeContext';
-import { FileExplorerProvider } from '@/context/FileExplorerContext';
 import { ThemeToggle } from '@/components/Header';
 
 const Index = () => {
   return (
-    <ThemeProvider>
-      <FileExplorerProvider>
-        <div className="flex flex-col min-h-screen h-screen overflow-hidden">
-          <Header />
-          <div className="absolute right-4 top-4 z-10">
-            <ThemeToggle />
-          </div>
-          
-          <div className="flex-1 flex overflow-hidden">
-            {/* Left sidebar - Folder Navigation */}
-            <div className="w-64 hidden md:block overflow-y-auto">
-              <FolderNavigation />
-            </div>
-            
-            {/* Main content area */}
-            <div className="flex-1 flex flex-col overflow-hidden">
-              <ScannerControls />
-              <ScanProgressBar />
-              <div className="flex-1 overflow-auto">
-                <ResultsDisplay />
-              </div>
-            </div>
-          </div>
-          
-          <Footer />
-        </div>
-      </FileExplorerProvider>
-    </ThemeProvider>
+    <div className="container mx-auto px-4 py-8">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold">PLR Organizer Pro</h1>
+        <ThemeToggle />
+      </div>
+      
+      <div className="bg-card text-card-foreground rounded-lg border p-6">
+        <h2 className="text-2xl font-semibold mb-4">Welcome to your dashboard</h2>
+        <p>Start organizing your PLR content today.</p>
+      </div>
+    </div>
   );
 };
 
