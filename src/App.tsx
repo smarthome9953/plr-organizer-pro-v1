@@ -22,6 +22,7 @@ import CookiePolicy from "./pages/CookiePolicy";
 import GdprCompliance from "./pages/GdprCompliance";
 import Careers from "./pages/Careers";
 import Contact from "./pages/Contact";
+import About from "./pages/About";
 import { AuthProvider } from "./context/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { ThemeProvider } from "./context/ThemeContext";
@@ -49,6 +50,7 @@ const App = () => (
                   <Route path="/resources/*" element={<Resources />} />
                   <Route path="/scan" element={<Scan />} />
                   <Route path="/affiliates" element={<Affiliates />} />
+                  <Route path="/about" element={<About />} />
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                   <Route path="/terms-of-service" element={<TermsOfService />} />
                   <Route path="/cookie-policy" element={<CookiePolicy />} />
