@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -55,7 +56,7 @@ const Auth = () => {
       <div className="hidden md:flex md:w-1/2 flex-col justify-center p-12">
         <div className="max-w-md">
           <h1 className="text-4xl font-bold text-purple-600 dark:text-purple-400 mb-4">
-            Welcome to PLR Organizer Pro
+            {activeTab === "login" ? "Welcome Back To PLR Organizer Pro" : "Welcome To PLR Organizer Pro"}
           </h1>
           <p className="text-gray-700 dark:text-gray-300 mb-8">
             Your AI-powered PLR content companion. Organize your files, track usage, and maximize your PLR investments with advanced organization tools.
