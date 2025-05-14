@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -18,6 +17,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import Logo from '@/components/Logo';
+import { toast } from "@/hooks/use-toast";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -56,15 +56,26 @@ const Auth = () => {
       navigate('/dashboard');
     } catch (error) {
       console.error('Login failed:', error);
+      toast({
+        variant: "destructive",
+        title: "Login failed",
+        description: "Please check your credentials and try again."
+      });
     }
   };
 
   const onSubmitSignup = async (data: z.infer<typeof signupSchema>) => {
     try {
-      await signUp(data.email, data.password, data.name);
+      await signUp(data.email, data.password);
+      localStorage.setItem('userName', data.name);
       navigate('/dashboard');
     } catch (error) {
       console.error('Signup failed:', error);
+      toast({
+        variant: "destructive",
+        title: "Signup failed",
+        description: "Please check your information and try again."
+      });
     }
   };
 
