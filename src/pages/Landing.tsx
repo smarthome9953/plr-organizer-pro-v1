@@ -280,7 +280,7 @@ const Landing = () => {
               },
               {
                 step: 3,
-                title: "Deploy With Confidence",
+ title: "Deploy With Confidence",
                 description: "Search, access, and track your PLR content deployments across all your projects and platforms. Never reuse content accidentally again.",
                 image: "deploy"
               }
