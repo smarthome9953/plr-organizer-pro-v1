@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink } from '@/components/ui/navigation-menu';
 import { cn } from '@/lib/utils';
-import { Scan, Home, Tools } from 'lucide-react';
+import { Scan, Home, Settings } from 'lucide-react';
 
 const MainMenu = () => {
   return (
@@ -25,7 +25,7 @@ const MainMenu = () => {
         
         <NavigationMenuItem>
           <div className="flex items-center gap-1 text-foreground hover:text-primary cursor-pointer">
-            <Tools className="h-4 w-4" />
+            <Settings className="h-4 w-4" />
             <span>Tools</span>
           </div>
         </NavigationMenuItem>
