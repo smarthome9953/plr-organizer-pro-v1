@@ -31,32 +31,57 @@ const PLRDashboard = () => {
 
       setLoading(true);
       
-      // Get category stats
-      const { data: categoryStats, error: categoryError } = await supabase
-        .from('plr_files')
-        .select('category, count(*)')
-        .eq('user_id', user.id)
-        .group('category');
+      try {
+        // Get category stats using count aggregation
+        const { data: categoryStats, error: categoryError } = await supabase
+          .from('plr_files')
+          .select('category, count')
+          .eq('user_id', user.id)
+          .select('category')
+          .then(result => {
+            // Manual grouping since supabase-js doesn't support group directly
+            if (result.error) throw result.error;
+            if (!result.data) return { count: 0, data: [] };
+            
+            // Manually count categories
+            const stats: Record<string, number> = {};
+            result.data.forEach(row => {
+              const category = row.category || 'Uncategorized';
+              stats[category] = (stats[category] || 0) + 1;
+            });
+            
+            // Convert to expected format
+            return {
+              data: Object.entries(stats).map(([category, count]) => ({
+                category: category === 'Uncategorized' ? null : category,
+                count
+              })),
+              count: result.data.length
+            };
+          });
       
-      if (categoryError) {
-        console.error('Error fetching category stats:', categoryError);
-      } else {
-        setPlrStats(categoryStats || []);
-      }
-      
-      // Get total file count
-      const { count, error: countError } = await supabase
-        .from('plr_files')
-        .select('*', { count: 'exact', head: true })
-        .eq('user_id', user.id);
+        if (categoryError) {
+          console.error('Error fetching category stats:', categoryError);
+        } else {
+          setPlrStats(categoryStats || []);
+        }
         
-      if (countError) {
-        console.error('Error fetching total count:', countError);
-      } else {
-        setTotalFiles(count || 0);
+        // Get total file count
+        const { count, error: countError } = await supabase
+          .from('plr_files')
+          .select('*', { count: 'exact', head: true })
+          .eq('user_id', user.id);
+          
+        if (countError) {
+          console.error('Error fetching total count:', countError);
+        } else {
+          setTotalFiles(count || 0);
+        }
+      } catch (error) {
+        console.error('Error in fetching PLR stats:', error);
+      } finally {
+        setLoading(false);
       }
-      
-      setLoading(false);
     };
     
     fetchPLRStats();

@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 // Types for our file system
@@ -37,8 +38,11 @@ interface FileExplorerContextType {
   collapseFolder: (nodeId: string) => void;
   toggleFolderSelection: (node: FileSystemNode) => void;
   isScanning: boolean;
+  setIsScanning: (scanning: boolean) => void; // Added setter
   scanProgress: number;
+  setScanProgress: (progress: number) => void; // Added setter
   currentScannedFolder: string;
+  setCurrentScannedFolder: (folder: string) => void; // Added setter
   scanResults: FileSystemNode[];
   startScan: () => void;
   cancelScan: () => void;
@@ -372,8 +376,11 @@ export const FileExplorerProvider: React.FC<{ children: React.ReactNode }> = ({ 
         collapseFolder,
         toggleFolderSelection,
         isScanning,
+        setIsScanning, // Added setter
         scanProgress,
+        setScanProgress, // Added setter
         currentScannedFolder,
+        setCurrentScannedFolder, // Added setter
         scanResults,
         startScan,
         cancelScan,

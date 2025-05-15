@@ -17,6 +17,30 @@ import {
 import ScanProgressBar from '@/components/ScanProgressBar';
 import { useFileExplorer } from '@/context/FileExplorerContext';
 
+// Define interfaces for File System Access API
+interface FileSystemDirectoryHandle {
+  kind: 'directory';
+  name: string;
+  values(): AsyncIterable<FileSystemHandle>;
+  getDirectoryHandle(name: string, options?: { create?: boolean }): Promise<FileSystemDirectoryHandle>;
+  getFileHandle(name: string, options?: { create?: boolean }): Promise<FileSystemFileHandle>;
+}
+
+interface FileSystemFileHandle {
+  kind: 'file';
+  name: string;
+  getFile(): Promise<File>;
+}
+
+type FileSystemHandle = FileSystemDirectoryHandle | FileSystemFileHandle;
+
+// Extend Window interface to include showDirectoryPicker
+declare global {
+  interface Window {
+    showDirectoryPicker?: () => Promise<FileSystemDirectoryHandle>;
+  }
+}
+
 interface FileItem {
   name: string;
   path: string;
@@ -66,7 +90,7 @@ const PLRScan = () => {
   const handleFolderSelect = async () => {
     try {
       // Check if File System Access API is supported
-      if (window.showDirectoryPicker === undefined) {
+      if (!window.showDirectoryPicker) {
         toast("Browser Not Supported", {
           description: "Your browser doesn't support folder selection. Please use Chrome or Edge, or select individual files instead.",
         });
@@ -96,7 +120,8 @@ const PLRScan = () => {
           for await (const entry of handle.values()) {
             if (entry.kind === 'file') {
               try {
-                const file = await entry.getFile();
+                const fileHandle = entry as FileSystemFileHandle;
+                const file = await fileHandle.getFile();
                 const filePath = path ? `${path}/${file.name}` : file.name;
                 
                 newFiles.push({
@@ -122,8 +147,9 @@ const PLRScan = () => {
                 console.error("Error processing file:", err);
               }
             } else if (entry.kind === 'directory' && includeSubfolders) {
-              setCurrentScannedFolder(`${path}/${entry.name}`.replace(/^\//, ''));
-              await processFolder(entry, path ? `${path}/${entry.name}` : entry.name);
+              const dirHandle = entry as FileSystemDirectoryHandle;
+              setCurrentScannedFolder(`${path}/${dirHandle.name}`.replace(/^\//, ''));
+              await processFolder(dirHandle, path ? `${path}/${dirHandle.name}` : dirHandle.name);
             }
           }
         };
