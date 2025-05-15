@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Upload, FileText, FolderPlus, Download, Search, Edit, Palette, Wrench } from 'lucide-react';
+import { Upload, FileText, FolderPlus, Download, Search, Edit, Palette, Wrench, RefreshCw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
@@ -56,10 +56,17 @@ const QuickActionPanel = ({ className }: QuickActionPanelProps) => {
       variant: 'outline'
     },
     {
-      id: '7',
+      id: '6',
       title: 'Brand Kit Tool',
       icon: <Palette className="h-4 w-4 mr-2" />,
       href: '/tools/brand-kit',
+      variant: 'outline'
+    },
+    {
+      id: '7',
+      title: 'Content Spinner',
+      icon: <RefreshCw className="h-4 w-4 mr-2" />,
+      href: '/tools/content-spinner',
       variant: 'outline'
     }
   ];

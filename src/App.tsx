@@ -17,6 +17,8 @@ import Scan from "./pages/Scan";
 import Tools from "./pages/Tools";
 import BrandKitTool from "./pages/BrandKitTool";
 import BrandKitToolApp from "./pages/BrandKitToolApp";
+import ContentSpinner from "./pages/ContentSpinner";
+import ContentSpinnerApp from "./pages/ContentSpinnerApp";
 import Affiliates from "./pages/Affiliates";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
@@ -52,6 +54,7 @@ const App = () => (
                   <Route path="/scan" element={<Scan />} />
                   <Route path="/tools" element={<Tools />} />
                   <Route path="/brand-kit-tool" element={<BrandKitTool />} />
+                  <Route path="/content-spinner" element={<ContentSpinner />} />
                   <Route path="/affiliates" element={<Affiliates />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
@@ -63,6 +66,7 @@ const App = () => (
                   <Route element={<ProtectedRoute />}>
                     <Route path="/dashboard" element={<Index />} />
                     <Route path="/tools/brand-kit" element={<BrandKitToolApp />} />
+                    <Route path="/tools/content-spinner" element={<ContentSpinnerApp />} />
                   </Route>
                   <Route path="*" element={<NotFound />} />
                 </Routes>

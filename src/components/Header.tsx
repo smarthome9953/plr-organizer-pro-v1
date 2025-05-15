@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/context/ThemeContext';
-import { Moon, Sun, Palette, Wrench } from 'lucide-react';
+import { Moon, Sun, Palette, Wrench, RefreshCw } from 'lucide-react';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -91,6 +91,19 @@ export default function Header({ showAuthButtons }: HeaderProps) {
                             </div>
                             <p className="line-clamp-2 text-sm leading-snug text-muted-foreground mt-1">
                               Create consistent branding across your PLR content
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <Link to="/content-spinner" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                            <div className="flex items-center text-sm font-medium leading-none">
+                              <RefreshCw className="mr-2 h-4 w-4" />
+                              Content Spinner
+                            </div>
+                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground mt-1">
+                              Make PLR content 100% unique in seconds
                             </p>
                           </Link>
                         </NavigationMenuLink>

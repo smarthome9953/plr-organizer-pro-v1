@@ -20,7 +20,8 @@ import {
   BookOpen,
   Plus,
   Menu,
-  X
+  X,
+  RefreshCw
 } from 'lucide-react';
 import {
   Sidebar,
@@ -214,6 +215,14 @@ const SideNav: React.FC = () => {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={isActive('/tools/content-spinner')}>
+                  <Link to="/tools/content-spinner">
+                    <RefreshCw className="mr-2 h-4 w-4" />
+                    <span>Content Spinner</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -299,12 +308,16 @@ const MobileNav: React.FC = () => {
               <span>Analytics</span>
             </Link>
             <Link to="/tools" className="flex items-center p-2 rounded-md hover:bg-muted" onClick={() => setIsOpen(false)}>
-              <Tool className="mr-2 h-4 w-4" />
+              <Wrench className="mr-2 h-4 w-4" />
               <span>Tools</span>
             </Link>
             <Link to="/tools/brand-kit" className="flex items-center p-2 rounded-md hover:bg-muted pl-8" onClick={() => setIsOpen(false)}>
               <Palette className="mr-2 h-4 w-4" />
               <span>Brand Kit Tool</span>
+            </Link>
+            <Link to="/tools/content-spinner" className="flex items-center p-2 rounded-md hover:bg-muted pl-8" onClick={() => setIsOpen(false)}>
+              <RefreshCw className="mr-2 h-4 w-4" />
+              <span>Content Spinner</span>
             </Link>
           </div>
           <div className="pt-4 border-t">
