@@ -4,7 +4,7 @@ import Header from "@/components/Header";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Palette, Wrench, FileText, RefreshCw, ArrowRight } from "lucide-react";
+import { Palette, Wrench, FileText, RefreshCw, ArrowRight, FileSearch, Shield } from "lucide-react";
 import Footer from "@/components/Footer";
 import { Helmet } from "react-helmet-async";
 
@@ -97,6 +97,86 @@ export default function Tools() {
                 <Button variant="outline">Learn More</Button>
               </Link>
               <Link to="/tools/content-spinner">
+                <Button>
+                  Use Tool
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </CardFooter>
+          </Card>
+          
+          <Card className="flex flex-col h-full border-2 border-primary/20">
+            <CardHeader>
+              <div className="flex items-center mb-2">
+                <div className="bg-primary/10 p-2 rounded-full mr-2">
+                  <FileSearch className="h-5 w-5 text-primary" />
+                </div>
+                <CardTitle>SEO Analyzer</CardTitle>
+              </div>
+              <CardDescription>Optimize your PLR content for search engines</CardDescription>
+            </CardHeader>
+            <CardContent className="flex-grow">
+              <p className="mb-4">Get tailored SEO recommendations to help your PLR content rank higher in search results.</p>
+              <ul className="space-y-2 mb-4">
+                <li className="flex items-center">
+                  <span className="bg-primary/20 p-1 rounded-full mr-2">✓</span>
+                  <span className="text-sm">PLR-specific SEO scoring system</span>
+                </li>
+                <li className="flex items-center">
+                  <span className="bg-primary/20 p-1 rounded-full mr-2">✓</span>
+                  <span className="text-sm">Keyword optimization suggestions</span>
+                </li>
+                <li className="flex items-center">
+                  <span className="bg-primary/20 p-1 rounded-full mr-2">✓</span>
+                  <span className="text-sm">Readability assessment</span>
+                </li>
+              </ul>
+            </CardContent>
+            <CardFooter className="flex justify-between">
+              <Link to="/seo-analyzer">
+                <Button variant="outline">Learn More</Button>
+              </Link>
+              <Link to="/tools/seo-analyzer">
+                <Button>
+                  Use Tool
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </CardFooter>
+          </Card>
+          
+          <Card className="flex flex-col h-full border-2 border-primary/20">
+            <CardHeader>
+              <div className="flex items-center mb-2">
+                <div className="bg-primary/10 p-2 rounded-full mr-2">
+                  <Shield className="h-5 w-5 text-primary" />
+                </div>
+                <CardTitle>License Tracker</CardTitle>
+              </div>
+              <CardDescription>Never risk copyright issues with your PLR content</CardDescription>
+            </CardHeader>
+            <CardContent className="flex-grow">
+              <p className="mb-4">Track usage rights, restrictions, and expiration dates for all your PLR content licenses.</p>
+              <ul className="space-y-2 mb-4">
+                <li className="flex items-center">
+                  <span className="bg-primary/20 p-1 rounded-full mr-2">✓</span>
+                  <span className="text-sm">License expiration alerts</span>
+                </li>
+                <li className="flex items-center">
+                  <span className="bg-primary/20 p-1 rounded-full mr-2">✓</span>
+                  <span className="text-sm">Usage rights visualization</span>
+                </li>
+                <li className="flex items-center">
+                  <span className="bg-primary/20 p-1 rounded-full mr-2">✓</span>
+                  <span className="text-sm">License violation risk assessment</span>
+                </li>
+              </ul>
+            </CardContent>
+            <CardFooter className="flex justify-between">
+              <Link to="/license-tracker">
+                <Button variant="outline">Learn More</Button>
+              </Link>
+              <Link to="/tools/license-tracker">
                 <Button>
                   Use Tool
                   <ArrowRight className="ml-2 h-4 w-4" />

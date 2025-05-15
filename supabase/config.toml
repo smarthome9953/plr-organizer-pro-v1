@@ -3,3 +3,9 @@ project_id = "rydcpajipcqwcavgcdtb"
 
 [functions.content-spinner]
 verify_jwt = false
+
+[functions.seo-analyzer]
+verify_jwt = false
+
+[functions.license-verifier]
+verify_jwt = false

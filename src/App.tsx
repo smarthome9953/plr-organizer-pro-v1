@@ -19,6 +19,10 @@ import BrandKitTool from "./pages/BrandKitTool";
 import BrandKitToolApp from "./pages/BrandKitToolApp";
 import ContentSpinner from "./pages/ContentSpinner";
 import ContentSpinnerApp from "./pages/ContentSpinnerApp";
+import SeoAnalyzer from "./pages/SeoAnalyzer";
+import SeoAnalyzerApp from "./pages/SeoAnalyzerApp";
+import LicenseTracker from "./pages/LicenseTracker";
+import LicenseTrackerApp from "./pages/LicenseTrackerApp";
 import Affiliates from "./pages/Affiliates";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
@@ -55,6 +59,8 @@ const App = () => (
                   <Route path="/tools" element={<Tools />} />
                   <Route path="/brand-kit-tool" element={<BrandKitTool />} />
                   <Route path="/content-spinner" element={<ContentSpinner />} />
+                  <Route path="/seo-analyzer" element={<SeoAnalyzer />} />
+                  <Route path="/license-tracker" element={<LicenseTracker />} />
                   <Route path="/affiliates" element={<Affiliates />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
@@ -67,6 +73,8 @@ const App = () => (
                     <Route path="/dashboard" element={<Index />} />
                     <Route path="/tools/brand-kit" element={<BrandKitToolApp />} />
                     <Route path="/tools/content-spinner" element={<ContentSpinnerApp />} />
+                    <Route path="/tools/seo-analyzer" element={<SeoAnalyzerApp />} />
+                    <Route path="/tools/license-tracker" element={<LicenseTrackerApp />} />
                   </Route>
                   <Route path="*" element={<NotFound />} />
                 </Routes>

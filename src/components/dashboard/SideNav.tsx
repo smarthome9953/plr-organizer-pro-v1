@@ -10,7 +10,9 @@ import {
   Wrench,
   HelpCircle,
   BookOpen,
-  RefreshCw
+  RefreshCw,
+  FileSearch,
+  Shield
 } from 'lucide-react';
 import {
   Sidebar,
@@ -108,6 +110,22 @@ const SideNav: React.FC = () => {
                   <Link to="/tools/content-spinner">
                     <RefreshCw className="mr-2 h-4 w-4" />
                     <span>Content Spinner</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={isActive('/tools/seo-analyzer')}>
+                  <Link to="/tools/seo-analyzer">
+                    <FileSearch className="mr-2 h-4 w-4" />
+                    <span>SEO Analyzer</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={isActive('/tools/license-tracker')}>
+                  <Link to="/tools/license-tracker">
+                    <Shield className="mr-2 h-4 w-4" />
+                    <span>License Tracker</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

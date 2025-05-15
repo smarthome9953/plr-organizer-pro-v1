@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/context/ThemeContext';
-import { Moon, Sun, Palette, Wrench, RefreshCw } from 'lucide-react';
+import { Moon, Sun, Palette, Wrench, RefreshCw, FileSearch, Shield } from 'lucide-react';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -109,14 +109,30 @@ export default function Header({ showAuthButtons }: HeaderProps) {
                         </NavigationMenuLink>
                       </li>
                       <li>
-                        <Link to="/tools/editor" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
-                          PLR Editor
-                        </Link>
+                        <NavigationMenuLink asChild>
+                          <Link to="/seo-analyzer" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                            <div className="flex items-center text-sm font-medium leading-none">
+                              <FileSearch className="mr-2 h-4 w-4" />
+                              SEO Analyzer
+                            </div>
+                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground mt-1">
+                              Optimize PLR content for search engines
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
                       </li>
                       <li>
-                        <Link to="/tools/converter" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
-                          Format Converter
-                        </Link>
+                        <NavigationMenuLink asChild>
+                          <Link to="/license-tracker" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                            <div className="flex items-center text-sm font-medium leading-none">
+                              <Shield className="mr-2 h-4 w-4" />
+                              License Tracker
+                            </div>
+                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground mt-1">
+                              Never risk copyright issues with PLR content
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
                       </li>
                     </ul>
                   </NavigationMenuContent>
