@@ -4,7 +4,7 @@ import Header from "@/components/Header";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Palette, Wrench, FileText, RefreshCw, ArrowRight, FileSearch, Shield, PercentSquare } from "lucide-react";
+import { Palette, Wrench, FileText, RefreshCw, ArrowRight, FileSearch, Shield, PercentSquare, Globe } from "lucide-react";
 import Footer from "@/components/Footer";
 import { Helmet } from "react-helmet-async";
 
@@ -217,6 +217,46 @@ export default function Tools() {
                 <Button variant="outline">Learn More</Button>
               </Link>
               <Link to="/tools/uniqueness-meter">
+                <Button>
+                  Use Tool
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </CardFooter>
+          </Card>
+          
+          <Card className="flex flex-col h-full border-2 border-primary/20">
+            <CardHeader>
+              <div className="flex items-center mb-2">
+                <div className="bg-primary/10 p-2 rounded-full mr-2">
+                  <Globe className="h-5 w-5 text-primary" />
+                </div>
+                <CardTitle>Multi-Language Translator</CardTitle>
+              </div>
+              <CardDescription>Convert PLR content into 27 different languages</CardDescription>
+            </CardHeader>
+            <CardContent className="flex-grow">
+              <p className="mb-4">Expand your reach by translating your PLR content into multiple languages for global audiences.</p>
+              <ul className="space-y-2 mb-4">
+                <li className="flex items-center">
+                  <span className="bg-primary/20 p-1 rounded-full mr-2">✓</span>
+                  <span className="text-sm">Support for 27 languages</span>
+                </li>
+                <li className="flex items-center">
+                  <span className="bg-primary/20 p-1 rounded-full mr-2">✓</span>
+                  <span className="text-sm">Context-aware translations</span>
+                </li>
+                <li className="flex items-center">
+                  <span className="bg-primary/20 p-1 rounded-full mr-2">✓</span>
+                  <span className="text-sm">Formatting preservation</span>
+                </li>
+              </ul>
+            </CardContent>
+            <CardFooter className="flex justify-between">
+              <Link to="/translator">
+                <Button variant="outline">Learn More</Button>
+              </Link>
+              <Link to="/tools/translator">
                 <Button>
                   Use Tool
                   <ArrowRight className="ml-2 h-4 w-4" />

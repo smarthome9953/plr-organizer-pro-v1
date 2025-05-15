@@ -13,7 +13,11 @@ import {
   RefreshCw,
   LogOut,
   Menu,
-  X
+  X,
+  FileSearch,
+  Shield,
+  PercentSquare,
+  Globe
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -80,6 +84,22 @@ const MobileNav: React.FC = () => {
             <Link to="/tools/content-spinner" className="flex items-center p-2 rounded-md hover:bg-muted pl-8" onClick={() => setIsOpen(false)}>
               <RefreshCw className="mr-2 h-4 w-4" />
               <span>Content Spinner</span>
+            </Link>
+            <Link to="/tools/seo-analyzer" className="flex items-center p-2 rounded-md hover:bg-muted pl-8" onClick={() => setIsOpen(false)}>
+              <FileSearch className="mr-2 h-4 w-4" />
+              <span>SEO Analyzer</span>
+            </Link>
+            <Link to="/tools/license-tracker" className="flex items-center p-2 rounded-md hover:bg-muted pl-8" onClick={() => setIsOpen(false)}>
+              <Shield className="mr-2 h-4 w-4" />
+              <span>License Tracker</span>
+            </Link>
+            <Link to="/tools/uniqueness-meter" className="flex items-center p-2 rounded-md hover:bg-muted pl-8" onClick={() => setIsOpen(false)}>
+              <PercentSquare className="mr-2 h-4 w-4" />
+              <span>Uniqueness Meter</span>
+            </Link>
+            <Link to="/tools/translator" className="flex items-center p-2 rounded-md hover:bg-muted pl-8" onClick={() => setIsOpen(false)}>
+              <Globe className="mr-2 h-4 w-4" />
+              <span>Translator</span>
             </Link>
           </div>
           <div className="pt-4 border-t">

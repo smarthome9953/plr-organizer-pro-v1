@@ -13,7 +13,8 @@ import {
   RefreshCw,
   FileSearch,
   Shield,
-  PercentSquare
+  PercentSquare,
+  Globe
 } from 'lucide-react';
 import {
   Sidebar,
@@ -135,6 +136,14 @@ const SideNav: React.FC = () => {
                   <Link to="/tools/uniqueness-meter">
                     <PercentSquare className="mr-2 h-4 w-4" />
                     <span>Uniqueness Meter</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={isActive('/tools/translator')}>
+                  <Link to="/tools/translator">
+                    <Globe className="mr-2 h-4 w-4" />
+                    <span>Translator</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

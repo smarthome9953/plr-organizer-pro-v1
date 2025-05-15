@@ -12,3 +12,6 @@ verify_jwt = false
 
 [functions.uniqueness-meter]
 verify_jwt = false
+
+[functions.translator]
+verify_jwt = false
