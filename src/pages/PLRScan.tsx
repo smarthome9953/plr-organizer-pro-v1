@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { toast } from '@/components/ui/use-toast';
+import { toast } from '@/components/ui/sonner';
 import { 
   FolderOpen, File, FileText, FilePlus2, 
   AlertCircle, CheckCircle2, Loader2
@@ -37,7 +37,6 @@ const PLRScan = () => {
   const [scanning, setScanning] = useState<boolean>(false);
   const [processingFiles, setProcessingFiles] = useState<boolean>(false);
   const [selectedTab, setSelectedTab] = useState<string>('folder');
-  const [folderError, setFolderError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { 
     isScanning, setIsScanning, 
@@ -70,12 +69,10 @@ const PLRScan = () => {
   }, []);
 
   const handleFolderSelect = async () => {
-    setFolderError(null);
-    
     try {
+      // Check if File System Access API is supported
       if (!window.showDirectoryPicker) {
-        toast({
-          title: "Browser Not Supported",
+        toast("Browser Not Supported", {
           description: "Your browser doesn't support folder selection. Please use Chrome or Edge, or select individual files instead.",
         });
         return;
@@ -85,15 +82,18 @@ const PLRScan = () => {
       setContextScanProgress(0);
       setIsScanning(true);
 
+      // Start timer for elapsed time
       const timer = startTimer();
 
       try {
         const dirHandle = await window.showDirectoryPicker();
         setCurrentScannedFolder(dirHandle.name);
         
+        // Process folder contents
         const newFiles: FileItem[] = [];
         let folderCount = 0;
         
+        // Recursive function to process folders
         const processFolder = async (handle: FileSystemDirectoryHandle, path: string) => {
           folderCount++;
           setStats(prev => ({ ...prev, foldersProcessed: folderCount }));
@@ -118,6 +118,7 @@ const PLRScan = () => {
                   totalSize: prev.totalSize + file.size
                 }));
                 
+                // Update progress
                 setScanProgress(prev => {
                   const newProgress = Math.min(95, prev + 1); // Cap at 95% until final processing
                   setContextScanProgress(newProgress);
@@ -136,46 +137,28 @@ const PLRScan = () => {
         
         await processFolder(dirHandle, '');
         
+        // Set files and update progress to 100%
         setFiles(newFiles);
         setScanProgress(100);
         setContextScanProgress(100);
         
-        toast({
-          title: "Scan Complete",
+        toast("Scan Complete", {
           description: `Successfully scanned ${newFiles.length} files across ${folderCount} folders.`,
         });
-      } catch (err: any) {
+      } catch (err) {
         console.error("Error during folder scanning:", err);
-        
-        if (err.name === 'SecurityError') {
-          const errorMessage = "Security restrictions prevented folder selection. This feature doesn't work in the preview environment. Try using the deployed version of the application instead, or use the file selection option.";
-          setFolderError(errorMessage);
-          toast({
-            title: "Security Error",
-            description: errorMessage,
-            variant: "destructive"
-          });
-        } else {
-          setFolderError(err.message || "There was an error scanning the folder.");
-          toast({
-            title: "Scan Error",
-            description: "There was an error scanning the folder. Please try again.",
-            variant: "destructive"
-          });
-        }
+        toast("Scan Error", {
+          description: "There was an error scanning the folder. Please try again.",
+        });
       } finally {
         clearInterval(timer);
         setScanning(false);
         setIsScanning(false);
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error("Error selecting folder:", err);
-      const errorMessage = err.message || "There was an error selecting the folder.";
-      setFolderError(errorMessage);
-      toast({
-        title: "Selection Error",
-        description: errorMessage,
-        variant: "destructive"
+      toast("Selection Error", {
+        description: "There was an error selecting the folder. Please try again.",
       });
       setScanning(false);
       setIsScanning(false);
@@ -197,6 +180,7 @@ const PLRScan = () => {
     setScanning(true);
     setScanProgress(0);
     
+    // Process selected files
     const newFiles: FileItem[] = [];
     
     Array.from(selectedFiles).forEach((file) => {
@@ -208,6 +192,7 @@ const PLRScan = () => {
       });
     });
     
+    // Update stats
     setStats({
       filesScanned: newFiles.length,
       foldersProcessed: 1,
@@ -216,11 +201,11 @@ const PLRScan = () => {
       elapsedTime: '00:00:00',
     });
     
+    // Update files and progress
     setFiles(newFiles);
     setScanProgress(100);
     
-    toast({
-      title: "Files Selected",
+    toast("Files Selected", {
       description: `Successfully selected ${newFiles.length} files.`,
     });
     
@@ -255,9 +240,11 @@ const PLRScan = () => {
     setProcessingFiles(true);
     
     try {
+      // Process files and upload metadata to Supabase
       let processed = 0;
       
       for (const file of files) {
+        // Insert file metadata into Supabase
         const { error } = await supabase
           .from('plr_files')
           .insert({
@@ -271,10 +258,8 @@ const PLRScan = () => {
           
         if (error) {
           console.error("Error inserting file metadata:", error);
-          toast({
-            title: "Processing Error",
+          toast("Processing Error", {
             description: `Error processing ${file.name}. Please try again.`,
-            variant: "destructive"
           });
         }
         
@@ -282,18 +267,16 @@ const PLRScan = () => {
         setScanProgress(Math.round((processed / files.length) * 100));
       }
       
-      toast({
-        title: "Processing Complete",
+      toast("Processing Complete", {
         description: `Successfully added ${processed} files to your PLR library.`,
       });
       
+      // Navigate to the PLR dashboard
       navigate('/dashboard');
     } catch (err) {
       console.error("Error processing files:", err);
-      toast({
-        title: "Processing Error",
+      toast("Processing Error", {
         description: "There was an error processing your files. Please try again.",
-        variant: "destructive"
       });
     } finally {
       setProcessingFiles(false);
@@ -329,12 +312,6 @@ const PLRScan = () => {
                         <p className="text-sm text-muted-foreground mb-4">
                           Choose a folder containing your PLR files to scan and organize
                         </p>
-                        {folderError && (
-                          <div className="mb-4 p-3 bg-destructive/10 border border-destructive text-destructive rounded-md text-sm">
-                            <AlertCircle className="h-4 w-4 inline mr-2" />
-                            {folderError}
-                          </div>
-                        )}
                         <Button 
                           onClick={handleFolderSelect}
                           disabled={scanning || processingFiles}
@@ -530,14 +507,6 @@ const PLRScan = () => {
                   <div>
                     <h4 className="font-medium">Firefox / Safari</h4>
                     <p className="text-sm text-muted-foreground">Use individual file selection instead of folder scanning</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start">
-                  <AlertCircle className="h-5 w-5 text-destructive mt-0.5 mr-2" />
-                  <div>
-                    <h4 className="font-medium">Preview Environment</h4>
-                    <p className="text-sm text-muted-foreground">Folder selection doesn't work in the preview environment due to security restrictions. Please use the deployed version.</p>
                   </div>
                 </div>
               </CardContent>
