@@ -30,6 +30,8 @@ import UniquenessMeter from "./pages/UniquenessMeter";
 import UniquenessMeterApp from "./pages/UniquenessMeterApp";
 import Translator from "./pages/Translator";
 import TranslatorApp from "./pages/TranslatorApp";
+import FileConverter from "./pages/FileConverter";
+import FileConverterApp from "./pages/FileConverterApp";
 import Affiliates from "./pages/Affiliates";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
@@ -73,6 +75,7 @@ const App = () => (
                   <Route path="/license-tracker" element={<LicenseTracker />} />
                   <Route path="/uniqueness-meter" element={<UniquenessMeter />} />
                   <Route path="/translator" element={<Translator />} />
+                  <Route path="/file-converter" element={<FileConverter />} />
                   <Route path="/affiliates" element={<Affiliates />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
@@ -89,6 +92,7 @@ const App = () => (
                     <Route path="/tools/license-tracker" element={<LicenseTrackerApp />} />
                     <Route path="/tools/uniqueness-meter" element={<UniquenessMeterApp />} />
                     <Route path="/tools/translator" element={<TranslatorApp />} />
+                    <Route path="/tools/file-converter" element={<FileConverterApp />} />
                   </Route>
                   <Route path="*" element={<NotFound />} />
                 </Routes>

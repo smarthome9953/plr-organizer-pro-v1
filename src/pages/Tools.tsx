@@ -4,7 +4,7 @@ import Header from "@/components/Header";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Palette, Wrench, FileText, RefreshCw, ArrowRight, FileSearch, Shield, PercentSquare, Globe } from "lucide-react";
+import { Palette, Wrench, FileText, RefreshCw, ArrowRight, FileSearch, Shield, PercentSquare, Globe, FileType } from "lucide-react";
 import Footer from "@/components/Footer";
 import { Helmet } from "react-helmet-async";
 
@@ -265,6 +265,46 @@ export default function Tools() {
             </CardFooter>
           </Card>
           
+          <Card className="flex flex-col h-full border-2 border-primary/20">
+            <CardHeader>
+              <div className="flex items-center mb-2">
+                <div className="bg-primary/10 p-2 rounded-full mr-2">
+                  <FileType className="h-5 w-5 text-primary" />
+                </div>
+                <CardTitle>File Converter</CardTitle>
+              </div>
+              <CardDescription>Transform any PLR format to editable content</CardDescription>
+            </CardHeader>
+            <CardContent className="flex-grow">
+              <p className="mb-4">Convert between DOCX, PDF, HTML and more while preserving formatting and structure.</p>
+              <ul className="space-y-2 mb-4">
+                <li className="flex items-center">
+                  <span className="bg-primary/20 p-1 rounded-full mr-2">✓</span>
+                  <span className="text-sm">Batch conversion capability</span>
+                </li>
+                <li className="flex items-center">
+                  <span className="bg-primary/20 p-1 rounded-full mr-2">✓</span>
+                  <span className="text-sm">OCR technology for locked PDFs</span>
+                </li>
+                <li className="flex items-center">
+                  <span className="bg-primary/20 p-1 rounded-full mr-2">✓</span>
+                  <span className="text-sm">Format preservation</span>
+                </li>
+              </ul>
+            </CardContent>
+            <CardFooter className="flex justify-between">
+              <Link to="/file-converter">
+                <Button variant="outline">Learn More</Button>
+              </Link>
+              <Link to="/tools/file-converter">
+                <Button>
+                  Use Tool
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </CardFooter>
+          </Card>
+          
           <Card className="flex flex-col h-full">
             <CardHeader>
               <div className="flex items-center mb-2">
@@ -277,24 +317,6 @@ export default function Tools() {
             </CardHeader>
             <CardContent className="flex-grow">
               <p>Our built-in editor helps you quickly customize PLR content to match your brand voice and style.</p>
-            </CardContent>
-            <CardFooter>
-              <p className="text-sm text-muted-foreground">Coming soon</p>
-            </CardFooter>
-          </Card>
-          
-          <Card className="flex flex-col h-full">
-            <CardHeader>
-              <div className="flex items-center mb-2">
-                <div className="bg-muted p-2 rounded-full mr-2">
-                  <Wrench className="h-5 w-5" />
-                </div>
-                <CardTitle>Format Converter</CardTitle>
-              </div>
-              <CardDescription>Convert PLR content between different formats</CardDescription>
-            </CardHeader>
-            <CardContent className="flex-grow">
-              <p>Easily convert your PLR content between different formats like PDF, DOCX, HTML, and more.</p>
             </CardContent>
             <CardFooter>
               <p className="text-sm text-muted-foreground">Coming soon</p>

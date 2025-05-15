@@ -15,3 +15,6 @@ verify_jwt = false
 
 [functions.translator]
 verify_jwt = false
+
+[functions.file-converter]
+verify_jwt = false

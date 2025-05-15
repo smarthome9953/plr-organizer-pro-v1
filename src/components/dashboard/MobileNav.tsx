@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
@@ -18,7 +19,8 @@ import {
   PercentSquare,
   Globe,
   BookOpen,
-  HelpCircle
+  HelpCircle,
+  FileType
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -101,6 +103,10 @@ const MobileNav: React.FC = () => {
             <Link to="/tools/translator" className="flex items-center p-2 rounded-md hover:bg-muted pl-8" onClick={() => setIsOpen(false)}>
               <Globe className="mr-2 h-4 w-4" />
               <span>Translator</span>
+            </Link>
+            <Link to="/tools/file-converter" className="flex items-center p-2 rounded-md hover:bg-muted pl-8" onClick={() => setIsOpen(false)}>
+              <FileType className="mr-2 h-4 w-4" />
+              <span>File Converter</span>
             </Link>
             {/* Resources Links */}
             <Link to="/resources/guides" className="flex items-center p-2 rounded-md hover:bg-muted" onClick={() => setIsOpen(false)}>

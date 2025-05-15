@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
@@ -13,7 +14,8 @@ import {
   FileSearch,
   Shield,
   PercentSquare,
-  Globe
+  Globe,
+  FileType
 } from 'lucide-react';
 import {
   Sidebar,
@@ -143,6 +145,14 @@ const SideNav: React.FC = () => {
                   <Link to="/tools/translator">
                     <Globe className="mr-2 h-4 w-4" />
                     <span>Translator</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={isActive('/tools/file-converter')}>
+                  <Link to="/tools/file-converter">
+                    <FileType className="mr-2 h-4 w-4" />
+                    <span>File Converter</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
