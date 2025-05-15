@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
@@ -17,29 +16,7 @@ import {
 import ScanProgressBar from '@/components/ScanProgressBar';
 import { useFileExplorer } from '@/context/FileExplorerContext';
 
-// Define interfaces for File System Access API
-interface FileSystemDirectoryHandle {
-  kind: 'directory';
-  name: string;
-  values(): AsyncIterable<FileSystemHandle>;
-  getDirectoryHandle(name: string, options?: { create?: boolean }): Promise<FileSystemDirectoryHandle>;
-  getFileHandle(name: string, options?: { create?: boolean }): Promise<FileSystemFileHandle>;
-}
-
-interface FileSystemFileHandle {
-  kind: 'file';
-  name: string;
-  getFile(): Promise<File>;
-}
-
-type FileSystemHandle = FileSystemDirectoryHandle | FileSystemFileHandle;
-
-// Extend Window interface to include showDirectoryPicker
-declare global {
-  interface Window {
-    showDirectoryPicker?: () => Promise<FileSystemDirectoryHandle>;
-  }
-}
+// No need to redefine interfaces here since they're now in vite-env.d.ts
 
 interface FileItem {
   name: string;
@@ -61,7 +38,11 @@ const PLRScan = () => {
   const [processingFiles, setProcessingFiles] = useState<boolean>(false);
   const [selectedTab, setSelectedTab] = useState<string>('folder');
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { setIsScanning, setScanProgress: setContextScanProgress, setCurrentScannedFolder } = useFileExplorer();
+  const { 
+    isScanning, setIsScanning, 
+    scanProgress: contextScanProgress, setScanProgress: setContextScanProgress, 
+    currentScannedFolder, setCurrentScannedFolder 
+  } = useFileExplorer();
 
   // Stats for the scanning process
   const [stats, setStats] = useState({
