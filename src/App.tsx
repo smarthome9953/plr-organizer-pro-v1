@@ -13,6 +13,9 @@ import Blog from "./pages/Blog";
 import BlogCategory from "./pages/BlogCategory";
 import BlogPost from "./pages/BlogPost";
 import Resources from "./pages/Resources";
+import Templates from "./pages/Templates";
+import TemplateCategory from "./pages/TemplateCategory";
+import TemplateDetail from "./pages/TemplateDetail";
 import Scan from "./pages/Scan";
 import Tools from "./pages/Tools";
 import BrandKitTool from "./pages/BrandKitTool";
@@ -58,7 +61,10 @@ const App = () => (
                   <Route path="/blog" element={<Blog />} />
                   <Route path="/blog/:categorySlug" element={<BlogCategory />} />
                   <Route path="/blog/:categorySlug/:postSlug" element={<BlogPost />} />
-                  <Route path="/resources/*" element={<Resources />} />
+                  <Route path="/resources" element={<Resources />} />
+                  <Route path="/resources/templates" element={<Templates />} />
+                  <Route path="/resources/templates/:category" element={<TemplateCategory />} />
+                  <Route path="/resources/templates/:category/:templateId" element={<TemplateDetail />} />
                   <Route path="/scan" element={<Scan />} />
                   <Route path="/tools" element={<Tools />} />
                   <Route path="/brand-kit-tool" element={<BrandKitTool />} />

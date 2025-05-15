@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
@@ -160,6 +159,14 @@ const SideNav: React.FC = () => {
                   <Link to="/resources/guides">
                     <BookOpen className="mr-2 h-4 w-4" />
                     <span>PLR Guides</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/resources/templates">
+                    <FileText className="mr-2 h-4 w-4" />
+                    <span>Templates</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

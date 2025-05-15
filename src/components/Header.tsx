@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/context/ThemeContext';
-import { Moon, Sun, Palette, Wrench, RefreshCw, FileSearch, Shield, PercentSquare, Globe } from 'lucide-react';
+import { Moon, Sun, Palette, Wrench, RefreshCw, FileSearch, Shield, PercentSquare, Globe, FileText } from 'lucide-react';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -174,7 +174,8 @@ export default function Header({ showAuthButtons }: HeaderProps) {
                         </Link>
                       </li>
                       <li>
-                        <Link to="/resources/templates" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
+                        <Link to="/resources/templates" className={`${navigationMenuTriggerStyle()} w-full justify-start flex items-center`}>
+                          <FileText className="h-4 w-4 mr-2" />
                           Templates
                         </Link>
                       </li>

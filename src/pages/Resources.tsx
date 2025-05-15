@@ -1,8 +1,11 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Header from "@/components/Header";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { FileText } from 'lucide-react';
 
 export default function Resources() {
   return (
@@ -48,32 +51,91 @@ export default function Resources() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Content Calendar</CardTitle>
-                  <CardDescription>Plan your content strategy</CardDescription>
+                  <CardTitle>Blog Templates</CardTitle>
+                  <CardDescription>SEO-optimized layouts for different types of blog posts</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p>A template to help you plan and schedule your PLR content publication.</p>
+                  <p>Access ready-to-use templates for various blog formats including list posts, how-to guides, and product reviews.</p>
                 </CardContent>
+                <CardFooter>
+                  <Button asChild>
+                    <Link to="/resources/templates/blogs">
+                      <FileText className="mr-2 h-4 w-4" />
+                      View Templates
+                    </Link>
+                  </Button>
+                </CardFooter>
               </Card>
               
               <Card>
                 <CardHeader>
-                  <CardTitle>PLR Tracking Sheet</CardTitle>
-                  <CardDescription>Track your PLR usage and rights</CardDescription>
+                  <CardTitle>Email Templates</CardTitle>
+                  <CardDescription>High-converting email sequences</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p>Keep track of where you've used your PLR content and what rights you have for each piece.</p>
+                  <p>Get templates for welcome sequences, promotional campaigns, and follow-up emails to engage your audience.</p>
                 </CardContent>
+                <CardFooter>
+                  <Button asChild>
+                    <Link to="/resources/templates/emails">
+                      <FileText className="mr-2 h-4 w-4" />
+                      View Templates
+                    </Link>
+                  </Button>
+                </CardFooter>
               </Card>
               
               <Card>
                 <CardHeader>
-                  <CardTitle>PLR Customization Checklist</CardTitle>
-                  <CardDescription>Ensure your PLR is fully customized</CardDescription>
+                  <CardTitle>Legal Templates</CardTitle>
+                  <CardDescription>Essential legal documents for your business</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p>A step-by-step checklist for customizing PLR content to make it unique to your brand.</p>
+                  <p>Download customizable templates for privacy policies, terms of service, and other legal requirements.</p>
                 </CardContent>
+                <CardFooter>
+                  <Button asChild>
+                    <Link to="/resources/templates/legal">
+                      <FileText className="mr-2 h-4 w-4" />
+                      View Templates
+                    </Link>
+                  </Button>
+                </CardFooter>
+              </Card>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle>Social Media Templates</CardTitle>
+                  <CardDescription>Content formats for maximum engagement</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p>Templates for carousel posts, quotes, tips, and other popular social media content formats.</p>
+                </CardContent>
+                <CardFooter>
+                  <Button asChild>
+                    <Link to="/resources/templates/social-media">
+                      <FileText className="mr-2 h-4 w-4" />
+                      View Templates
+                    </Link>
+                  </Button>
+                </CardFooter>
+              </Card>
+              
+              <Card className="md:col-span-3">
+                <CardHeader>
+                  <CardTitle>Browse All Templates</CardTitle>
+                  <CardDescription>Explore our complete template library</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p>Access our full collection of PLR templates organized by content type and use case.</p>
+                </CardContent>
+                <CardFooter>
+                  <Button asChild size="lg">
+                    <Link to="/resources/templates">
+                      Browse Template Library
+                    </Link>
+                  </Button>
+                </CardFooter>
               </Card>
             </div>
           </TabsContent>
