@@ -32,6 +32,8 @@ import Translator from "./pages/Translator";
 import TranslatorApp from "./pages/TranslatorApp";
 import FileConverter from "./pages/FileConverter";
 import FileConverterApp from "./pages/FileConverterApp";
+import OcrTool from "./pages/OcrTool";
+import OcrToolApp from "./pages/OcrToolApp";
 import Affiliates from "./pages/Affiliates";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
@@ -76,6 +78,7 @@ const App = () => (
                   <Route path="/uniqueness-meter" element={<UniquenessMeter />} />
                   <Route path="/translator" element={<Translator />} />
                   <Route path="/file-converter" element={<FileConverter />} />
+                  <Route path="/ocr-tool" element={<OcrTool />} />
                   <Route path="/affiliates" element={<Affiliates />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
@@ -93,6 +96,7 @@ const App = () => (
                     <Route path="/tools/uniqueness-meter" element={<UniquenessMeterApp />} />
                     <Route path="/tools/translator" element={<TranslatorApp />} />
                     <Route path="/tools/file-converter" element={<FileConverterApp />} />
+                    <Route path="/tools/ocr-tool" element={<OcrToolApp />} />
                   </Route>
                   <Route path="*" element={<NotFound />} />
                 </Routes>

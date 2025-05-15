@@ -20,7 +20,8 @@ import {
   Globe,
   BookOpen,
   HelpCircle,
-  FileType
+  FileType,
+  FileScan
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -107,6 +108,10 @@ const MobileNav: React.FC = () => {
             <Link to="/tools/file-converter" className="flex items-center p-2 rounded-md hover:bg-muted pl-8" onClick={() => setIsOpen(false)}>
               <FileType className="mr-2 h-4 w-4" />
               <span>File Converter</span>
+            </Link>
+            <Link to="/tools/ocr-tool" className="flex items-center p-2 rounded-md hover:bg-muted pl-8" onClick={() => setIsOpen(false)}>
+              <FileScan className="mr-2 h-4 w-4" />
+              <span>OCR Tool</span>
             </Link>
             {/* Resources Links */}
             <Link to="/resources/guides" className="flex items-center p-2 rounded-md hover:bg-muted" onClick={() => setIsOpen(false)}>

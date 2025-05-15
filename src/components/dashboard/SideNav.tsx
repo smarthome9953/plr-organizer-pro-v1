@@ -15,7 +15,8 @@ import {
   Shield,
   PercentSquare,
   Globe,
-  FileType
+  FileType,
+  FileScan
 } from 'lucide-react';
 import {
   Sidebar,
@@ -153,6 +154,14 @@ const SideNav: React.FC = () => {
                   <Link to="/tools/file-converter">
                     <FileType className="mr-2 h-4 w-4" />
                     <span>File Converter</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={isActive('/tools/ocr-tool')}>
+                  <Link to="/tools/ocr-tool">
+                    <FileScan className="mr-2 h-4 w-4" />
+                    <span>OCR Tool</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
