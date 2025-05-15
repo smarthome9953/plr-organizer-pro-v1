@@ -12,7 +12,8 @@ import {
   BookOpen,
   RefreshCw,
   FileSearch,
-  Shield
+  Shield,
+  PercentSquare
 } from 'lucide-react';
 import {
   Sidebar,
@@ -126,6 +127,14 @@ const SideNav: React.FC = () => {
                   <Link to="/tools/license-tracker">
                     <Shield className="mr-2 h-4 w-4" />
                     <span>License Tracker</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={isActive('/tools/uniqueness-meter')}>
+                  <Link to="/tools/uniqueness-meter">
+                    <PercentSquare className="mr-2 h-4 w-4" />
+                    <span>Uniqueness Meter</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

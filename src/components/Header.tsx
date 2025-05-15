@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/context/ThemeContext';
-import { Moon, Sun, Palette, Wrench, RefreshCw, FileSearch, Shield } from 'lucide-react';
+import { Moon, Sun, Palette, Wrench, RefreshCw, FileSearch, Shield, PercentSquare } from 'lucide-react';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -130,6 +130,19 @@ export default function Header({ showAuthButtons }: HeaderProps) {
                             </div>
                             <p className="line-clamp-2 text-sm leading-snug text-muted-foreground mt-1">
                               Never risk copyright issues with PLR content
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <Link to="/uniqueness-meter" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                            <div className="flex items-center text-sm font-medium leading-none">
+                              <PercentSquare className="mr-2 h-4 w-4" />
+                              Uniqueness Meter
+                            </div>
+                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground mt-1">
+                              Verify content originality before publishing
                             </p>
                           </Link>
                         </NavigationMenuLink>

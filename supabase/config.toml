@@ -9,3 +9,6 @@ verify_jwt = false
 
 [functions.license-verifier]
 verify_jwt = false
+
+[functions.uniqueness-meter]
+verify_jwt = false

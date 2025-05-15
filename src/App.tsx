@@ -23,6 +23,8 @@ import SeoAnalyzer from "./pages/SeoAnalyzer";
 import SeoAnalyzerApp from "./pages/SeoAnalyzerApp";
 import LicenseTracker from "./pages/LicenseTracker";
 import LicenseTrackerApp from "./pages/LicenseTrackerApp";
+import UniquenessMeter from "./pages/UniquenessMeter";
+import UniquenessMeterApp from "./pages/UniquenessMeterApp";
 import Affiliates from "./pages/Affiliates";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
@@ -61,6 +63,7 @@ const App = () => (
                   <Route path="/content-spinner" element={<ContentSpinner />} />
                   <Route path="/seo-analyzer" element={<SeoAnalyzer />} />
                   <Route path="/license-tracker" element={<LicenseTracker />} />
+                  <Route path="/uniqueness-meter" element={<UniquenessMeter />} />
                   <Route path="/affiliates" element={<Affiliates />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
@@ -75,6 +78,7 @@ const App = () => (
                     <Route path="/tools/content-spinner" element={<ContentSpinnerApp />} />
                     <Route path="/tools/seo-analyzer" element={<SeoAnalyzerApp />} />
                     <Route path="/tools/license-tracker" element={<LicenseTrackerApp />} />
+                    <Route path="/tools/uniqueness-meter" element={<UniquenessMeterApp />} />
                   </Route>
                   <Route path="*" element={<NotFound />} />
                 </Routes>

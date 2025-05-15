@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Upload, FileText, FolderPlus, Download, Search, Edit, Palette, Wrench, RefreshCw, Shield, FileSearch } from 'lucide-react';
+import { Upload, FileText, FolderPlus, Download, Search, Edit, Palette, Wrench, RefreshCw, Shield, FileSearch, PercentSquare } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
@@ -81,6 +81,13 @@ const QuickActionPanel = ({ className }: QuickActionPanelProps) => {
       title: 'License Tracker',
       icon: <Shield className="h-4 w-4 mr-2" />,
       href: '/tools/license-tracker',
+      variant: 'outline'
+    },
+    {
+      id: '10',
+      title: 'Uniqueness Meter',
+      icon: <PercentSquare className="h-4 w-4 mr-2" />,
+      href: '/tools/uniqueness-meter',
       variant: 'outline'
     }
   ];

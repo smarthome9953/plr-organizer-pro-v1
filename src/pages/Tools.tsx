@@ -4,7 +4,7 @@ import Header from "@/components/Header";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Palette, Wrench, FileText, RefreshCw, ArrowRight, FileSearch, Shield } from "lucide-react";
+import { Palette, Wrench, FileText, RefreshCw, ArrowRight, FileSearch, Shield, PercentSquare } from "lucide-react";
 import Footer from "@/components/Footer";
 import { Helmet } from "react-helmet-async";
 
@@ -177,6 +177,46 @@ export default function Tools() {
                 <Button variant="outline">Learn More</Button>
               </Link>
               <Link to="/tools/license-tracker">
+                <Button>
+                  Use Tool
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </CardFooter>
+          </Card>
+          
+          <Card className="flex flex-col h-full border-2 border-primary/20">
+            <CardHeader>
+              <div className="flex items-center mb-2">
+                <div className="bg-primary/10 p-2 rounded-full mr-2">
+                  <PercentSquare className="h-5 w-5 text-primary" />
+                </div>
+                <CardTitle>Uniqueness Meter</CardTitle>
+              </div>
+              <CardDescription>Verify your content is original before publishing</CardDescription>
+            </CardHeader>
+            <CardContent className="flex-grow">
+              <p className="mb-4">Check how unique your modified PLR content is to avoid duplicate content penalties.</p>
+              <ul className="space-y-2 mb-4">
+                <li className="flex items-center">
+                  <span className="bg-primary/20 p-1 rounded-full mr-2">✓</span>
+                  <span className="text-sm">Paragraph-by-paragraph analysis</span>
+                </li>
+                <li className="flex items-center">
+                  <span className="bg-primary/20 p-1 rounded-full mr-2">✓</span>
+                  <span className="text-sm">Uniqueness improvement suggestions</span>
+                </li>
+                <li className="flex items-center">
+                  <span className="bg-primary/20 p-1 rounded-full mr-2">✓</span>
+                  <span className="text-sm">Plagiarism risk assessment</span>
+                </li>
+              </ul>
+            </CardContent>
+            <CardFooter className="flex justify-between">
+              <Link to="/uniqueness-meter">
+                <Button variant="outline">Learn More</Button>
+              </Link>
+              <Link to="/tools/uniqueness-meter">
                 <Button>
                   Use Tool
                   <ArrowRight className="ml-2 h-4 w-4" />
