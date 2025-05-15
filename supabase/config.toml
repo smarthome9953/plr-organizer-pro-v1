@@ -1,1 +1,5 @@
+
 project_id = "rydcpajipcqwcavgcdtb"
+
+[functions.content-spinner]
+verify_jwt = false

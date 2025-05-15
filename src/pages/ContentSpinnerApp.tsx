@@ -14,6 +14,7 @@ import { Helmet } from "react-helmet-async";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { FileText, RefreshCw, Upload, Check, Save, Lock, Bot, Dices } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function ContentSpinnerApp() {
   const { toast } = useToast();
@@ -23,11 +24,15 @@ export default function ContentSpinnerApp() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [uniquenessScore, setUniquenessScore] = useState<number | null>(null);
   
-  // Demo protected terms
+  // Protected terms
   const [protectedTerms, setProtectedTerms] = useState('PLR, SEO, Google, WordPress');
   
-  // Sample processing function
-  const processContent = () => {
+  // Settings
+  const [paragraphRestructuring, setParagraphRestructuring] = useState(false);
+  const [maintainKeywords, setMaintainKeywords] = useState(true);
+  const [enhanceReadability, setEnhanceReadability] = useState(true);
+  
+  const processContent = async () => {
     if (!inputText.trim()) {
       toast({
         title: "No content to spin",
@@ -41,61 +46,42 @@ export default function ContentSpinnerApp() {
     setOutputText('');
     setUniquenessScore(null);
     
-    // Simulated processing time
-    const processingTime = Math.floor(Math.random() * 2000) + 1000;
-    
-    // This is a simplified demo - in a real app, this would call an AI service
-    setTimeout(() => {
-      // Very simple demo spinning - a real implementation would use an API
-      const demoSpinText = simulateSpin(inputText, uniquenessLevel);
-      setOutputText(demoSpinText);
-      
-      // Set a random uniqueness score based on the level selected
-      const randomScore = uniquenessLevel - 5 + Math.floor(Math.random() * 10);
-      setUniquenessScore(Math.min(100, Math.max(0, randomScore)));
-      
-      setIsProcessing(false);
+    try {
+      // Call the edge function to spin the content
+      const { data, error } = await supabase.functions.invoke('content-spinner', {
+        body: {
+          content: inputText,
+          uniquenessLevel,
+          protectedTerms,
+          paragraphRestructuring,
+          maintainKeywords,
+          enhanceReadability
+        }
+      });
+
+      if (error) {
+        console.error('Error with content spinner function:', error);
+        throw new Error(error.message || 'Failed to spin content');
+      }
+
+      // Update the UI with the results
+      setOutputText(data.spunContent);
+      setUniquenessScore(data.uniquenessScore);
       
       toast({
         title: "Content spinning complete",
-        description: `Your content has been spun with ${randomScore}% uniqueness.`,
+        description: `Your content has been spun with ${data.uniquenessScore}% uniqueness.`,
       });
-    }, processingTime);
-  };
-  
-  // Very simple simulation of spinning text for demo purposes only
-  const simulateSpin = (text: string, level: number): string => {
-    // This is just a placeholder for demonstration
-    // A real implementation would use an NLP/AI service
-    
-    if (!text) return '';
-    
-    // Simple word replacements as demo
-    const replacements: Record<string, string[]> = {
-      'content': ['material', 'information', 'text', 'articles'],
-      'good': ['great', 'excellent', 'high-quality', 'superior'],
-      'use': ['utilize', 'leverage', 'employ', 'work with'],
-      'make': ['create', 'produce', 'develop', 'generate'],
-      'important': ['crucial', 'essential', 'critical', 'significant'],
-      'helps': ['assists', 'aids', 'supports', 'facilitates'],
-    };
-    
-    // For demo, more aggressive levels replace more words
-    const replacementChance = level / 100;
-    
-    let result = text;
-    Object.entries(replacements).forEach(([word, alternatives]) => {
-      const regex = new RegExp(`\\b${word}\\b`, 'gi');
-      result = result.replace(regex, (match) => {
-        // Only replace some instances based on uniqueness level
-        if (Math.random() < replacementChance) {
-          return alternatives[Math.floor(Math.random() * alternatives.length)];
-        }
-        return match;
+    } catch (error) {
+      console.error('Content spinning error:', error);
+      toast({
+        title: "Error spinning content",
+        description: error instanceof Error ? error.message : "An unknown error occurred",
+        variant: "destructive",
       });
-    });
-    
-    return result;
+    } finally {
+      setIsProcessing(false);
+    }
   };
   
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -198,7 +184,12 @@ export default function ContentSpinnerApp() {
                     <Label htmlFor="paragraph-restructure">Paragraph Restructuring</Label>
                     <p className="text-xs text-muted-foreground">Change paragraph order & structure</p>
                   </div>
-                  <Switch id="paragraph-restructure" disabled={isProcessing} />
+                  <Switch 
+                    id="paragraph-restructure" 
+                    disabled={isProcessing}
+                    checked={paragraphRestructuring}
+                    onCheckedChange={setParagraphRestructuring}
+                  />
                 </div>
                 
                 <div className="flex items-center justify-between">
@@ -206,7 +197,12 @@ export default function ContentSpinnerApp() {
                     <Label htmlFor="maintain-keywords">Maintain Keywords</Label>
                     <p className="text-xs text-muted-foreground">Preserve SEO-relevant keywords</p>
                   </div>
-                  <Switch id="maintain-keywords" disabled={isProcessing} defaultChecked />
+                  <Switch 
+                    id="maintain-keywords" 
+                    disabled={isProcessing}
+                    checked={maintainKeywords}
+                    onCheckedChange={setMaintainKeywords}
+                  />
                 </div>
                 
                 <div className="flex items-center justify-between">
@@ -214,7 +210,12 @@ export default function ContentSpinnerApp() {
                     <Label htmlFor="readability-check">Enhance Readability</Label>
                     <p className="text-xs text-muted-foreground">Improve sentence flow and clarity</p>
                   </div>
-                  <Switch id="readability-check" disabled={isProcessing} defaultChecked />
+                  <Switch 
+                    id="readability-check" 
+                    disabled={isProcessing}
+                    checked={enhanceReadability}
+                    onCheckedChange={setEnhanceReadability}
+                  />
                 </div>
               </div>
             </CardContent>

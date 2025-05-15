@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
@@ -155,7 +154,7 @@ const SideNav: React.FC = () => {
         </Link>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup defaultOpen={isDashboardActive}>
+        <SidebarGroup>
           <SidebarGroupLabel>Main</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -195,7 +194,7 @@ const SideNav: React.FC = () => {
           </SidebarGroupContent>
         </SidebarGroup>
         
-        <SidebarGroup defaultOpen={isToolsExpanded}>
+        <SidebarGroup>
           <SidebarGroupLabel>Tools</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -227,7 +226,7 @@ const SideNav: React.FC = () => {
           </SidebarGroupContent>
         </SidebarGroup>
         
-        <SidebarGroup defaultOpen={isResourcesExpanded}>
+        <SidebarGroup>
           <SidebarGroupLabel>Resources</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
