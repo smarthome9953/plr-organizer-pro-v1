@@ -34,6 +34,8 @@ import FileConverter from "./pages/FileConverter";
 import FileConverterApp from "./pages/FileConverterApp";
 import OcrTool from "./pages/OcrTool";
 import OcrToolApp from "./pages/OcrToolApp";
+import HtmlEditor from "./pages/HtmlEditor";
+import HtmlEditorApp from "./pages/HtmlEditorApp";
 import Affiliates from "./pages/Affiliates";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
@@ -79,6 +81,7 @@ const App = () => (
                   <Route path="/translator" element={<Translator />} />
                   <Route path="/file-converter" element={<FileConverter />} />
                   <Route path="/ocr-tool" element={<OcrTool />} />
+                  <Route path="/html-editor" element={<HtmlEditor />} />
                   <Route path="/affiliates" element={<Affiliates />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
@@ -97,6 +100,7 @@ const App = () => (
                     <Route path="/tools/translator" element={<TranslatorApp />} />
                     <Route path="/tools/file-converter" element={<FileConverterApp />} />
                     <Route path="/tools/ocr-tool" element={<OcrToolApp />} />
+                    <Route path="/tools/html-editor" element={<HtmlEditorApp />} />
                   </Route>
                   <Route path="*" element={<NotFound />} />
                 </Routes>

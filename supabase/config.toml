@@ -21,3 +21,7 @@ verify_jwt = false
 
 [functions.ocr-tool]
 verify_jwt = false
+
+[functions.html-editor]
+verify_jwt = false
+

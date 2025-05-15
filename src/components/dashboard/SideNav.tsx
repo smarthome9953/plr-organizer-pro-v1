@@ -16,7 +16,8 @@ import {
   PercentSquare,
   Globe,
   FileType,
-  FileScan
+  FileScan,
+  FileCode
 } from 'lucide-react';
 import {
   Sidebar,
@@ -162,6 +163,14 @@ const SideNav: React.FC = () => {
                   <Link to="/tools/ocr-tool">
                     <FileScan className="mr-2 h-4 w-4" />
                     <span>OCR Tool</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={isActive('/tools/html-editor')}>
+                  <Link to="/tools/html-editor">
+                    <FileCode className="mr-2 h-4 w-4" />
+                    <span>HTML Editor</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
