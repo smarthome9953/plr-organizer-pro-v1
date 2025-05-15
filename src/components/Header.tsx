@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/context/ThemeContext';
-import { Moon, Sun, Palette } from 'lucide-react';
+import { Moon, Sun, Palette, Wrench } from 'lucide-react';
 import {
   NavigationMenu,
   NavigationMenuContent,

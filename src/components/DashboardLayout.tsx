@@ -15,7 +15,7 @@ import {
   PieChart,
   Palette,
   FolderIcon,
-  Tool,
+  Wrench,
   HelpCircle,
   BookOpen,
   Plus,
@@ -154,7 +154,7 @@ const SideNav: React.FC = () => {
         </Link>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup open={isDashboardActive}>
+        <SidebarGroup defaultOpen={isDashboardActive}>
           <SidebarGroupLabel>Main</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -194,14 +194,14 @@ const SideNav: React.FC = () => {
           </SidebarGroupContent>
         </SidebarGroup>
         
-        <SidebarGroup open={isToolsExpanded}>
+        <SidebarGroup defaultOpen={isToolsExpanded}>
           <SidebarGroupLabel>Tools</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={isActive('/tools')}>
                   <Link to="/tools">
-                    <Tool className="mr-2 h-4 w-4" />
+                    <Wrench className="mr-2 h-4 w-4" />
                     <span>All Tools</span>
                   </Link>
                 </SidebarMenuButton>
@@ -218,7 +218,7 @@ const SideNav: React.FC = () => {
           </SidebarGroupContent>
         </SidebarGroup>
         
-        <SidebarGroup open={isResourcesExpanded}>
+        <SidebarGroup defaultOpen={isResourcesExpanded}>
           <SidebarGroupLabel>Resources</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>

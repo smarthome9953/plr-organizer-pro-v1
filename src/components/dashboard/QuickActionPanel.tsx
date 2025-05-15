@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Upload, FileText, FolderPlus, Download, Search, Edit, Palette } from 'lucide-react';
+import { Upload, FileText, FolderPlus, Download, Search, Edit, Palette, Wrench } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 

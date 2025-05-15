@@ -57,7 +57,7 @@ const Index = () => {
     }
   ];
 
-  // Sample recommendations
+  // Sample recommendations - fixed apostrophes by using double quotes for strings with apostrophes
   const recommendations = [
     {
       id: '1',
