@@ -14,6 +14,9 @@ import BlogCategory from "./pages/BlogCategory";
 import BlogPost from "./pages/BlogPost";
 import Resources from "./pages/Resources";
 import Scan from "./pages/Scan";
+import Tools from "./pages/Tools";
+import BrandKitTool from "./pages/BrandKitTool";
+import BrandKitToolApp from "./pages/BrandKitToolApp";
 import Affiliates from "./pages/Affiliates";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
@@ -47,6 +50,8 @@ const App = () => (
                   <Route path="/blog/:categorySlug/:postSlug" element={<BlogPost />} />
                   <Route path="/resources/*" element={<Resources />} />
                   <Route path="/scan" element={<Scan />} />
+                  <Route path="/tools" element={<Tools />} />
+                  <Route path="/brand-kit-tool" element={<BrandKitTool />} />
                   <Route path="/affiliates" element={<Affiliates />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
@@ -57,6 +62,7 @@ const App = () => (
                   <Route path="/contact" element={<Contact />} />
                   <Route element={<ProtectedRoute />}>
                     <Route path="/dashboard" element={<Index />} />
+                    <Route path="/tools/brand-kit" element={<BrandKitToolApp />} />
                   </Route>
                   <Route path="*" element={<NotFound />} />
                 </Routes>

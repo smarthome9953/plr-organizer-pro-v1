@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/context/ThemeContext';
-import { Moon, Sun } from 'lucide-react';
+import { Moon, Sun, Palette } from 'lucide-react';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -83,9 +83,17 @@ export default function Header({ showAuthButtons }: HeaderProps) {
                         </NavigationMenuLink>
                       </li>
                       <li>
-                        <Link to="/tools/analyzer" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
-                          Content Analyzer
-                        </Link>
+                        <NavigationMenuLink asChild>
+                          <Link to="/brand-kit-tool" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                            <div className="flex items-center text-sm font-medium leading-none">
+                              <Palette className="mr-2 h-4 w-4" />
+                              Brand Tool Kit
+                            </div>
+                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground mt-1">
+                              Create consistent branding across your PLR content
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
                       </li>
                       <li>
                         <Link to="/tools/editor" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
