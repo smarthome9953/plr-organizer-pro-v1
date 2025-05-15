@@ -16,5 +16,6 @@ export const ProtectedRoute = () => {
   }
   
   // Only after loading is complete, decide whether to show the protected content or navigate away
+  // Use the replace prop to replace instead of push to history stack
   return user ? <Outlet /> : <Navigate to="/auth" state={{ from: location }} replace />;
 };

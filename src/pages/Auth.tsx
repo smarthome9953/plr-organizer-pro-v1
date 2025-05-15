@@ -21,7 +21,7 @@ type FormValues = z.infer<typeof formSchema>;
 
 const Auth = () => {
   const [activeTab, setActiveTab] = useState("login");
-  const { signIn, signUp, user } = useAuth();
+  const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
@@ -36,10 +36,20 @@ const Auth = () => {
   
   // Redirect if user is already logged in
   useEffect(() => {
-    if (user) {
-      navigate('/dashboard');
+    if (user && !loading) {
+      const from = location.state?.from?.pathname || '/dashboard';
+      navigate(from, { replace: true });
     }
-  }, [user, navigate]);
+  }, [user, loading, navigate, location]);
+
+  // Don't render anything while checking auth state initially
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   const onSubmit = async (values: FormValues) => {
     setIsLoading(true);

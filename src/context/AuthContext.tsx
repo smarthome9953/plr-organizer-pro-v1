@@ -28,6 +28,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        // Update session and user state atomically to prevent flashing
         setSession(session);
         setUser(session?.user ?? null);
         
@@ -38,17 +39,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             toast("Signed in", {
               description: "You have successfully logged in",
             });
+            
             // Only redirect if not already on dashboard
             if (location.pathname === '/auth') {
-              navigate('/dashboard');
+              // Use replace instead of push to prevent back button issues
+              navigate('/dashboard', { replace: true });
             }
           } else if (event === 'SIGNED_OUT') {
             toast("Signed out", {
               description: "You have been logged out",
             });
+            
             // Only redirect if on a protected route
-            if (location.pathname.startsWith('/dashboard')) {
-              navigate('/auth');
+            if (location.pathname.startsWith('/dashboard') || 
+                location.pathname.startsWith('/plr-')) {
+              // Use replace instead of push to prevent back button issues
+              navigate('/auth', { replace: true });
             }
           }
         }
@@ -68,6 +74,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signIn = async (email: string, password: string) => {
     try {
+      setLoading(true);
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
     } catch (error: any) {
@@ -75,11 +82,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         description: error.message || "An error occurred during sign in",
       });
       throw error;
+    } finally {
+      setLoading(false);
     }
   };
 
   const signUp = async (email: string, password: string) => {
     try {
+      setLoading(true);
       const { error } = await supabase.auth.signUp({ email, password });
       if (error) throw error;
       
@@ -91,11 +101,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         description: error.message || "An error occurred during sign up",
       });
       throw error;
+    } finally {
+      setLoading(false);
     }
   };
 
   const signOut = async () => {
     try {
+      setLoading(true);
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
     } catch (error: any) {
@@ -103,6 +116,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         description: error.message || "An error occurred during sign out",
       });
       throw error;
+    } finally {
+      setLoading(false);
     }
   };
 
