@@ -23,6 +23,10 @@ import GdprCompliance from "./pages/GdprCompliance";
 import Careers from "./pages/Careers";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
+import PLRDashboard from "./pages/PLRDashboard";
+import PLRScan from "./pages/PLRScan";
+import PLRBrowser from "./pages/PLRBrowser";
+import PLRCategories from "./pages/PLRCategories";
 import { AuthProvider } from "./context/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { ThemeProvider } from "./context/ThemeContext";
@@ -58,7 +62,10 @@ const App = () => (
                   <Route path="/careers" element={<Careers />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route element={<ProtectedRoute />}>
-                    <Route path="/dashboard" element={<Index />} />
+                    <Route path="/dashboard" element={<PLRDashboard />} />
+                    <Route path="/plr-scan" element={<PLRScan />} />
+                    <Route path="/plr-browser" element={<PLRBrowser />} />
+                    <Route path="/plr-categories" element={<PLRCategories />} />
                   </Route>
                   <Route path="*" element={<NotFound />} />
                 </Routes>

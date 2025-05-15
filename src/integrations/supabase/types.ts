@@ -9,6 +9,54 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      plr_categories: {
+        Row: {
+          category_name: string
+          user_id: string
+        }
+        Insert: {
+          category_name: string
+          user_id: string
+        }
+        Update: {
+          category_name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      plr_files: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          file_name: string
+          file_path: string
+          file_type: string | null
+          id: string
+          tags: string[] | null
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          file_name: string
+          file_path: string
+          file_type?: string | null
+          id?: string
+          tags?: string[] | null
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          file_name?: string
+          file_path?: string
+          file_type?: string | null
+          id?: string
+          tags?: string[] | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       plr_packages: {
         Row: {
           category: string | null
