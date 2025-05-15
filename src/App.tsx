@@ -12,7 +12,6 @@ import Landing from "./pages/Landing";
 import Blog from "./pages/Blog";
 import BlogCategory from "./pages/BlogCategory";
 import BlogPost from "./pages/BlogPost";
-import Tools from "./pages/Tools";
 import Resources from "./pages/Resources";
 import Scan from "./pages/Scan";
 import Affiliates from "./pages/Affiliates";
@@ -23,10 +22,6 @@ import GdprCompliance from "./pages/GdprCompliance";
 import Careers from "./pages/Careers";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
-import PLRDashboard from "./pages/PLRDashboard";
-import PLRScan from "./pages/PLRScan";
-import PLRBrowser from "./pages/PLRBrowser";
-import PLRCategories from "./pages/PLRCategories";
 import { AuthProvider } from "./context/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { ThemeProvider } from "./context/ThemeContext";
@@ -50,7 +45,6 @@ const App = () => (
                   <Route path="/blog" element={<Blog />} />
                   <Route path="/blog/:categorySlug" element={<BlogCategory />} />
                   <Route path="/blog/:categorySlug/:postSlug" element={<BlogPost />} />
-                  <Route path="/tools" element={<Tools />} />
                   <Route path="/resources/*" element={<Resources />} />
                   <Route path="/scan" element={<Scan />} />
                   <Route path="/affiliates" element={<Affiliates />} />
@@ -62,10 +56,7 @@ const App = () => (
                   <Route path="/careers" element={<Careers />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route element={<ProtectedRoute />}>
-                    <Route path="/dashboard" element={<PLRDashboard />} />
-                    <Route path="/plr-scan" element={<PLRScan />} />
-                    <Route path="/plr-browser" element={<PLRBrowser />} />
-                    <Route path="/plr-categories" element={<PLRCategories />} />
+                    <Route path="/dashboard" element={<Index />} />
                   </Route>
                   <Route path="*" element={<NotFound />} />
                 </Routes>
