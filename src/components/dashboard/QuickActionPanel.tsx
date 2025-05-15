@@ -1,0 +1,93 @@
+
+import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Upload, FileText, FolderPlus, Download, Search, Edit } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { cn } from '@/lib/utils';
+
+interface QuickAction {
+  id: string;
+  title: string;
+  icon: React.ReactNode;
+  href: string;
+  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
+}
+
+interface QuickActionPanelProps {
+  className?: string;
+}
+
+const QuickActionPanel = ({ className }: QuickActionPanelProps) => {
+  const quickActions: QuickAction[] = [
+    {
+      id: '1',
+      title: 'Upload Content',
+      icon: <Upload className="h-4 w-4 mr-2" />,
+      href: '/upload',
+      variant: 'default'
+    },
+    {
+      id: '2',
+      title: 'Browse Library',
+      icon: <FileText className="h-4 w-4 mr-2" />,
+      href: '/plr-library',
+      variant: 'outline'
+    },
+    {
+      id: '3',
+      title: 'New Project',
+      icon: <FolderPlus className="h-4 w-4 mr-2" />,
+      href: '/projects/new',
+      variant: 'outline'
+    },
+    {
+      id: '4',
+      title: 'Export Content',
+      icon: <Download className="h-4 w-4 mr-2" />,
+      href: '/export',
+      variant: 'outline'
+    },
+    {
+      id: '5',
+      title: 'Advanced Search',
+      icon: <Search className="h-4 w-4 mr-2" />,
+      href: '/search',
+      variant: 'outline'
+    },
+    {
+      id: '6',
+      title: 'Bulk Editor',
+      icon: <Edit className="h-4 w-4 mr-2" />,
+      href: '/bulk-edit',
+      variant: 'outline'
+    }
+  ];
+
+  return (
+    <Card className={cn("", className)}>
+      <CardHeader>
+        <CardTitle className="text-lg">Quick Actions</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-2 gap-3">
+          {quickActions.map((action) => (
+            <Button 
+              key={action.id} 
+              variant={action.variant || 'outline'} 
+              asChild
+              className="justify-start h-10"
+            >
+              <Link to={action.href}>
+                {action.icon}
+                {action.title}
+              </Link>
+            </Button>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default QuickActionPanel;
