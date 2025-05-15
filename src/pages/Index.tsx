@@ -62,21 +62,21 @@ const Index = () => {
     {
       id: '1',
       title: 'Content Optimization Opportunity',
-      description: 'Your "Social Media Marketing" PLR articles haven't been modified yet. Customize them to improve uniqueness.',
+      description: "Your \"Social Media Marketing\" PLR articles haven't been modified yet. Customize them to improve uniqueness.",
       actionText: 'Start Customizing',
       actionHref: '/plr-library/social-media'
     },
     {
       id: '2',
       title: 'Trending Topic Alert',
-      description: 'AI tools content is trending in your niche. We found 5 PLR articles in your library you could update.',
+      description: "AI tools content is trending in your niche. We found 5 PLR articles in your library you could update.",
       actionText: 'View Articles',
       actionHref: '/plr-library?tag=ai-tools'
     },
     {
       id: '3',
       title: 'Unused Content',
-      description: 'You have 15 health and wellness articles that haven't been published or used yet.',
+      description: "You have 15 health and wellness articles that haven't been published or used yet.",
       actionText: 'Explore Content',
       actionHref: '/plr-library?status=unused&category=health'
     }
