@@ -124,9 +124,9 @@ const MobileNav: React.FC = () => {
               <span>Batch Editor</span>
             </Link>
             {/* Resources Links */}
-            <Link to="/resources/guides" className="flex items-center p-2 rounded-md hover:bg-muted" onClick={() => setIsOpen(false)}>
+            <Link to="/resources/plr-software-guides" className="flex items-center p-2 rounded-md hover:bg-muted" onClick={() => setIsOpen(false)}>
               <BookOpen className="mr-2 h-4 w-4" />
-              <span>PLR Guides</span>
+              <span>PLR Software Guides</span>
             </Link>
             <Link to="/resources/templates" className="flex items-center p-2 rounded-md hover:bg-muted" onClick={() => setIsOpen(false)}>
               <FileText className="mr-2 h-4 w-4" />

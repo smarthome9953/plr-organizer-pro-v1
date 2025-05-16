@@ -193,9 +193,9 @@ const SideNav: React.FC = () => {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to="/resources/guides">
+                  <Link to="/resources/plr-software-guides">
                     <BookOpen className="mr-2 h-4 w-4" />
-                    <span>PLR Guides</span>
+                    <span>PLR Software Guides</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

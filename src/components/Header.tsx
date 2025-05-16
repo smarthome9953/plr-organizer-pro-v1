@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -157,8 +158,8 @@ export default function Header({
                   <NavigationMenuContent>
                     <ul className="grid gap-3 p-4 w-[400px] md:w-[500px] md:grid-cols-2 text-base">
                       <li>
-                        <Link to="/resources/guides" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
-                          PLR Guides
+                        <Link to="/resources/plr-software-guides" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
+                          PLR Software Guides
                         </Link>
                       </li>
                       <li>

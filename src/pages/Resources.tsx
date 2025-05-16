@@ -27,12 +27,19 @@ export default function Resources() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Getting Started Guide</CardTitle>
+                  <CardTitle>PLR Software Guides</CardTitle>
                   <CardDescription>Everything you need to know to get started with PLR</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <p>Learn the fundamentals of PLR content and how to use it effectively in your business.</p>
                 </CardContent>
+                <CardFooter>
+                  <Button asChild>
+                    <Link to="/resources/plr-software-guides">
+                      View Guides
+                    </Link>
+                  </Button>
+                </CardFooter>
               </Card>
               
               <Card>
@@ -43,6 +50,13 @@ export default function Resources() {
                 <CardContent>
                   <p>Discover proven strategies to keep your PLR content organized and easily accessible.</p>
                 </CardContent>
+                <CardFooter>
+                  <Button asChild>
+                    <Link to="/blog/organization">
+                      Read Strategies
+                    </Link>
+                  </Button>
+                </CardFooter>
               </Card>
             </div>
           </TabsContent>
@@ -161,6 +175,13 @@ export default function Resources() {
                   </div>
                 </div>
               </CardContent>
+              <CardFooter>
+                <Button asChild>
+                  <Link to="/resources/plr-software-faq">
+                    View All FAQs
+                  </Link>
+                </Button>
+              </CardFooter>
             </Card>
           </TabsContent>
           

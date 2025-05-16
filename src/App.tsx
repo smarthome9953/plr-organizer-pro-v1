@@ -47,6 +47,7 @@ import Careers from "./pages/Careers";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
 import PLRSoftwareFAQ from "./pages/PLRSoftwareFAQ";
+import PLRSoftwareGuides from "./pages/PLRSoftwareGuides";
 import { AuthProvider } from "./context/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { ThemeProvider } from "./context/ThemeContext";
@@ -75,6 +76,7 @@ const App = () => (
                   <Route path="/resources/templates/:category" element={<TemplateCategory />} />
                   <Route path="/resources/templates/:category/:templateId" element={<TemplateDetail />} />
                   <Route path="/resources/plr-software-faq" element={<PLRSoftwareFAQ />} />
+                  <Route path="/resources/plr-software-guides" element={<PLRSoftwareGuides />} />
                   <Route path="/scan" element={<Scan />} />
                   <Route path="/tools" element={<Tools />} />
                   <Route path="/brand-kit-tool" element={<BrandKitTool />} />
