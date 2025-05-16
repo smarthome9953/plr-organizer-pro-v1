@@ -21,11 +21,18 @@ interface QuickActionPanelProps {
 const QuickActionPanel = ({ className }: QuickActionPanelProps) => {
   const quickActions: QuickAction[] = [
     {
+      id: '0',
+      title: 'PLR Scanner',
+      icon: <FileScan className="h-4 w-4 mr-2" />,
+      href: '/scan',
+      variant: 'default'
+    },
+    {
       id: '1',
       title: 'Upload Content',
       icon: <Upload className="h-4 w-4 mr-2" />,
       href: '/upload',
-      variant: 'default'
+      variant: 'outline'
     },
     {
       id: '2',

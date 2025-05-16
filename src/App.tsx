@@ -17,6 +17,7 @@ import Templates from "./pages/Templates";
 import TemplateCategory from "./pages/TemplateCategory";
 import TemplateDetail from "./pages/TemplateDetail";
 import Scan from "./pages/Scan";
+import PlrScanner from "./pages/PlrScanner";
 import Tools from "./pages/Tools";
 import BrandKitTool from "./pages/BrandKitTool";
 import BrandKitToolApp from "./pages/BrandKitToolApp";
@@ -78,6 +79,7 @@ const App = () => (
                   <Route path="/resources/plr-software-faq" element={<PLRSoftwareFAQ />} />
                   <Route path="/resources/plr-software-guides" element={<PLRSoftwareGuides />} />
                   <Route path="/scan" element={<Scan />} />
+                  <Route path="/plr-scanner" element={<PlrScanner />} />
                   <Route path="/tools" element={<Tools />} />
                   <Route path="/brand-kit-tool" element={<BrandKitTool />} />
                   <Route path="/content-spinner" element={<ContentSpinner />} />

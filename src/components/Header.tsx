@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/context/ThemeContext';
-import { Moon, Sun, Palette, Wrench, RefreshCw, FileSearch, Shield, PercentSquare, Globe, FileText, FileCode } from 'lucide-react';
+import { Moon, Sun, Palette, Wrench, RefreshCw, FileSearch, Shield, PercentSquare, Globe, FileText, FileCode, FileScan } from 'lucide-react';
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 export function ThemeToggle() {
   const {
@@ -35,6 +35,12 @@ export default function Header({
                 <NavigationMenuItem>
                   <Link to="/" className={`${navigationMenuTriggerStyle()} text-lg`}>
                     Home
+                  </Link>
+                </NavigationMenuItem>
+                
+                <NavigationMenuItem>
+                  <Link to="/plr-scanner" className={`${navigationMenuTriggerStyle()} text-lg`}>
+                    PLR Scanner
                   </Link>
                 </NavigationMenuItem>
                 
@@ -93,6 +99,19 @@ export default function Header({
                             </div>
                             <p className="line-clamp-2 text-sm leading-snug text-muted-foreground mt-1">
                               Optimize PLR content for search engines
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <Link to="/plr-scanner" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                            <div className="flex items-center text-sm font-medium leading-none">
+                              <FileScan className="mr-2 h-4 w-4" />
+                              PLR Scanner
+                            </div>
+                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground mt-1">
+                              Find and organize all your PLR content in minutes
                             </p>
                           </Link>
                         </NavigationMenuLink>

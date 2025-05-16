@@ -71,6 +71,10 @@ const MobileNav: React.FC = () => {
               <Home className="mr-2 h-4 w-4" />
               <span>Dashboard</span>
             </Link>
+            <Link to="/plr-scanner" className="flex items-center p-2 rounded-md hover:bg-muted" onClick={() => setIsOpen(false)}>
+              <FileScan className="mr-2 h-4 w-4" />
+              <span>PLR Scanner</span>
+            </Link>
             <Link to="/plr-library" className="flex items-center p-2 rounded-md hover:bg-muted" onClick={() => setIsOpen(false)}>
               <FileText className="mr-2 h-4 w-4" />
               <span>PLR Library</span>
