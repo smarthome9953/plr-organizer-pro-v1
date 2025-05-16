@@ -1,55 +1,30 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/context/ThemeContext';
 import { Moon, Sun, Palette, Wrench, RefreshCw, FileSearch, Shield, PercentSquare, Globe, FileText, FileCode } from 'lucide-react';
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle
-} from "@/components/ui/navigation-menu";
-
+import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 export function ThemeToggle() {
-  const { theme, toggleTheme } = useTheme();
-  
-  return (
-    <Button 
-      variant="ghost" 
-      size="icon" 
-      onClick={toggleTheme} 
-      className="rounded-full"
-      aria-label="Toggle theme"
-    >
-      {theme === 'dark' ? (
-        <Sun className="h-5 w-5" />
-      ) : (
-        <Moon className="h-5 w-5" />
-      )}
-    </Button>
-  );
+  const {
+    theme,
+    toggleTheme
+  } = useTheme();
+  return <Button variant="ghost" size="icon" onClick={toggleTheme} className="rounded-full" aria-label="Toggle theme">
+      {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+    </Button>;
 }
-
 interface HeaderProps {
   showAuthButtons?: boolean;
 }
-
-export default function Header({ showAuthButtons }: HeaderProps) {
-  return (
-    <header className="border-b">
+export default function Header({
+  showAuthButtons
+}: HeaderProps) {
+  return <header className="border-b">
       <div className="container mx-auto px-4 py-2">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
-              <img 
-                src="/lovable-uploads/34f6c58f-7ead-48ed-8bf9-bed0734b95c5.png" 
-                alt="PLR Organizer Pro - Private Label Rights Content Management Software" 
-                className="h-12 mr-3" 
-              />
+              <img src="/lovable-uploads/34f6c58f-7ead-48ed-8bf9-bed0734b95c5.png" alt="PLR Organizer Pro - Private Label Rights Content Management Software" className="h-12 mr-3" />
             </Link>
           </div>
           
@@ -235,9 +210,7 @@ export default function Header({ showAuthButtons }: HeaderProps) {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  <Link to="/contact" className={`${navigationMenuTriggerStyle()} text-lg`}>
-                    Contact
-                  </Link>
+                  
                 </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
@@ -245,23 +218,18 @@ export default function Header({ showAuthButtons }: HeaderProps) {
           
           <div className="flex items-center space-x-4">
             <ThemeToggle />
-            {showAuthButtons ? (
-              <div className="flex items-center gap-4">
+            {showAuthButtons ? <div className="flex items-center gap-4">
                 <Link to="/auth">
                   <Button variant="outline">Sign In</Button>
                 </Link>
                 <Link to="/auth">
                   <Button>Start Free Trial</Button>
                 </Link>
-              </div>
-            ) : (
-              <Link to="/auth">
+              </div> : <Link to="/auth">
                 <Button variant="default">Sign In</Button>
-              </Link>
-            )}
+              </Link>}
           </div>
         </div>
       </div>
-    </header>
-  );
+    </header>;
 }
