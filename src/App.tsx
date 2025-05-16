@@ -36,6 +36,8 @@ import OcrTool from "./pages/OcrTool";
 import OcrToolApp from "./pages/OcrToolApp";
 import HtmlEditor from "./pages/HtmlEditor";
 import HtmlEditorApp from "./pages/HtmlEditorApp";
+import BatchEditor from "./pages/BatchEditor";
+import BatchEditorApp from "./pages/BatchEditorApp";
 import Affiliates from "./pages/Affiliates";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
@@ -82,6 +84,7 @@ const App = () => (
                   <Route path="/file-converter" element={<FileConverter />} />
                   <Route path="/ocr-tool" element={<OcrTool />} />
                   <Route path="/html-editor" element={<HtmlEditor />} />
+                  <Route path="/batch-editor" element={<BatchEditor />} />
                   <Route path="/affiliates" element={<Affiliates />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
@@ -101,6 +104,7 @@ const App = () => (
                     <Route path="/tools/file-converter" element={<FileConverterApp />} />
                     <Route path="/tools/ocr-tool" element={<OcrToolApp />} />
                     <Route path="/tools/html-editor" element={<HtmlEditorApp />} />
+                    <Route path="/tools/batch-editor" element={<BatchEditorApp />} />
                   </Route>
                   <Route path="*" element={<NotFound />} />
                 </Routes>

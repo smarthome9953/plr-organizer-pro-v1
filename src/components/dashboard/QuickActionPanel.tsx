@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Upload, FileText, FolderPlus, Download, Search, Edit, Palette, Wrench, RefreshCw, Shield, FileSearch, PercentSquare, Globe, FileType, FileScan, FileCode } from 'lucide-react';
+import { Upload, FileText, FolderPlus, Download, Search, Edit, Palette, Wrench, RefreshCw, Shield, FileSearch, PercentSquare, Globe, FileType, FileScan, FileCode, Replace } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
@@ -116,6 +116,13 @@ const QuickActionPanel = ({ className }: QuickActionPanelProps) => {
       title: 'HTML Editor',
       icon: <FileCode className="h-4 w-4 mr-2" />,
       href: '/tools/html-editor',
+      variant: 'outline'
+    },
+    {
+      id: '15',
+      title: 'Batch Editor',
+      icon: <Replace className="h-4 w-4 mr-2" />,
+      href: '/tools/batch-editor',
       variant: 'outline'
     }
   ];

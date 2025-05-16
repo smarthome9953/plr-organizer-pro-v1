@@ -25,3 +25,6 @@ verify_jwt = false
 [functions.html-editor]
 verify_jwt = false
 
+[functions.batch-editor]
+verify_jwt = false
+

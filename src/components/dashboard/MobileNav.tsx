@@ -22,7 +22,8 @@ import {
   HelpCircle,
   FileType,
   FileScan,
-  FileCode
+  FileCode,
+  Replace
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -117,6 +118,10 @@ const MobileNav: React.FC = () => {
             <Link to="/tools/html-editor" className="flex items-center p-2 rounded-md hover:bg-muted pl-8" onClick={() => setIsOpen(false)}>
               <FileCode className="mr-2 h-4 w-4" />
               <span>HTML Editor</span>
+            </Link>
+            <Link to="/tools/batch-editor" className="flex items-center p-2 rounded-md hover:bg-muted pl-8" onClick={() => setIsOpen(false)}>
+              <Replace className="mr-2 h-4 w-4" />
+              <span>Batch Editor</span>
             </Link>
             {/* Resources Links */}
             <Link to="/resources/guides" className="flex items-center p-2 rounded-md hover:bg-muted" onClick={() => setIsOpen(false)}>

@@ -17,7 +17,8 @@ import {
   Globe,
   FileType,
   FileScan,
-  FileCode
+  FileCode,
+  Replace
 } from 'lucide-react';
 import {
   Sidebar,
@@ -171,6 +172,14 @@ const SideNav: React.FC = () => {
                   <Link to="/tools/html-editor">
                     <FileCode className="mr-2 h-4 w-4" />
                     <span>HTML Editor</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={isActive('/tools/batch-editor')}>
+                  <Link to="/tools/batch-editor">
+                    <Replace className="mr-2 h-4 w-4" />
+                    <span>Batch Editor</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

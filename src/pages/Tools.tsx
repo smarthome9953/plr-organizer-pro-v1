@@ -4,7 +4,7 @@ import Header from "@/components/Header";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Palette, Wrench, FileText, RefreshCw, ArrowRight, FileSearch, Shield, PercentSquare, Globe, FileType, FileScan, FileCode } from "lucide-react";
+import { Palette, Wrench, FileText, RefreshCw, ArrowRight, FileSearch, Shield, PercentSquare, Globe, FileType, FileScan, FileCode, Replace } from "lucide-react";
 import Footer from "@/components/Footer";
 import { Helmet } from "react-helmet-async";
 
@@ -25,6 +25,7 @@ export default function Tools() {
         </p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Brand Kit Tool */}
           <Card className="flex flex-col h-full border-2 border-primary/20">
             <CardHeader>
               <div className="flex items-center mb-2">
@@ -65,6 +66,7 @@ export default function Tools() {
             </CardFooter>
           </Card>
           
+          {/* Content Spinner */}
           <Card className="flex flex-col h-full border-2 border-primary/20">
             <CardHeader>
               <div className="flex items-center mb-2">
@@ -105,6 +107,7 @@ export default function Tools() {
             </CardFooter>
           </Card>
           
+          {/* SEO Analyzer */}
           <Card className="flex flex-col h-full border-2 border-primary/20">
             <CardHeader>
               <div className="flex items-center mb-2">
@@ -145,6 +148,7 @@ export default function Tools() {
             </CardFooter>
           </Card>
           
+          {/* License Tracker */}
           <Card className="flex flex-col h-full border-2 border-primary/20">
             <CardHeader>
               <div className="flex items-center mb-2">
@@ -185,6 +189,7 @@ export default function Tools() {
             </CardFooter>
           </Card>
           
+          {/* Uniqueness Meter */}
           <Card className="flex flex-col h-full border-2 border-primary/20">
             <CardHeader>
               <div className="flex items-center mb-2">
@@ -225,6 +230,7 @@ export default function Tools() {
             </CardFooter>
           </Card>
           
+          {/* Multi-Language Translator */}
           <Card className="flex flex-col h-full border-2 border-primary/20">
             <CardHeader>
               <div className="flex items-center mb-2">
@@ -265,6 +271,7 @@ export default function Tools() {
             </CardFooter>
           </Card>
           
+          {/* File Converter */}
           <Card className="flex flex-col h-full border-2 border-primary/20">
             <CardHeader>
               <div className="flex items-center mb-2">
@@ -305,6 +312,7 @@ export default function Tools() {
             </CardFooter>
           </Card>
           
+          {/* OCR Tool */}
           <Card className="flex flex-col h-full border-2 border-primary/20">
             <CardHeader>
               <div className="flex items-center mb-2">
@@ -345,6 +353,7 @@ export default function Tools() {
             </CardFooter>
           </Card>
           
+          {/* HTML Editor */}
           <Card className="flex flex-col h-full border-2 border-primary/20">
             <CardHeader>
               <div className="flex items-center mb-2">
@@ -385,6 +394,48 @@ export default function Tools() {
             </CardFooter>
           </Card>
           
+          {/* Batch Editor */}
+          <Card className="flex flex-col h-full border-2 border-primary/20">
+            <CardHeader>
+              <div className="flex items-center mb-2">
+                <div className="bg-primary/10 p-2 rounded-full mr-2">
+                  <Replace className="h-5 w-5 text-primary" />
+                </div>
+                <CardTitle>Batch Editor</CardTitle>
+              </div>
+              <CardDescription>Edit hundreds of PLR files simultaneously</CardDescription>
+            </CardHeader>
+            <CardContent className="flex-grow">
+              <p className="mb-4">Make changes across multiple files at once with powerful search and replace functionality.</p>
+              <ul className="space-y-2 mb-4">
+                <li className="flex items-center">
+                  <span className="bg-primary/20 p-1 rounded-full mr-2">✓</span>
+                  <span className="text-sm">Edit up to 100+ files at once</span>
+                </li>
+                <li className="flex items-center">
+                  <span className="bg-primary/20 p-1 rounded-full mr-2">✓</span>
+                  <span className="text-sm">Regular expression support</span>
+                </li>
+                <li className="flex items-center">
+                  <span className="bg-primary/20 p-1 rounded-full mr-2">✓</span>
+                  <span className="text-sm">Before/after preview for changes</span>
+                </li>
+              </ul>
+            </CardContent>
+            <CardFooter className="flex justify-between">
+              <Link to="/batch-editor">
+                <Button variant="outline">Learn More</Button>
+              </Link>
+              <Link to="/tools/batch-editor">
+                <Button>
+                  Use Tool
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </CardFooter>
+          </Card>
+          
+          {/* Coming Soon: PLR Editor */}
           <Card className="flex flex-col h-full">
             <CardHeader>
               <div className="flex items-center mb-2">
