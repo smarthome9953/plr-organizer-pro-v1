@@ -13,7 +13,6 @@ import ComparisonTable from '@/components/landing/ComparisonTable';
 import HowItWorks from '@/components/landing/HowItWorks';
 import OrganizationTips from '@/components/landing/OrganizationTips';
 import TargetAudience from '@/components/landing/TargetAudience';
-import UseCases from '@/components/landing/UseCases';
 import PricingSection from '@/components/landing/PricingSection';
 import FaqSection from '@/components/landing/FaqSection';
 import FinalCta from '@/components/landing/FinalCta';
@@ -53,7 +52,7 @@ const Landing = () => {
       <Helmet>
         <title>PLR Organizer Pro | Ultimate PLR Content Management System</title>
         <meta name="description" content="Organize, manage and track your PLR content library. Our PLR content management software helps digital marketers maximize their PLR investments. Try free for 7 days." />
-        <meta name="keywords" content="PLR organizer, PLR content management, PLR library, private label rights, content organization, PLR tools" />
+        <meta name="keywords" content="PLR organizer, PLR content management, PLR library, private label rights, content organization, PLR tools, batch editor, HTML editor, content spinner" />
         <meta property="og:title" content="PLR Organizer Pro | Ultimate PLR Content Management System" />
         <meta property="og:description" content="Organize, manage and track your PLR content library. Our PLR content management software helps digital marketers maximize their PLR investments." />
         <meta property="og:type" content="website" />
@@ -87,11 +86,8 @@ const Landing = () => {
       {/* PLR Organization Tips */}
       <OrganizationTips />
 
-      {/* Who This Is For - Combined section */}
+      {/* Who This Is For - Combined with use cases */}
       <TargetAudience />
-
-      {/* Use Cases Section */}
-      <UseCases />
 
       {/* Pricing Section */}
       <PricingSection pricingRef={pricingRef} />

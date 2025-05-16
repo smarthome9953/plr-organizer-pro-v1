@@ -38,22 +38,30 @@ const SolutionOverview = ({ featuresRef }: { featuresRef: React.RefObject<HTMLDi
           </p>
           
           <div className="w-full max-w-4xl mb-12">
-            <AspectRatio ratio={16 / 9}>
-              <div className="rounded-lg border bg-card shadow-lg overflow-hidden">
-                <video 
-                  className="h-full w-full object-cover" 
-                  poster="/placeholder.svg" 
-                  controls
-                  preload="none"
-                >
-                  <source src="https://example.com/plr-organizer-demo.mp4" type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
+            <AspectRatio ratio={16 / 9} className="bg-muted">
+              <div className="rounded-lg border bg-card shadow-lg overflow-hidden h-full">
+                <div className="h-full w-full flex items-center justify-center bg-muted/70 relative">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground/50">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polygon points="10 8 16 12 10 16 10 8"></polygon>
+                    </svg>
+                  </div>
+                  <video 
+                    className="h-full w-full object-cover opacity-0" 
+                    poster="/placeholder.svg" 
+                    controls
+                    preload="none"
+                  >
+                    <source src="https://example.com/plr-organizer-demo.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
               </div>
             </AspectRatio>
           </div>
           
-          <div className="grid md:grid-cols-4 gap-8 w-full">
+          <div className="grid md:grid-cols-4 gap-8 w-full mt-8 pt-8">
             {features.map((item, index) => (
               <div key={index} className="flex flex-col items-center text-center">
                 <div className="mb-4 p-3 rounded-full bg-primary/10">{item.icon}</div>

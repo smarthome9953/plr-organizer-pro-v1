@@ -19,13 +19,13 @@ const HeroSection = () => {
             </h2>
             
             {/* SEO-optimized introduction paragraph */}
-            <div itemProp="description" className="mt-2">
+            <div itemProp="description" className="mt-4">
               <p className="max-w-[600px] text-muted-foreground md:text-xl">
                 Private Label Rights (PLR) content represents a valuable investment for digital marketers, content creators, and online business owners—but only when properly organized and utilized. PLR Organizer Pro is the definitive PLR content management system designed specifically for tracking, categorizing, and maximizing your entire PLR library.
               </p>
             </div>
             
-            <div className="flex flex-col sm:flex-row gap-3 mt-4">
+            <div className="flex flex-col sm:flex-row gap-3 mt-6">
               <Button size="lg" className="font-medium">
                 Start Organizing Your PLR Library - Free 7-Day Trial
               </Button>
@@ -34,7 +34,7 @@ const HeroSection = () => {
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </div>
-            <div className="flex items-center gap-4 text-sm flex-wrap">
+            <div className="flex items-center gap-4 text-sm flex-wrap mt-2">
               <div className="flex items-center gap-1">
                 <Users className="h-4 w-4" />
                 <span><strong>10,000+</strong> Users</span>
@@ -54,10 +54,11 @@ const HeroSection = () => {
             </div>
           </div>
           <div className="relative">
-            <AspectRatio ratio={16 / 9}>
+            <AspectRatio ratio={16 / 9} className="bg-muted">
               <div className="rounded-lg border bg-card shadow-lg overflow-hidden">
+                {/* Using placeholder with dimensions 1280x720px */}
                 <img 
-                  src="/placeholder.svg"
+                  src="/lovable-uploads/7d36ae97-d3ab-4473-861f-1003616e3414.png"
                   alt="PLR Organizer Pro Dashboard - Comprehensive PLR content management interface showing content library and analytics"
                   className="h-full w-full object-cover"
                   loading="eager"
@@ -69,6 +70,7 @@ const HeroSection = () => {
             {/* Trust badges */}
             <div className="mt-4 flex justify-center space-x-6 items-center">
               <div className="bg-background/80 p-2 rounded-md">
+                {/* Trust badges should be 200x80px */}
                 <img src="/placeholder.svg" alt="GDPR Compliance Badge" className="h-8 w-auto" />
               </div>
               <div className="bg-background/80 p-2 rounded-md">
