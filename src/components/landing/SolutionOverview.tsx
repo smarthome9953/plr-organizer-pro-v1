@@ -7,22 +7,22 @@ import { Database, Tag, Settings, Cloud } from 'lucide-react';
 const SolutionOverview = ({ featuresRef }: { featuresRef: React.RefObject<HTMLDivElement> }) => {
   const features = [
     {
-      icon: <Database className="h-6 w-6" />,
+      icon: <Database className="h-6 w-6 text-purple-600" />,
       title: "Centralized Library",
       description: "All your PLR content in one searchable database that automatically organizes by topic, format, and quality rating"
     },
     {
-      icon: <Tag className="h-6 w-6" />,
+      icon: <Tag className="h-6 w-6 text-purple-600" />,
       title: "License Tracking",
       description: "Complete monitoring of PLR usage rights, restrictions, and expiration dates to ensure legal compliance across all your projects"
     },
     {
-      icon: <Settings className="h-6 w-6" />,
+      icon: <Settings className="h-6 w-6 text-purple-600" />,
       title: "Auto-Categorization",
       description: "AI-powered sorting by topic, type, and quality with custom tagging capabilities for your unique organizational needs"
     },
     {
-      icon: <Cloud className="h-6 w-6" />,
+      icon: <Cloud className="h-6 w-6 text-purple-600" />,
       title: "Cross-Device Access",
       description: "Seamless sync between desktop and web interfaces with mobile optimization for managing your PLR library from anywhere"
     }
@@ -37,12 +37,12 @@ const SolutionOverview = ({ featuresRef }: { featuresRef: React.RefObject<HTMLDi
             The only software specifically designed to help digital marketers, content creators, and PLR users organize, track, and maximize their private label rights investments. Now with 10+ integrated tools including Batch Editor, HTML Editor, Content Spinner, and more!
           </p>
           
-          <div className="w-full max-w-4xl mb-16"> {/* Increased bottom margin */}
+          <div className="w-full max-w-4xl mb-16">
             <AspectRatio ratio={16 / 9} className="bg-muted relative">
               <div className="rounded-lg border bg-card shadow-lg overflow-hidden h-full">
                 <div className="h-full w-full flex items-center justify-center bg-muted/70 relative">
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground/50">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-purple-600/50">
                       <circle cx="12" cy="12" r="10"></circle>
                       <polygon points="10 8 16 12 10 16 10 8"></polygon>
                     </svg>
@@ -61,10 +61,10 @@ const SolutionOverview = ({ featuresRef }: { featuresRef: React.RefObject<HTMLDi
             </AspectRatio>
           </div>
           
-          <div className="grid md:grid-cols-4 gap-8 w-full mt-8 pt-4"> {/* Reduced top padding */}
+          <div className="grid md:grid-cols-4 gap-8 w-full mt-8 pt-4">
             {features.map((item, index) => (
               <div key={index} className="flex flex-col items-center text-center">
-                <div className="mb-4 p-3 rounded-full bg-primary/10">{item.icon}</div>
+                <div className="mb-4 p-3 rounded-full bg-purple-600/10">{item.icon}</div>
                 <h3 className="text-lg font-medium mb-2">{item.title}</h3>
                 <p className="text-sm text-muted-foreground">{item.description}</p>
               </div>

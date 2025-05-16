@@ -11,7 +11,7 @@ const HeroSection = () => {
       <div className="container px-4 md:px-6">
         <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
           <div className="flex flex-col justify-center space-y-4">
-            <div className="inline-block rounded-lg bg-muted px-3 py-1 text-sm">
+            <div className="inline-block rounded-lg bg-purple-600 px-3 py-1 text-sm text-white">
               <h1 className="text-lg font-semibold m-0" itemProp="headline">#1 PLR Content Organizer</h1>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
@@ -40,19 +40,19 @@ const HeroSection = () => {
             </div>
             <div className="flex items-center gap-4 text-sm flex-wrap mt-2">
               <div className="flex items-center gap-1">
-                <Users className="h-4 w-4" />
+                <Users className="h-4 w-4 text-purple-600" />
                 <span><strong>10,000+</strong> Users</span>
               </div>
               <div className="flex items-center gap-1">
-                <Clock className="h-4 w-4" />
+                <Clock className="h-4 w-4 text-purple-600" />
                 <span><strong>Save 5+</strong> Hours/Week</span>
               </div>
               <div className="flex items-center gap-1">
-                <Star className="h-4 w-4" />
+                <Star className="h-4 w-4 text-purple-600" />
                 <span><strong>4.8/5</strong> Rating</span>
               </div>
               <div className="flex items-center gap-1">
-                <Shield className="h-4 w-4" />
+                <Shield className="h-4 w-4 text-purple-600" />
                 <span><strong>GDPR</strong> Compliant</span>
               </div>
             </div>

@@ -6,7 +6,7 @@ import { Shield, Clock, Users } from 'lucide-react';
 
 const FinalCta = () => {
   return (
-    <section className="py-16 md:py-24 bg-primary text-primary-foreground">
+    <section className="py-16 md:py-24 bg-purple-600 text-primary-foreground">
       <div className="container px-4 md:px-6 text-center">
         <h2 className="text-3xl font-bold mb-4">Start Organizing Your PLR Content Library Today</h2>
         <p className="mb-6 max-w-[600px] mx-auto opacity-90">
@@ -26,15 +26,15 @@ const FinalCta = () => {
         </div>
         <div className="flex justify-center items-center gap-8">
           <div className="flex flex-col items-center">
-            <Shield className="h-8 w-8 mb-2" />
+            <Shield className="h-8 w-8 mb-2 text-white" />
             <span className="text-sm">7-Day Guarantee</span>
           </div>
           <div className="flex flex-col items-center">
-            <Clock className="h-8 w-8 mb-2" />
+            <Clock className="h-8 w-8 mb-2 text-white" />
             <span className="text-sm">Quick Setup</span>
           </div>
           <div className="flex flex-col items-center">
-            <Users className="h-8 w-8 mb-2" />
+            <Users className="h-8 w-8 mb-2 text-white" />
             <span className="text-sm">Free Support</span>
           </div>
         </div>

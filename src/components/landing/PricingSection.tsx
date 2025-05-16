@@ -66,14 +66,14 @@ const PricingSection = ({ pricingRef }: { pricingRef: React.RefObject<HTMLDivEle
             <div 
               key={index} 
               className={`flex flex-col bg-card border rounded-lg shadow-sm overflow-hidden ${
-                plan.highlighted ? 'border-primary ring-2 ring-primary' : ''
+                plan.highlighted ? 'border-purple-600 ring-2 ring-purple-600' : ''
               }`}
               itemScope
               itemType="https://schema.org/Product"
               itemProp={plan.itemProp}
             >
               {plan.highlighted && (
-                <div className="bg-primary text-primary-foreground py-1 text-center text-sm font-medium">
+                <div className="bg-purple-600 text-primary-foreground py-1 text-center text-sm font-medium">
                   MOST POPULAR
                 </div>
               )}
@@ -93,7 +93,7 @@ const PricingSection = ({ pricingRef }: { pricingRef: React.RefObject<HTMLDivEle
                 <ul className="space-y-2">
                   {plan.features.map((feature, i) => (
                     <li key={i} className="flex items-start">
-                      <Check className="h-5 w-5 text-primary mr-2 mt-0.5" />
+                      <Check className="h-5 w-5 text-purple-600 mr-2 mt-0.5" />
                       <span>{feature}</span>
                     </li>
                   ))}

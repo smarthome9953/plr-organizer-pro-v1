@@ -24,31 +24,31 @@ const ComparisonTable = () => {
             <tbody>
               <tr className="border-t">
                 <td className="p-4 font-medium">Auto-Categorization</td>
-                <td className="p-4 text-center"><Check className="h-5 w-5 text-primary mx-auto" /></td>
+                <td className="p-4 text-center"><Check className="h-5 w-5 text-purple-600 mx-auto" /></td>
                 <td className="p-4 text-center">✕</td>
                 <td className="p-4 text-center">Partial</td>
               </tr>
               <tr className="border-t">
                 <td className="p-4 font-medium">PLR License Tracking</td>
-                <td className="p-4 text-center"><Check className="h-5 w-5 text-primary mx-auto" /></td>
+                <td className="p-4 text-center"><Check className="h-5 w-5 text-purple-600 mx-auto" /></td>
                 <td className="p-4 text-center">✕</td>
                 <td className="p-4 text-center">✕</td>
               </tr>
               <tr className="border-t">
                 <td className="p-4 font-medium">Content Usage History</td>
-                <td className="p-4 text-center"><Check className="h-5 w-5 text-primary mx-auto" /></td>
+                <td className="p-4 text-center"><Check className="h-5 w-5 text-purple-600 mx-auto" /></td>
                 <td className="p-4 text-center">✕</td>
                 <td className="p-4 text-center">Partial</td>
               </tr>
               <tr className="border-t">
                 <td className="p-4 font-medium">ROI Analytics</td>
-                <td className="p-4 text-center"><Check className="h-5 w-5 text-primary mx-auto" /></td>
+                <td className="p-4 text-center"><Check className="h-5 w-5 text-purple-600 mx-auto" /></td>
                 <td className="p-4 text-center">✕</td>
                 <td className="p-4 text-center">✕</td>
               </tr>
               <tr className="border-t">
                 <td className="p-4 font-medium">Duplicate Detection</td>
-                <td className="p-4 text-center"><Check className="h-5 w-5 text-primary mx-auto" /></td>
+                <td className="p-4 text-center"><Check className="h-5 w-5 text-purple-600 mx-auto" /></td>
                 <td className="p-4 text-center">✕</td>
                 <td className="p-4 text-center">Partial</td>
               </tr>
