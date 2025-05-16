@@ -12,6 +12,7 @@ interface QuickAction {
   icon: React.ReactNode;
   href: string;
   variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
+  highlight?: boolean;
 }
 
 interface QuickActionPanelProps {
@@ -24,8 +25,9 @@ const QuickActionPanel = ({ className }: QuickActionPanelProps) => {
       id: '0',
       title: 'PLR Scanner',
       icon: <FileScan className="h-4 w-4 mr-2" />,
-      href: '/scan',
-      variant: 'default'
+      href: '/plr-scanner',
+      variant: 'default',
+      highlight: true
     },
     {
       id: '1',
@@ -146,7 +148,10 @@ const QuickActionPanel = ({ className }: QuickActionPanelProps) => {
               key={action.id} 
               variant={action.variant || 'outline'} 
               asChild
-              className="justify-start h-10"
+              className={cn(
+                "justify-start h-10",
+                action.highlight && "ring-1 ring-primary shadow-sm"
+              )}
             >
               <Link to={action.href}>
                 {action.icon}
