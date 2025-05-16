@@ -138,11 +138,11 @@ const QuickActionPanel = ({ className }: QuickActionPanelProps) => {
 
   return (
     <Card className={cn("", className)}>
-      <CardHeader className="bg-purple-600 text-white rounded-t-lg">
+      <CardHeader>
         <CardTitle className="text-lg">Quick Actions</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2 gap-3 pt-4">
+        <div className="grid grid-cols-2 gap-3">
           {quickActions.map((action) => (
             <Button 
               key={action.id} 
@@ -150,7 +150,7 @@ const QuickActionPanel = ({ className }: QuickActionPanelProps) => {
               asChild
               className={cn(
                 "justify-start h-10",
-                action.highlight && "ring-2 ring-purple-500 shadow-sm"
+                action.highlight && "ring-1 ring-primary shadow-sm"
               )}
             >
               <Link to={action.href}>

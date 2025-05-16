@@ -1,10 +1,10 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/context/ThemeContext';
 import { Moon, Sun, Palette, Wrench, RefreshCw, FileSearch, Shield, PercentSquare, Globe, FileText, FileCode, FileScan } from 'lucide-react';
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
-
 export function ThemeToggle() {
   const {
     theme,
@@ -14,15 +14,13 @@ export function ThemeToggle() {
       {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
     </Button>;
 }
-
 interface HeaderProps {
   showAuthButtons?: boolean;
 }
-
 export default function Header({
   showAuthButtons
 }: HeaderProps) {
-  return <header className="border-b bg-purple-600 text-white">
+  return <header className="border-b">
       <div className="container mx-auto px-4 py-2">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
@@ -35,27 +33,27 @@ export default function Header({
             <NavigationMenu>
               <NavigationMenuList className="text-lg"> 
                 <NavigationMenuItem>
-                  <Link to="/" className={`${navigationMenuTriggerStyle()} text-lg text-white hover:text-purple-200`}>
+                  <Link to="/" className={`${navigationMenuTriggerStyle()} text-lg`}>
                     Home
                   </Link>
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
-                  <Link to="/plr-scanner" className={`${navigationMenuTriggerStyle()} text-lg text-white hover:text-purple-200`}>
+                  <Link to="/plr-scanner" className={`${navigationMenuTriggerStyle()} text-lg`}>
                     PLR Scanner
                   </Link>
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
-                  <Link to="/scan" className={`${navigationMenuTriggerStyle()} text-lg text-white hover:text-purple-200`}>
+                  <Link to="/scan" className={`${navigationMenuTriggerStyle()} text-lg`}>
                     Scan & Organize
                   </Link>
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-lg text-white hover:text-purple-200">Tools</NavigationMenuTrigger>
+                  <NavigationMenuTrigger className="text-lg">Tools</NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] text-base bg-white dark:bg-gray-900 text-foreground">
+                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] text-base">
                       <li className="row-span-3">
                         <NavigationMenuLink asChild>
                           <Link to="/tools" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
@@ -175,9 +173,9 @@ export default function Header({
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-lg text-white hover:text-purple-200">Resources</NavigationMenuTrigger>
+                  <NavigationMenuTrigger className="text-lg">Resources</NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <ul className="grid gap-3 p-4 w-[400px] md:w-[500px] md:grid-cols-2 text-base bg-white dark:bg-gray-900 text-foreground">
+                    <ul className="grid gap-3 p-4 w-[400px] md:w-[500px] md:grid-cols-2 text-base">
                       <li>
                         <Link to="/resources/plr-software-guides" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
                           PLR Software Guides
@@ -204,9 +202,9 @@ export default function Header({
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-lg text-white hover:text-purple-200">Blog</NavigationMenuTrigger>
+                  <NavigationMenuTrigger className="text-lg">Blog</NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <ul className="grid gap-3 p-4 w-[400px] md:w-[500px] md:grid-cols-2 text-base bg-white dark:bg-gray-900 text-foreground">
+                    <ul className="grid gap-3 p-4 w-[400px] md:w-[500px] md:grid-cols-2 text-base">
                       <li>
                         <Link to="/blog/organization" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
                           PLR Organization Strategies
@@ -242,13 +240,13 @@ export default function Header({
             <ThemeToggle />
             {showAuthButtons ? <div className="flex items-center gap-4">
                 <Link to="/auth">
-                  <Button variant="outline" className="text-white border-white hover:bg-purple-700">Sign In</Button>
+                  <Button variant="outline">Sign In</Button>
                 </Link>
                 <Link to="/auth">
-                  <Button className="bg-white text-purple-600 hover:bg-purple-100">Start Free Trial</Button>
+                  <Button>Start Free Trial</Button>
                 </Link>
               </div> : <Link to="/auth">
-                <Button variant="default" className="bg-white text-purple-600 hover:bg-purple-100">Sign In</Button>
+                <Button variant="default">Sign In</Button>
               </Link>}
           </div>
         </div>

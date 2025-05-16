@@ -6,19 +6,19 @@ import { Shield, Clock, Users } from 'lucide-react';
 
 const FinalCta = () => {
   return (
-    <section className="py-16 md:py-24 bg-purple-600 text-white">
+    <section className="py-16 md:py-24 bg-primary text-primary-foreground">
       <div className="container px-4 md:px-6 text-center">
         <h2 className="text-3xl font-bold mb-4">Start Organizing Your PLR Content Library Today</h2>
         <p className="mb-6 max-w-[600px] mx-auto opacity-90">
           Join thousands of successful PLR users who have transformed their content management and maximized their private label rights investments.
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-4 mb-8">
-          <Button size="lg" variant="secondary" className="bg-white text-purple-600 hover:bg-purple-100" asChild>
+          <Button size="lg" variant="secondary" asChild>
             <Link to="/auth?action=signup">
               Start Your Free 7-Day Trial
             </Link>
           </Button>
-          <Button size="lg" variant="outline" className="border-white text-white hover:bg-purple-700" asChild>
+          <Button size="lg" variant="outline" className="border-primary-foreground" asChild>
             <Link to="/contact">
               Schedule a Demo
             </Link>
@@ -40,7 +40,7 @@ const FinalCta = () => {
         </div>
 
         <div className="mt-12">
-          <Button variant="outline" className="bg-white text-purple-600 hover:bg-purple-100 border-white" asChild>
+          <Button variant="outline" className="bg-purple-600 hover:bg-purple-700 border-primary-foreground text-white" asChild>
             <Link to="/resources/plr-software-faq">
               Download Our Free PLR Organization Checklist
             </Link>
