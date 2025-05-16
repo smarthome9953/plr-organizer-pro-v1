@@ -13,7 +13,7 @@ const FinalCta = () => {
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-4 mb-8">
           <Button size="lg" variant="secondary">
-            Start Your Free 14-Day Trial
+            Start Your Free 7-Day Trial
           </Button>
           <Button size="lg" variant="outline" className="border-primary-foreground">
             Schedule a Demo
@@ -22,7 +22,7 @@ const FinalCta = () => {
         <div className="flex justify-center items-center gap-8">
           <div className="flex flex-col items-center">
             <Shield className="h-8 w-8 mb-2" />
-            <span className="text-sm">14-Day Guarantee</span>
+            <span className="text-sm">7-Day Guarantee</span>
           </div>
           <div className="flex flex-col items-center">
             <Clock className="h-8 w-8 mb-2" />

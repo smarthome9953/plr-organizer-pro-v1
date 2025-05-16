@@ -16,7 +16,7 @@ const PricingSection = ({ pricingRef }: { pricingRef: React.RefObject<HTMLDivEle
         "Desktop app only",
         "Email support"
       ],
-      button: "Start Your Free Trial",
+      button: "Start Your 7-Day Free Trial",
       itemProp: "itemListElement"
     },
     {
@@ -31,7 +31,7 @@ const PricingSection = ({ pricingRef }: { pricingRef: React.RefObject<HTMLDivEle
         "Priority support",
         "ROI analytics"
       ],
-      button: "Start Free 14-Day Trial",
+      button: "Start Free 7-Day Trial",
       highlighted: true,
       itemProp: "itemListElement"
     },
@@ -104,7 +104,7 @@ const PricingSection = ({ pricingRef }: { pricingRef: React.RefObject<HTMLDivEle
         </div>
         
         <div className="mt-12 text-center">
-          <p className="text-muted-foreground mb-2">All plans include a 14-day money-back guarantee</p>
+          <p className="text-muted-foreground mb-2">All plans include a 7-day money-back guarantee</p>
           <p className="text-sm text-muted-foreground">Prices shown are monthly when billed annually. Monthly billing available.</p>
         </div>
       </div>

@@ -33,8 +33,8 @@ const SolutionOverview = ({ featuresRef }: { featuresRef: React.RefObject<HTMLDi
       <div className="container px-4 md:px-6">
         <div className="flex flex-col items-center text-center">
           <h2 className="text-3xl font-bold mb-6">Introducing the Complete PLR Content Management System</h2>
-          <p className="text-muted-foreground max-w-[800px] mb-8">
-            The only software specifically designed to help digital marketers, content creators, and PLR users organize, track, and maximize their private label rights investments.
+          <p className="text-muted-foreground max-w-[800px] mb-12">
+            The only software specifically designed to help digital marketers, content creators, and PLR users organize, track, and maximize their private label rights investments. Now with 10+ integrated tools including Batch Editor, HTML Editor, Content Spinner, and more!
           </p>
           
           <div className="w-full max-w-4xl mb-12">

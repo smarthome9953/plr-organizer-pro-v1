@@ -29,17 +29,20 @@ const HowItWorks = ({ howItWorksRef }: { howItWorksRef: React.RefObject<HTMLDivE
     {
       content: "This software has transformed how I manage my PLR content library. I've saved at least 5 hours every week and never accidentally reuse content anymore. The ROI tracking alone has helped me make much better purchasing decisions, increasing my content utilization by 37% in just two months.",
       author: "Sarah Johnson, Digital Product Creator",
-      rating: 5
+      rating: 5,
+      image: "/placeholder.svg" // Recommended image size: 100x100px
     },
     {
       content: "As someone with over 5,000 PLR items across multiple niches, finding anything was a nightmare before. PLR Organizer Pro categorized everything automatically and now I can find exactly what I need in seconds. My content production has increased by 25% while spending less time searching through my library.",
       author: "Michael Roberts, Content Marketing Agency Owner",
-      rating: 5
+      rating: 5,
+      image: "/placeholder.svg" // Recommended image size: 100x100px
     },
     {
       content: "The license tracking feature alone is worth the investment. I used to constantly worry about violating PLR terms, but now the system alerts me to any restrictions. This saved me from a potential legal issue when I was about to use restricted content for a client project. This software is essential for anyone serious about PLR content.",
       author: "Jennifer Lewis, Digital Marketing Consultant",
-      rating: 5
+      rating: 5,
+      image: "/placeholder.svg" // Recommended image size: 100x100px
     }
   ];
 
@@ -70,12 +73,20 @@ const HowItWorks = ({ howItWorksRef }: { howItWorksRef: React.RefObject<HTMLDivE
           ))}
         </div>
         
-        {/* Enhanced testimonials with schema markup */}
-        <div className="mt-16 space-y-6" itemScope itemType="https://schema.org/Review">
+        {/* Enhanced testimonials with schema markup and images */}
+        <div className="mt-16 space-y-8" itemScope itemType="https://schema.org/Review">
+          <h2 className="text-3xl font-bold text-center mb-8">What Our Users Say</h2>
+          
           {testimonials.map((testimonial, index) => (
             <div key={index} className="p-6 bg-card border rounded-lg shadow-sm">
               <div className="flex flex-col md:flex-row items-center gap-6">
-                <div className="w-16 h-16 rounded-full bg-muted flex-shrink-0" itemProp="image"></div>
+                <div className="w-20 h-20 rounded-full bg-muted overflow-hidden flex-shrink-0" itemProp="image">
+                  <img 
+                    src={testimonial.image} 
+                    alt={`${testimonial.author} avatar`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
                 <div>
                   <div className="flex items-center mb-2" itemProp="reviewRating" itemScope itemType="https://schema.org/Rating">
                     {[1, 2, 3, 4, 5].map((star) => (

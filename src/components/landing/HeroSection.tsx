@@ -9,7 +9,7 @@ const HeroSection = () => {
   return (
     <section className="py-16 md:py-24 bg-gradient-to-br from-background to-muted" itemProp="mainContentOfPage">
       <div className="container px-4 md:px-6">
-        <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 items-center">
+        <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
           <div className="flex flex-col justify-center space-y-4">
             <div className="inline-block rounded-lg bg-muted px-3 py-1 text-sm">
               <h1 className="text-lg font-semibold m-0" itemProp="headline">#1 PLR Content Organizer</h1>
@@ -19,15 +19,15 @@ const HeroSection = () => {
             </h2>
             
             {/* SEO-optimized introduction paragraph */}
-            <div itemProp="description">
+            <div itemProp="description" className="mt-2">
               <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                Private Label Rights (PLR) content represents a valuable investment for digital marketers, content creators, and online business owners—but only when properly organized and utilized. PLR Organizer Pro is the definitive PLR content management system designed specifically for tracking, categorizing, and maximizing your entire PLR library. Our intelligent software automatically organizes your private label rights assets across all content types, monitors usage rights, prevents duplicate publishing, and provides comprehensive analytics on your PLR investment performance. With users reporting over 5 hours saved weekly and a 37% increase in PLR content utilization, PLR Organizer Pro transforms chaotic content collections into strategic business assets.
+                Private Label Rights (PLR) content represents a valuable investment for digital marketers, content creators, and online business owners—but only when properly organized and utilized. PLR Organizer Pro is the definitive PLR content management system designed specifically for tracking, categorizing, and maximizing your entire PLR library.
               </p>
             </div>
             
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex flex-col sm:flex-row gap-3 mt-4">
               <Button size="lg" className="font-medium">
-                Start Organizing Your PLR Library - Free 14-Day Trial
+                Start Organizing Your PLR Library - Free 7-Day Trial
               </Button>
               <Button variant="outline" size="lg" className="group">
                 See How PLR Organizer Saves You 5 Hours Weekly
@@ -75,7 +75,7 @@ const HeroSection = () => {
                 <img src="/placeholder.svg" alt="Secure Payment Badge" className="h-8 w-auto" />
               </div>
               <div className="bg-background/80 p-2 rounded-md">
-                <img src="/placeholder.svg" alt="14-Day Money Back Guarantee" className="h-8 w-auto" />
+                <img src="/placeholder.svg" alt="7-Day Money Back Guarantee" className="h-8 w-auto" />
               </div>
             </div>
           </div>

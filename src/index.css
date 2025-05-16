@@ -45,13 +45,18 @@
     --secondary-foreground: 210 20% 98%;
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
+    --accent: 263.4 70% 20.4%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 20% 98%;
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
+    --ring: 263.4 70% 50.4%;
+
+    /* Enhanced purple accents for dark mode */
+    --purple-accent-1: 263.4 70% 65%;
+    --purple-accent-2: 263.4 70% 45%;
+    --purple-accent-3: 263.4 70% 25%;
   }
 }
 
@@ -61,6 +66,19 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  
+  /* Enhanced styling for dark mode */
+  .dark .bg-primary\/10 {
+    background-color: hsla(var(--primary), 0.2);
+  }
+  
+  .dark .border-primary\/20 {
+    border-color: hsla(var(--primary), 0.3);
+  }
+  
+  .dark .text-primary {
+    color: hsla(var(--purple-accent-1), 1);
   }
 }
 
@@ -75,4 +93,28 @@
 
 .folder-expanded {
   @apply border-l border-border pl-2 mt-0.5;
+}
+
+/* SEO optimized landing page styles */
+.seo-heading {
+  @apply scroll-m-20;
+}
+
+/* Enhanced testimonial styling */
+.testimonial-card {
+  @apply transition-all duration-300 hover:border-primary hover:shadow-md dark:hover:border-purple-500;
+}
+
+.dark .testimonial-card:hover {
+  box-shadow: 0 0 20px hsla(var(--purple-accent-1), 0.2);
+}
+
+/* Enhanced dashboard card effects */
+.dashboard-card {
+  @apply transition-all duration-300;
+}
+
+.dark .dashboard-card:hover {
+  border-color: hsla(var(--purple-accent-1), 0.5);
+  box-shadow: 0 0 15px hsla(var(--purple-accent-3), 0.3);
 }
