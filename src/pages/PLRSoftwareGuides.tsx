@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
@@ -316,9 +315,9 @@ export default function PLRSoftwareGuides() {
             </div>
             
             <img 
-              src="/placeholder.svg" 
-              alt="PLR Monetization Dashboard Example"
-              className="w-full h-64 object-cover my-6 rounded border"
+              src="/lovable-uploads/15d49077-c574-4f13-b973-630f3850e5ca.png" 
+              alt="PLR Monetization Illustration: Books, money bags, shopping carts, and PLR license documents surrounded by dollar coins and business elements"
+              className="w-full h-auto my-6 rounded border"
             />
             
             <div className="p-4 bg-primary/10 rounded-md">
