@@ -38,7 +38,7 @@ const SolutionOverview = ({ featuresRef }: { featuresRef: React.RefObject<HTMLDi
           </p>
           
           <div className="w-full max-w-4xl mb-12">
-            <AspectRatio ratio={16 / 9} className="bg-muted">
+            <AspectRatio ratio={16 / 9} className="bg-muted relative">
               <div className="rounded-lg border bg-card shadow-lg overflow-hidden h-full">
                 <div className="h-full w-full flex items-center justify-center bg-muted/70 relative">
                   <div className="absolute inset-0 flex items-center justify-center">
@@ -71,8 +71,8 @@ const SolutionOverview = ({ featuresRef }: { featuresRef: React.RefObject<HTMLDi
             ))}
           </div>
           
-          <Button className="mt-12" size="lg">
-            See How It Works
+          <Button className="mt-12" size="lg" asChild>
+            <a href="#how-it-works">See How It Works</a>
           </Button>
         </div>
       </div>

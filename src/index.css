@@ -57,6 +57,7 @@
     --purple-accent-1: 263.4 70% 75%;
     --purple-accent-2: 263.4 70% 55%;
     --purple-accent-3: 263.4 70% 25%;
+    --purple-accent-4: 263.4 70% 85%;
   }
 }
 
@@ -88,6 +89,27 @@
   .dark .shadow-sm {
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05), 0 0 10px hsla(var(--primary), 0.1);
   }
+  
+  /* Enhanced buttons in dark mode */
+  .dark .bg-primary {
+    background-color: hsla(var(--purple-accent-2), 1);
+  }
+  
+  .dark .bg-primary:hover {
+    background-color: hsla(var(--purple-accent-1), 1);
+  }
+  
+  .dark button.bg-secondary:hover {
+    background-color: hsla(var(--purple-accent-3), 0.6);
+  }
+  
+  .dark .border-primary-foreground {
+    border-color: hsla(var(--purple-accent-4), 0.7);
+  }
+}
+
+@layer base {
+  /* ... keep existing code */
 }
 
 /* Custom styles for file explorer */
@@ -140,3 +162,15 @@
   box-shadow: 0 0 10px hsla(var(--purple-accent-3), 0.1);
 }
 
+/* Additional purple accents for dark mode */
+.dark .bg-muted {
+  background-color: hsla(var(--purple-accent-3), 0.1);
+}
+
+.dark .border {
+  border-color: hsla(var(--purple-accent-3), 0.3);
+}
+
+.dark a:hover {
+  color: hsla(var(--purple-accent-1), 1);
+}

@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 import { Shield, Clock, Users } from 'lucide-react';
 
 const FinalCta = () => {
@@ -12,11 +13,15 @@ const FinalCta = () => {
           Join thousands of successful PLR users who have transformed their content management and maximized their private label rights investments.
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-4 mb-8">
-          <Button size="lg" variant="secondary">
-            Start Your Free 7-Day Trial
+          <Button size="lg" variant="secondary" asChild>
+            <Link to="/auth?action=signup">
+              Start Your Free 7-Day Trial
+            </Link>
           </Button>
-          <Button size="lg" variant="outline" className="border-primary-foreground">
-            Schedule a Demo
+          <Button size="lg" variant="outline" className="border-primary-foreground" asChild>
+            <Link to="/contact">
+              Schedule a Demo
+            </Link>
           </Button>
         </div>
         <div className="flex justify-center items-center gap-8">
@@ -32,6 +37,14 @@ const FinalCta = () => {
             <Users className="h-8 w-8 mb-2" />
             <span className="text-sm">Free Support</span>
           </div>
+        </div>
+
+        <div className="mt-12">
+          <Button variant="outline" className="bg-purple-600 hover:bg-purple-700 border-primary-foreground text-white" asChild>
+            <a href="/resources/templates/checklists/plr-organization">
+              Download Our Free PLR Organization Checklist
+            </a>
+          </Button>
         </div>
       </div>
     </section>

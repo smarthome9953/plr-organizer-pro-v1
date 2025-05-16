@@ -81,12 +81,14 @@ const Landing = () => {
       <ComparisonTable />
 
       {/* How It Works Section */}
-      <HowItWorks howItWorksRef={howItWorksRef} />
+      <div id="how-it-works">
+        <HowItWorks howItWorksRef={howItWorksRef} />
+      </div>
 
       {/* PLR Organization Tips */}
       <OrganizationTips />
 
-      {/* Who This Is For - Combined with use cases */}
+      {/* Target Audience - combined section */}
       <TargetAudience />
 
       {/* Pricing Section */}

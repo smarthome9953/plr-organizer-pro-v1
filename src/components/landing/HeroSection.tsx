@@ -26,12 +26,16 @@ const HeroSection = () => {
             </div>
             
             <div className="flex flex-col sm:flex-row gap-3 mt-6">
-              <Button size="lg" className="font-medium">
-                Start Organizing Your PLR Library - Free 7-Day Trial
+              <Button size="lg" className="font-medium" asChild>
+                <Link to="/auth?action=signup">
+                  Start Organizing Your PLR Library - Free 7-Day Trial
+                </Link>
               </Button>
-              <Button variant="outline" size="lg" className="group">
-                See How PLR Organizer Saves You 5 Hours Weekly
-                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              <Button variant="outline" size="lg" className="group" asChild>
+                <a href="#how-it-works">
+                  See How PLR Organizer Saves You 5 Hours Weekly
+                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </a>
               </Button>
             </div>
             <div className="flex items-center gap-4 text-sm flex-wrap mt-2">
@@ -54,7 +58,7 @@ const HeroSection = () => {
             </div>
           </div>
           <div className="relative">
-            <AspectRatio ratio={16 / 9} className="bg-muted">
+            <AspectRatio ratio={16 / 9} className="bg-muted mb-4">
               <div className="rounded-lg border bg-card shadow-lg overflow-hidden">
                 {/* Using placeholder with dimensions 1280x720px */}
                 <img 
