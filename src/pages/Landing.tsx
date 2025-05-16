@@ -1,8 +1,8 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { useExitIntent } from '@/hooks/useExitIntent';
 
 // Import our landing page components
 import HeroSection from '@/components/landing/HeroSection';
@@ -20,32 +20,24 @@ import ExitIntentCta from '@/components/landing/ExitIntentCta';
 
 const Landing = () => {
   // Refs for scroll navigation
-  const featuresRef = React.useRef<HTMLDivElement>(null);
-  const howItWorksRef = React.useRef<HTMLDivElement>(null);
-  const pricingRef = React.useRef<HTMLDivElement>(null);
+  const featuresRef = useRef<HTMLDivElement>(null);
+  const howItWorksRef = useRef<HTMLDivElement>(null);
+  const pricingRef = useRef<HTMLDivElement>(null);
   
-  // State for exit intent CTA
-  const [showExitIntent, setShowExitIntent] = useState(false);
+  // Exit intent with custom configuration
+  const { showExitIntent, closeExitIntent } = useExitIntent({
+    sensitivity: 50,          // Higher sensitivity (less trigger-happy)
+    speedThreshold: 20,       // Require faster mouse movement
+    showOnce: true,           // Only show once per session
+    cookieDuration: 7,        // Remember for 7 days
+    delayPeriod: 30000,       // Wait 30 seconds before enabling
+    pageViewThreshold: 2      // Require at least 2 page views
+  });
   
   // Scroll to section function
   const scrollToSection = (ref: React.RefObject<HTMLDivElement>) => {
     ref.current?.scrollIntoView({ behavior: 'smooth' });
   };
-  
-  // Exit intent detection
-  useEffect(() => {
-    const handleMouseLeave = (e: MouseEvent) => {
-      if (e.clientY <= 0) {
-        setShowExitIntent(true);
-      }
-    };
-    
-    document.addEventListener('mouseleave', handleMouseLeave);
-    
-    return () => {
-      document.removeEventListener('mouseleave', handleMouseLeave);
-    };
-  }, []);
   
   return (
     <div className="flex flex-col min-h-screen" itemScope itemType="https://schema.org/WebPage">
@@ -104,7 +96,7 @@ const Landing = () => {
       <Footer />
       
       {/* Exit Intent CTA */}
-      <ExitIntentCta show={showExitIntent} onClose={() => setShowExitIntent(false)} />
+      <ExitIntentCta show={showExitIntent} onClose={closeExitIntent} />
     </div>
   );
 };
