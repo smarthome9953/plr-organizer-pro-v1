@@ -37,7 +37,7 @@ const SolutionOverview = ({ featuresRef }: { featuresRef: React.RefObject<HTMLDi
             The only software specifically designed to help digital marketers, content creators, and PLR users organize, track, and maximize their private label rights investments. Now with 10+ integrated tools including Batch Editor, HTML Editor, Content Spinner, and more!
           </p>
           
-          <div className="w-full max-w-4xl mb-12">
+          <div className="w-full max-w-4xl mb-16"> {/* Increased bottom margin */}
             <AspectRatio ratio={16 / 9} className="bg-muted relative">
               <div className="rounded-lg border bg-card shadow-lg overflow-hidden h-full">
                 <div className="h-full w-full flex items-center justify-center bg-muted/70 relative">
@@ -61,7 +61,7 @@ const SolutionOverview = ({ featuresRef }: { featuresRef: React.RefObject<HTMLDi
             </AspectRatio>
           </div>
           
-          <div className="grid md:grid-cols-4 gap-8 w-full mt-8 pt-8">
+          <div className="grid md:grid-cols-4 gap-8 w-full mt-8 pt-4"> {/* Reduced top padding */}
             {features.map((item, index) => (
               <div key={index} className="flex flex-col items-center text-center">
                 <div className="mb-4 p-3 rounded-full bg-primary/10">{item.icon}</div>

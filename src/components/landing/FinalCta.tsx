@@ -41,9 +41,9 @@ const FinalCta = () => {
 
         <div className="mt-12">
           <Button variant="outline" className="bg-purple-600 hover:bg-purple-700 border-primary-foreground text-white" asChild>
-            <a href="/resources/templates/checklists/plr-organization">
+            <Link to="/resources/plr-software-faq">
               Download Our Free PLR Organization Checklist
-            </a>
+            </Link>
           </Button>
         </div>
       </div>

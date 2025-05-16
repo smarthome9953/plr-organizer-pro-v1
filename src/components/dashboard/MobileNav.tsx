@@ -132,6 +132,10 @@ const MobileNav: React.FC = () => {
               <FileText className="mr-2 h-4 w-4" />
               <span>Templates</span>
             </Link>
+            <Link to="/resources/plr-software-faq" className="flex items-center p-2 rounded-md hover:bg-muted" onClick={() => setIsOpen(false)}>
+              <HelpCircle className="mr-2 h-4 w-4" />
+              <span>PLR Software FAQs</span>
+            </Link>
             <Link to="/resources/support" className="flex items-center p-2 rounded-md hover:bg-muted" onClick={() => setIsOpen(false)}>
               <HelpCircle className="mr-2 h-4 w-4" />
               <span>Support Center</span>

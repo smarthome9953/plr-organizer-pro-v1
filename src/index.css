@@ -58,6 +58,11 @@
     --purple-accent-2: 263.4 70% 55%;
     --purple-accent-3: 263.4 70% 25%;
     --purple-accent-4: 263.4 70% 85%;
+    
+    /* Additional purple accents for FAQ page */
+    --purple-accent-5: 263.4 70% 20%;
+    --purple-accent-6: 263.4 70% 90%;
+    --purple-accent-7: 263.4 40% 40%;
   }
 }
 
@@ -106,6 +111,31 @@
   .dark .border-primary-foreground {
     border-color: hsla(var(--purple-accent-4), 0.7);
   }
+  
+  /* Enhanced FAQ page styling for dark mode */
+  .dark .accordion-item {
+    border-color: hsla(var(--purple-accent-3), 0.5);
+  }
+  
+  .dark .accordion-trigger:hover {
+    color: hsla(var(--purple-accent-1), 1);
+  }
+  
+  .dark .pro-tip {
+    background-color: hsla(var(--purple-accent-5), 0.3);
+    border-color: hsla(var(--purple-accent-1), 0.3);
+  }
+  
+  .dark .cta-section {
+    background-color: hsla(var(--purple-accent-3), 0.7);
+  }
+  
+  .dark .bg-gradient-to-b.from-primary\/10 {
+    background-image: linear-gradient(to bottom, 
+      hsla(var(--purple-accent-2), 0.15) 0%, 
+      hsla(var(--background), 1) 100%
+    );
+  }
 }
 
 @layer base {
@@ -149,6 +179,34 @@
   box-shadow: 0 0 15px hsla(var(--purple-accent-3), 0.3);
 }
 
+/* Enhanced accordion styling for FAQ page */
+.dark .accordion-content-inner {
+  background-color: hsla(var(--purple-accent-5), 0.1);
+  border-left: 3px solid hsla(var(--purple-accent-2), 0.5);
+  padding-left: 1rem;
+}
+
+/* FAQ specific styles */
+.faq-section {
+  @apply py-12 md:py-16;
+}
+
+.faq-heading {
+  @apply text-2xl md:text-3xl font-bold mb-8;
+}
+
+.faq-subheading {
+  @apply text-xl font-semibold mb-4;
+}
+
+.pro-tip {
+  @apply bg-primary/5 p-4 rounded-md mt-4 border border-primary/10;
+}
+
+.pro-tip-heading {
+  @apply font-medium;
+}
+
 /* Dark mode enhancements */
 .dark button.bg-primary {
   background-color: hsla(var(--purple-accent-2), 1);
@@ -173,4 +231,21 @@
 
 .dark a:hover {
   color: hsla(var(--purple-accent-1), 1);
+}
+
+/* Enhanced FAQ page styling */
+.dark .accordion-item[data-state="open"] {
+  border-color: hsla(var(--purple-accent-1), 0.5);
+}
+
+.dark .accordion-trigger[data-state="open"] {
+  color: hsla(var(--purple-accent-1), 1);
+}
+
+.dark button.bg-purple-600 {
+  background-color: hsla(var(--purple-accent-2), 0.9);
+}
+
+.dark button.bg-purple-600:hover {
+  background-color: hsla(var(--purple-accent-1), 1);
 }

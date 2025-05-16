@@ -193,8 +193,8 @@ export default function Header({ showAuthButtons }: HeaderProps) {
                         </Link>
                       </li>
                       <li>
-                        <Link to="/resources/faq" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
-                          FAQ
+                        <Link to="/resources/plr-software-faq" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
+                          PLR Software FAQs
                         </Link>
                       </li>
                       <li>
