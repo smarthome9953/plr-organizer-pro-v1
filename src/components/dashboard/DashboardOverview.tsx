@@ -17,29 +17,93 @@ const DashboardOverview = () => {
       value: '248',
       icon: 'FileText',
       description: '+12% from last month',
-      trend: 'up',
+      trend: { value: 12, positive: true },
     },
     {
       title: 'Active Users',
       value: '1,652',
       icon: 'Users',
       description: '+5% from last month',
-      trend: 'up',
+      trend: { value: 5, positive: true },
     },
     {
       title: 'Blog Posts',
       value: '32',
       icon: 'BookOpen',
       description: '3 drafts pending',
-      trend: 'neutral',
+      trend: { value: 0, positive: true },
     },
     {
       title: 'Pending Scans',
       value: '7',
       icon: 'FileScan',
       description: '4 in progress',
-      trend: 'neutral',
+      trend: { value: 0, positive: false },
     }
+  ];
+
+  // Mock data for ActivityTimeline
+  const timelineItems = [
+    {
+      id: 1,
+      title: 'New PLR package uploaded',
+      description: 'Health & Wellness Collection',
+      timestamp: '30 minutes ago',
+      icon: 'FileUp',
+    },
+    {
+      id: 2,
+      title: 'License updated',
+      description: 'Digital Marketing PLR Bundle',
+      timestamp: '2 hours ago',
+      icon: 'FileCheck',
+    },
+    {
+      id: 3,
+      title: 'Blog post published',
+      description: 'Top 10 Ways to Use PLR Content',
+      timestamp: '5 hours ago',
+      icon: 'FileText',
+    },
+    {
+      id: 4,
+      title: 'New user registered',
+      description: 'john.smith@example.com',
+      timestamp: '1 day ago',
+      icon: 'UserPlus',
+    },
+  ];
+
+  // Mock data for ContentTypeChart
+  const chartData = [
+    { name: 'Ebooks', value: 35 },
+    { name: 'Articles', value: 25 },
+    { name: 'Videos', value: 15 },
+    { name: 'Templates', value: 10 },
+    { name: 'Graphics', value: 8 },
+    { name: 'Audio', value: 7 },
+  ];
+
+  // Mock recommendations
+  const recommendations = [
+    {
+      title: 'Update Your PLR Content',
+      description: 'You have 5 PLR items that need updating to match current trends.',
+      actionLabel: 'View Content',
+      actionUrl: '/plr-library?filter=outdated',
+    },
+    {
+      title: 'Complete Your Profile',
+      description: 'Add your niche and interests to get more relevant PLR recommendations.',
+      actionLabel: 'Edit Profile',
+      actionUrl: '/settings/profile',
+    },
+    {
+      title: 'Try Our New AI Writer',
+      description: 'Generate unique content from your PLR materials with our new AI tool.',
+      actionLabel: 'Try Now',
+      actionUrl: '/tools/ai-writer',
+    },
   ];
 
   return (
@@ -78,7 +142,7 @@ const DashboardOverview = () => {
                 <CardTitle>Activity</CardTitle>
               </CardHeader>
               <CardContent>
-                <ActivityTimeline />
+                <ActivityTimeline items={timelineItems} />
               </CardContent>
             </Card>
             
@@ -87,7 +151,7 @@ const DashboardOverview = () => {
                 <CardTitle>Content Type Distribution</CardTitle>
               </CardHeader>
               <CardContent>
-                <ContentTypeChart />
+                <ContentTypeChart data={chartData} />
               </CardContent>
             </Card>
           </div>
@@ -116,7 +180,7 @@ const DashboardOverview = () => {
       
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <QuickActionPanel className="lg:col-span-2" />
-        <RecommendationCard className="lg:col-span-1" />
+        <RecommendationCard className="lg:col-span-1" recommendations={recommendations} />
       </div>
     </div>
   );

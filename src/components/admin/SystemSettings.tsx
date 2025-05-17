@@ -1,622 +1,697 @@
 
-import React from 'react';
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardHeader, 
-  CardTitle,
-  CardFooter
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '@/components/ui/form';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Switch } from '@/components/ui/switch';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import * as z from 'zod';
-import { Globe, Mail, Shield, Database, Upload, Clock, BellRing } from 'lucide-react';
-
-const generalFormSchema = z.object({
-  siteName: z.string().min(2, {
-    message: "Site name must be at least 2 characters.",
-  }),
-  tagline: z.string().optional(),
-  adminEmail: z.string().email({
-    message: "Please enter a valid email address.",
-  }),
-  timeZone: z.string(),
-  dateFormat: z.string(),
-});
+import React, { useState } from 'react';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { toast } from "@/hooks/use-toast";
+import { Badge } from "@/components/ui/badge";
+import { Save, RefreshCw, ShieldAlert, Mail, Database, Cloud, Server, Key, Globe, Upload, Clock } from 'lucide-react';
 
 const SystemSettings = () => {
-  const generalForm = useForm<z.infer<typeof generalFormSchema>>({
-    resolver: zodResolver(generalFormSchema),
-    defaultValues: {
-      siteName: "PLR Organizer Pro",
-      tagline: "Organize and manage your PLR content efficiently",
-      adminEmail: "admin@plrorganizer.com",
-      timeZone: "UTC",
-      dateFormat: "MM/DD/YYYY",
-    },
-  });
+  const [isSaving, setIsSaving] = useState(false);
+  const [maintenanceMode, setMaintenanceMode] = useState(false);
 
-  function onGeneralSubmit(values: z.infer<typeof generalFormSchema>) {
-    console.log(values);
-    // Save to Supabase or state management
-  }
+  const handleSave = async () => {
+    setIsSaving(true);
+    // Simulate API call
+    setTimeout(() => {
+      setIsSaving(false);
+      toast({
+        title: "Settings saved successfully",
+        description: "Your system settings have been updated.",
+      });
+    }, 1000);
+  };
 
   return (
-    <div className="space-y-6">
-      <div>
+    <div className="space-y-6 p-6 pb-16">
+      <div className="flex flex-col space-y-2">
         <h2 className="text-3xl font-bold tracking-tight">System Settings</h2>
-        <p className="text-muted-foreground">Configure system-wide settings for your PLR Organizer application.</p>
+        <p className="text-muted-foreground">
+          Manage your application settings and configuration.
+        </p>
       </div>
       
       <Tabs defaultValue="general" className="space-y-4">
-        <TabsList className="grid grid-cols-2 md:grid-cols-6 h-auto">
-          <TabsTrigger value="general" className="flex items-center gap-2">
-            <Globe className="h-4 w-4" />
-            <span className="hidden sm:inline">General</span>
-          </TabsTrigger>
-          <TabsTrigger value="email" className="flex items-center gap-2">
-            <Mail className="h-4 w-4" />
-            <span className="hidden sm:inline">Email</span>
-          </TabsTrigger>
-          <TabsTrigger value="security" className="flex items-center gap-2">
-            <Shield className="h-4 w-4" />
-            <span className="hidden sm:inline">Security</span>
-          </TabsTrigger>
-          <TabsTrigger value="storage" className="flex items-center gap-2">
-            <Database className="h-4 w-4" />
-            <span className="hidden sm:inline">Storage</span>
-          </TabsTrigger>
-          <TabsTrigger value="api" className="flex items-center gap-2">
-            <Upload className="h-4 w-4" />
-            <span className="hidden sm:inline">API</span>
-          </TabsTrigger>
-          <TabsTrigger value="notifications" className="flex items-center gap-2">
-            <BellRing className="h-4 w-4" />
-            <span className="hidden sm:inline">Notifications</span>
-          </TabsTrigger>
+        <TabsList>
+          <TabsTrigger value="general">General</TabsTrigger>
+          <TabsTrigger value="email">Email</TabsTrigger>
+          <TabsTrigger value="api">API Integration</TabsTrigger>
+          <TabsTrigger value="storage">Storage</TabsTrigger>
+          <TabsTrigger value="security">Security</TabsTrigger>
         </TabsList>
         
-        <TabsContent value="general">
+        <TabsContent value="general" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>General Settings</CardTitle>
+              <CardTitle>Site Information</CardTitle>
               <CardDescription>
-                Configure basic settings for your PLR Organizer application.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Form {...generalForm}>
-                <form onSubmit={generalForm.handleSubmit(onGeneralSubmit)} className="space-y-8">
-                  <FormField
-                    control={generalForm.control}
-                    name="siteName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Site Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="PLR Organizer Pro" {...field} />
-                        </FormControl>
-                        <FormDescription>
-                          This will be displayed in the header and browser tab.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={generalForm.control}
-                    name="tagline"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Tagline</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Organize and manage your PLR content efficiently" {...field} />
-                        </FormControl>
-                        <FormDescription>
-                          A short description of your application.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={generalForm.control}
-                    name="adminEmail"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Admin Email</FormLabel>
-                        <FormControl>
-                          <Input type="email" placeholder="admin@example.com" {...field} />
-                        </FormControl>
-                        <FormDescription>
-                          System notifications will be sent to this email.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <div className="grid gap-6 md:grid-cols-2">
-                    <FormField
-                      control={generalForm.control}
-                      name="timeZone"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Time Zone</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select time zone" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="UTC">UTC</SelectItem>
-                              <SelectItem value="America/New_York">Eastern Time (ET)</SelectItem>
-                              <SelectItem value="America/Chicago">Central Time (CT)</SelectItem>
-                              <SelectItem value="America/Denver">Mountain Time (MT)</SelectItem>
-                              <SelectItem value="America/Los_Angeles">Pacific Time (PT)</SelectItem>
-                              <SelectItem value="Europe/London">London (GMT)</SelectItem>
-                              <SelectItem value="Asia/Tokyo">Tokyo (JST)</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormDescription>
-                            Set the default time zone for the application.
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={generalForm.control}
-                      name="dateFormat"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Date Format</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select date format" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="MM/DD/YYYY">MM/DD/YYYY</SelectItem>
-                              <SelectItem value="DD/MM/YYYY">DD/MM/YYYY</SelectItem>
-                              <SelectItem value="YYYY-MM-DD">YYYY-MM-DD</SelectItem>
-                              <SelectItem value="YYYY/MM/DD">YYYY/MM/DD</SelectItem>
-                              <SelectItem value="DD.MM.YYYY">DD.MM.YYYY</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormDescription>
-                            Choose how dates will be displayed throughout the application.
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  
-                  <div className="flex items-center space-x-4">
-                    <div className="flex-1 space-y-1">
-                      <p className="text-sm font-medium">Maintenance Mode</p>
-                      <p className="text-sm text-muted-foreground">
-                        Put the site in maintenance mode, showing a custom message to visitors.
-                      </p>
-                    </div>
-                    <Switch />
-                  </div>
-                  
-                  <div>
-                    <FormLabel>Custom Logo</FormLabel>
-                    <div className="mt-2 flex items-center gap-4">
-                      <img 
-                        src="/lovable-uploads/34f6c58f-7ead-48ed-8bf9-bed0734b95c5.png" 
-                        alt="Current logo" 
-                        className="h-10" 
-                      />
-                      <Button variant="outline" type="button">
-                        <Upload className="h-4 w-4 mr-2" />
-                        Change Logo
-                      </Button>
-                    </div>
-                    <p className="text-sm text-muted-foreground mt-2">
-                      Recommended size: 200x60 pixels. Max file size: 2MB.
-                    </p>
-                  </div>
-                  
-                  <Button type="submit">Save General Settings</Button>
-                </form>
-              </Form>
-            </CardContent>
-          </Card>
-        </TabsContent>
-        
-        <TabsContent value="email">
-          <Card>
-            <CardHeader>
-              <CardTitle>Email Configuration</CardTitle>
-              <CardDescription>
-                Configure email settings for system notifications and user communications.
+                Configure basic information about your application.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="grid gap-6 md:grid-cols-2">
-                <div className="space-y-2">
-                  <FormLabel>From Name</FormLabel>
-                  <Input placeholder="PLR Organizer Pro" defaultValue="PLR Organizer Pro" />
-                  <p className="text-sm text-muted-foreground">
-                    Name shown in the From field of emails.
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <FormLabel>From Email</FormLabel>
-                  <Input placeholder="no-reply@plrorganizer.com" defaultValue="no-reply@plrorganizer.com" type="email" />
-                  <p className="text-sm text-muted-foreground">
-                    Email address used for sending emails.
-                  </p>
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="site-name">Site Name</Label>
+                <Input id="site-name" placeholder="PLR Organizer Pro" defaultValue="PLR Organizer Pro" />
               </div>
               
               <div className="space-y-2">
-                <FormLabel>Email Template</FormLabel>
-                <Select defaultValue="default">
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select email template" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="default">Default Template</SelectItem>
-                    <SelectItem value="minimal">Minimal</SelectItem>
-                    <SelectItem value="branded">Branded</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Label htmlFor="tagline">Tagline</Label>
+                <Input id="tagline" placeholder="Organize your PLR content efficiently" defaultValue="Organize your PLR content efficiently" />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="admin-email">Admin Email Address</Label>
+                <Input id="admin-email" type="email" placeholder="admin@plrorganizer.com" defaultValue="admin@plrorganizer.com" />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="logo">Logo</Label>
+                <div className="flex items-center gap-4">
+                  <div className="h-20 w-20 rounded border flex items-center justify-center bg-background">
+                    <Upload className="h-10 w-10 text-muted-foreground" />
+                  </div>
+                  <Button variant="outline">
+                    <Upload className="mr-2 h-4 w-4" />
+                    Upload Logo
+                  </Button>
+                </div>
                 <p className="text-sm text-muted-foreground">
-                  Choose a template for system emails.
+                  Recommended size: 200x200px. Max file size: 2MB.
                 </p>
               </div>
               
               <div className="space-y-2">
-                <div className="flex items-center space-x-4">
-                  <div className="flex-1 space-y-1">
-                    <p className="text-sm font-medium">Email Notifications</p>
-                    <p className="text-sm text-muted-foreground">
-                      Send email notifications for user registrations, new content uploads, etc.
-                    </p>
-                  </div>
-                  <Switch defaultChecked />
-                </div>
+                <Label htmlFor="timezone">Timezone</Label>
+                <Select defaultValue="utc">
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a timezone" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="utc">UTC (Coordinated Universal Time)</SelectItem>
+                    <SelectItem value="est">EST (Eastern Standard Time)</SelectItem>
+                    <SelectItem value="cst">CST (Central Standard Time)</SelectItem>
+                    <SelectItem value="mst">MST (Mountain Standard Time)</SelectItem>
+                    <SelectItem value="pst">PST (Pacific Standard Time)</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               
-              <Button>Save Email Settings</Button>
+              <div className="space-y-2">
+                <Label htmlFor="date-format">Date Format</Label>
+                <Select defaultValue="mdy">
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a date format" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="mdy">MM/DD/YYYY</SelectItem>
+                    <SelectItem value="dmy">DD/MM/YYYY</SelectItem>
+                    <SelectItem value="ymd">YYYY/MM/DD</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </CardContent>
+            <CardFooter className="flex justify-end">
+              <Button onClick={handleSave} disabled={isSaving}>
+                {isSaving ? (
+                  <>
+                    <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save className="mr-2 h-4 w-4" />
+                    Save Changes
+                  </>
+                )}
+              </Button>
+            </CardFooter>
+          </Card>
+          
+          <Card>
+            <CardHeader>
+              <CardTitle>Maintenance Mode</CardTitle>
+              <CardDescription>
+                Enable maintenance mode to prevent users from accessing the application during updates.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <Label htmlFor="maintenance-mode">Maintenance Mode</Label>
+                  <p className="text-sm text-muted-foreground">
+                    When enabled, users will see a maintenance page instead of the application.
+                  </p>
+                </div>
+                <Switch
+                  id="maintenance-mode"
+                  checked={maintenanceMode}
+                  onCheckedChange={setMaintenanceMode}
+                />
+              </div>
+              
+              {maintenanceMode && (
+                <div className="space-y-2">
+                  <Label htmlFor="maintenance-message">Maintenance Message</Label>
+                  <Textarea
+                    id="maintenance-message"
+                    placeholder="We're currently performing scheduled maintenance. Please check back in a few hours."
+                    className="min-h-[100px]"
+                  />
+                </div>
+              )}
+            </CardContent>
+            <CardFooter className="flex justify-end">
+              <Button onClick={handleSave} disabled={isSaving}>
+                {isSaving ? (
+                  <>
+                    <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save className="mr-2 h-4 w-4" />
+                    Save Changes
+                  </>
+                )}
+              </Button>
+            </CardFooter>
           </Card>
         </TabsContent>
         
-        <TabsContent value="security">
+        <TabsContent value="email" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Security Settings</CardTitle>
+              <CardTitle>Email Configuration</CardTitle>
+              <CardDescription>
+                Configure email sending settings for the application.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="email-provider">Email Provider</Label>
+                <Select defaultValue="smtp">
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select an email provider" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="smtp">SMTP</SelectItem>
+                    <SelectItem value="sendgrid">SendGrid</SelectItem>
+                    <SelectItem value="mailgun">Mailgun</SelectItem>
+                    <SelectItem value="ses">Amazon SES</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="from-email">From Email Address</Label>
+                <Input id="from-email" type="email" placeholder="noreply@plrorganizer.com" />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="reply-to-email">Reply-To Email Address</Label>
+                <Input id="reply-to-email" type="email" placeholder="support@plrorganizer.com" />
+              </div>
+              
+              <Separator />
+              
+              <div className="space-y-2">
+                <Label htmlFor="smtp-host">SMTP Host</Label>
+                <Input id="smtp-host" placeholder="smtp.example.com" />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="smtp-port">SMTP Port</Label>
+                <Input id="smtp-port" placeholder="587" />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="smtp-username">SMTP Username</Label>
+                <Input id="smtp-username" placeholder="username" />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="smtp-password">SMTP Password</Label>
+                <Input id="smtp-password" type="password" placeholder="••••••••••••" />
+              </div>
+              
+              <div className="flex items-center space-x-2">
+                <Switch id="smtp-secure" defaultChecked />
+                <Label htmlFor="smtp-secure">Use Secure Connection (TLS)</Label>
+              </div>
+              
+              <div className="pt-4">
+                <Button variant="outline">
+                  <Mail className="mr-2 h-4 w-4" />
+                  Send Test Email
+                </Button>
+              </div>
+            </CardContent>
+            <CardFooter className="flex justify-end">
+              <Button onClick={handleSave} disabled={isSaving}>
+                {isSaving ? (
+                  <>
+                    <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save className="mr-2 h-4 w-4" />
+                    Save Changes
+                  </>
+                )}
+              </Button>
+            </CardFooter>
+          </Card>
+          
+          <Card>
+            <CardHeader>
+              <CardTitle>Email Templates</CardTitle>
+              <CardDescription>
+                Customize email templates sent by the system.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label>Email Templates</Label>
+                <Select defaultValue="welcome">
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a template" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="welcome">Welcome Email</SelectItem>
+                    <SelectItem value="password-reset">Password Reset</SelectItem>
+                    <SelectItem value="email-verification">Email Verification</SelectItem>
+                    <SelectItem value="notification">Notification</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="space-y-2 pt-4">
+                <Label htmlFor="template-subject">Email Subject</Label>
+                <Input id="template-subject" placeholder="Welcome to PLR Organizer Pro!" />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="template-content">Email Content</Label>
+                <Textarea
+                  id="template-content"
+                  placeholder="Hello {{name}}, Welcome to PLR Organizer Pro..."
+                  className="min-h-[200px]"
+                />
+              </div>
+              
+              <div className="pt-2">
+                <p className="text-sm text-muted-foreground">
+                  Available variables: <Badge variant="outline">{{name}}</Badge>, <Badge variant="outline">{{email}}</Badge>, <Badge variant="outline">{{link}}</Badge>
+                </p>
+              </div>
+            </CardContent>
+            <CardFooter className="flex justify-end">
+              <Button variant="outline" className="mr-2">
+                Preview
+              </Button>
+              <Button onClick={handleSave} disabled={isSaving}>
+                {isSaving ? (
+                  <>
+                    <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save className="mr-2 h-4 w-4" />
+                    Save Template
+                  </>
+                )}
+              </Button>
+            </CardFooter>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="api" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>API Integration</CardTitle>
+              <CardDescription>
+                Configure external API connections and services.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-medium mb-2 flex items-center">
+                    <Key className="mr-2 h-4 w-4 text-primary" />
+                    API Keys
+                  </h4>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Manage API keys for connecting to external services.
+                  </p>
+                </div>
+                
+                <div className="space-y-4 border rounded-md p-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="openai-api-key">OpenAI API Key</Label>
+                    <Input id="openai-api-key" type="password" placeholder="••••••••••••" />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="sendgrid-api-key">SendGrid API Key</Label>
+                    <Input id="sendgrid-api-key" type="password" placeholder="••••••••••••" />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="stripe-api-key">Stripe API Key</Label>
+                    <Input id="stripe-api-key" type="password" placeholder="••••••••••••" />
+                  </div>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-medium mb-2 flex items-center">
+                    <Globe className="mr-2 h-4 w-4 text-primary" />
+                    Webhooks
+                  </h4>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Configure webhooks to notify external services of events.
+                  </p>
+                </div>
+                
+                <div className="space-y-4 border rounded-md p-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="webhook-url">Webhook URL</Label>
+                    <Input id="webhook-url" placeholder="https://example.com/webhook" />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label>Webhook Events</Label>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="flex items-center space-x-2">
+                        <Switch id="webhook-event-user-created" />
+                        <Label htmlFor="webhook-event-user-created">User Created</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Switch id="webhook-event-user-updated" />
+                        <Label htmlFor="webhook-event-user-updated">User Updated</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Switch id="webhook-event-plr-created" />
+                        <Label htmlFor="webhook-event-plr-created">PLR Created</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Switch id="webhook-event-plr-updated" />
+                        <Label htmlFor="webhook-event-plr-updated">PLR Updated</Label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+            <CardFooter className="flex justify-end">
+              <Button onClick={handleSave} disabled={isSaving}>
+                {isSaving ? (
+                  <>
+                    <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save className="mr-2 h-4 w-4" />
+                    Save Changes
+                  </>
+                )}
+              </Button>
+            </CardFooter>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="storage" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Storage Configuration</CardTitle>
+              <CardDescription>
+                Manage storage settings for files and PLR content.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-medium mb-2 flex items-center">
+                    <Cloud className="mr-2 h-4 w-4 text-primary" />
+                    Storage Provider
+                  </h4>
+                </div>
+                
+                <div className="space-y-2">
+                  <Select defaultValue="supabase">
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a storage provider" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="supabase">Supabase Storage</SelectItem>
+                      <SelectItem value="s3">Amazon S3</SelectItem>
+                      <SelectItem value="gcs">Google Cloud Storage</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-medium mb-2">File Limits</h4>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="max-file-size">Maximum File Size (MB)</Label>
+                  <Input id="max-file-size" type="number" defaultValue="10" />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="allowed-file-types">Allowed File Types</Label>
+                  <Input id="allowed-file-types" placeholder="pdf,docx,txt,jpg,png" defaultValue="pdf,docx,txt,jpg,png" />
+                  <p className="text-sm text-muted-foreground">
+                    Comma-separated list of file extensions.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-medium mb-2 flex items-center">
+                    <Database className="mr-2 h-4 w-4 text-primary" />
+                    Storage Buckets
+                  </h4>
+                </div>
+                
+                <div className="border rounded-md">
+                  <div className="p-4 border-b">
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <h5 className="font-medium">PLR Files</h5>
+                        <p className="text-sm text-muted-foreground">
+                          Storage for PLR content files
+                        </p>
+                      </div>
+                      <Button variant="outline" size="sm">Manage</Button>
+                    </div>
+                  </div>
+                  
+                  <div className="p-4 border-b">
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <h5 className="font-medium">User Uploads</h5>
+                        <p className="text-sm text-muted-foreground">
+                          Storage for user uploaded files
+                        </p>
+                      </div>
+                      <Button variant="outline" size="sm">Manage</Button>
+                    </div>
+                  </div>
+                  
+                  <div className="p-4">
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <h5 className="font-medium">System Files</h5>
+                        <p className="text-sm text-muted-foreground">
+                          Storage for system files and backups
+                        </p>
+                      </div>
+                      <Button variant="outline" size="sm">Manage</Button>
+                    </div>
+                  </div>
+                </div>
+                
+                <Button variant="outline">
+                  <Cloud className="mr-2 h-4 w-4" />
+                  Add New Bucket
+                </Button>
+              </div>
+            </CardContent>
+            <CardFooter className="flex justify-end">
+              <Button onClick={handleSave} disabled={isSaving}>
+                {isSaving ? (
+                  <>
+                    <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save className="mr-2 h-4 w-4" />
+                    Save Changes
+                  </>
+                )}
+              </Button>
+            </CardFooter>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="security" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <ShieldAlert className="mr-2 h-5 w-5 text-primary" />
+                Security Settings
+              </CardTitle>
               <CardDescription>
                 Configure security settings for your application.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
-                <h3 className="text-lg font-medium">Authentication</h3>
-                
-                <div className="flex items-center space-x-4">
-                  <div className="flex-1 space-y-1">
-                    <p className="text-sm font-medium">Two-Factor Authentication</p>
-                    <p className="text-sm text-muted-foreground">
-                      Require 2FA for admin accounts.
-                    </p>
-                  </div>
-                  <Switch />
+                <div>
+                  <h4 className="font-medium mb-2">Password Policy</h4>
                 </div>
                 
-                <div className="flex items-center space-x-4">
-                  <div className="flex-1 space-y-1">
-                    <p className="text-sm font-medium">Email Verification</p>
-                    <p className="text-sm text-muted-foreground">
-                      Require email verification for new accounts.
-                    </p>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="min-password-length">Minimum Password Length</Label>
+                    <Input
+                      id="min-password-length"
+                      type="number"
+                      defaultValue="8"
+                      className="w-20"
+                      min="6"
+                      max="32"
+                    />
                   </div>
-                  <Switch defaultChecked />
-                </div>
-                
-                <div className="space-y-2">
-                  <FormLabel>Session Timeout</FormLabel>
-                  <Select defaultValue="24h">
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select session timeout" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="1h">1 hour</SelectItem>
-                      <SelectItem value="6h">6 hours</SelectItem>
-                      <SelectItem value="12h">12 hours</SelectItem>
-                      <SelectItem value="24h">24 hours</SelectItem>
-                      <SelectItem value="7d">7 days</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <p className="text-sm text-muted-foreground">
-                    How long users stay logged in before requiring re-authentication.
-                  </p>
+                  
+                  <div className="flex items-center space-x-2">
+                    <Switch id="require-uppercase" defaultChecked />
+                    <Label htmlFor="require-uppercase">Require Uppercase Letters</Label>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <Switch id="require-numbers" defaultChecked />
+                    <Label htmlFor="require-numbers">Require Numbers</Label>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <Switch id="require-special-chars" defaultChecked />
+                    <Label htmlFor="require-special-chars">Require Special Characters</Label>
+                  </div>
                 </div>
               </div>
               
+              <Separator />
+              
               <div className="space-y-4">
-                <h3 className="text-lg font-medium">Password Policy</h3>
-                
-                <div className="flex items-center space-x-4">
-                  <div className="flex-1 space-y-1">
-                    <p className="text-sm font-medium">Strong Password Requirements</p>
-                    <p className="text-sm text-muted-foreground">
-                      Require passwords with minimum length, special characters, numbers, etc.
-                    </p>
-                  </div>
-                  <Switch defaultChecked />
+                <div>
+                  <h4 className="font-medium mb-2">Two-Factor Authentication</h4>
                 </div>
                 
                 <div className="space-y-2">
-                  <FormLabel>Minimum Password Length</FormLabel>
-                  <Select defaultValue="8">
+                  <Label>2FA Enforcement</Label>
+                  <Select defaultValue="optional">
                     <SelectTrigger>
-                      <SelectValue placeholder="Select minimum length" />
+                      <SelectValue placeholder="Select 2FA policy" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="6">6 characters</SelectItem>
-                      <SelectItem value="8">8 characters</SelectItem>
-                      <SelectItem value="10">10 characters</SelectItem>
-                      <SelectItem value="12">12 characters</SelectItem>
-                      <SelectItem value="16">16 characters</SelectItem>
+                      <SelectItem value="disabled">Disabled for All Users</SelectItem>
+                      <SelectItem value="optional">Optional for All Users</SelectItem>
+                      <SelectItem value="admin-required">Required for Admins Only</SelectItem>
+                      <SelectItem value="all-required">Required for All Users</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
-              </div>
-              
-              <Button>Save Security Settings</Button>
-            </CardContent>
-          </Card>
-        </TabsContent>
-        
-        <TabsContent value="storage">
-          <Card>
-            <CardHeader>
-              <CardTitle>Storage Settings</CardTitle>
-              <CardDescription>
-                Configure storage settings for files and media.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <FormLabel>Storage Usage</FormLabel>
-                  <Badge variant="outline">
-                    2.4 GB / 10 GB
-                  </Badge>
-                </div>
-                <div className="h-4 w-full bg-muted rounded-full overflow-hidden">
-                  <div className="h-full bg-purple-600 rounded-full" style={{ width: '24%' }}></div>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  24% of your storage quota used.
-                </p>
-              </div>
-              
-              <div className="space-y-2">
-                <FormLabel>Default Upload Location</FormLabel>
-                <Select defaultValue="plr">
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select bucket" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="plr">PLR Content</SelectItem>
-                    <SelectItem value="blog">Blog Assets</SelectItem>
-                    <SelectItem value="users">User Uploads</SelectItem>
-                  </SelectContent>
-                </Select>
-                <p className="text-sm text-muted-foreground">
-                  Default storage location for uploaded files.
-                </p>
-              </div>
-              
-              <div className="space-y-2">
-                <FormLabel>Maximum File Size</FormLabel>
-                <Select defaultValue="50">
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select maximum size" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="10">10 MB</SelectItem>
-                    <SelectItem value="25">25 MB</SelectItem>
-                    <SelectItem value="50">50 MB</SelectItem>
-                    <SelectItem value="100">100 MB</SelectItem>
-                    <SelectItem value="250">250 MB</SelectItem>
-                  </SelectContent>
-                </Select>
-                <p className="text-sm text-muted-foreground">
-                  Maximum file size for uploads.
-                </p>
-              </div>
-              
-              <div className="flex items-center space-x-4">
-                <div className="flex-1 space-y-1">
-                  <p className="text-sm font-medium">File Versioning</p>
-                  <p className="text-sm text-muted-foreground">
-                    Keep previous versions of files when they are updated.
-                  </p>
-                </div>
-                <Switch defaultChecked />
-              </div>
-              
-              <Button>Save Storage Settings</Button>
-            </CardContent>
-          </Card>
-        </TabsContent>
-        
-        <TabsContent value="api">
-          <Card>
-            <CardHeader>
-              <CardTitle>API Integrations</CardTitle>
-              <CardDescription>
-                Configure external API integrations for your application.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-4">
-                <h3 className="text-lg font-medium">OpenAI Integration</h3>
+                
                 <div className="space-y-2">
-                  <FormLabel>API Key</FormLabel>
-                  <div className="flex gap-2">
-                    <Input type="password" defaultValue="sk-•••••••••••••••••••••••••••••••" className="flex-1" />
-                    <Button variant="outline">Reveal</Button>
+                  <Label>2FA Methods</Label>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    <div className="flex items-center space-x-2">
+                      <Switch id="2fa-authenticator-app" defaultChecked />
+                      <Label htmlFor="2fa-authenticator-app">Authenticator App</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Switch id="2fa-sms" defaultChecked />
+                      <Label htmlFor="2fa-sms">SMS</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Switch id="2fa-email" defaultChecked />
+                      <Label htmlFor="2fa-email">Email</Label>
+                    </div>
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    Used for AI-powered content generation.
-                  </p>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <div className="flex-1 space-y-1">
-                    <p className="text-sm font-medium">Enable AI Features</p>
-                    <p className="text-sm text-muted-foreground">
-                      Use AI for content categorization and tagging.
-                    </p>
-                  </div>
-                  <Switch defaultChecked />
                 </div>
               </div>
+              
+              <Separator />
               
               <div className="space-y-4">
-                <h3 className="text-lg font-medium">Payment Gateway</h3>
-                <div className="space-y-2">
-                  <FormLabel>Stripe Secret Key</FormLabel>
-                  <div className="flex gap-2">
-                    <Input type="password" defaultValue="sk_test_•••••••••••••••••••••••••••••••" className="flex-1" />
-                    <Button variant="outline">Reveal</Button>
-                  </div>
+                <div>
+                  <h4 className="font-medium mb-2">Session Settings</h4>
                 </div>
-                <div className="space-y-2">
-                  <FormLabel>Stripe Publishable Key</FormLabel>
-                  <Input defaultValue="pk_test_51N3ghdJ02hd93hdHGE92hd038hdh29hdJHH8333s" />
-                </div>
-                <div className="flex items-center space-x-4">
-                  <div className="flex-1 space-y-1">
-                    <p className="text-sm font-medium">Test Mode</p>
-                    <p className="text-sm text-muted-foreground">
-                      Use test environment for payment processing.
-                    </p>
+                
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="session-timeout">Session Timeout (minutes)</Label>
+                    <Input
+                      id="session-timeout"
+                      type="number"
+                      defaultValue="60"
+                      className="w-24"
+                      min="5"
+                    />
                   </div>
-                  <Switch defaultChecked />
+                  
+                  <div className="flex items-center space-x-2">
+                    <Switch id="enforce-single-session" />
+                    <Label htmlFor="enforce-single-session">Enforce Single Session Per User</Label>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <Switch id="log-login-attempts" defaultChecked />
+                    <Label htmlFor="log-login-attempts">Log Failed Login Attempts</Label>
+                  </div>
                 </div>
               </div>
               
-              <Button>Save API Settings</Button>
+              <Alert variant="destructive" className="bg-red-500/10 border-red-500/30">
+                <AlertDescription className="text-sm">
+                  <strong>Security Notice:</strong> Changes to security settings may affect all users and require them to re-authenticate.
+                </AlertDescription>
+              </Alert>
             </CardContent>
-          </Card>
-        </TabsContent>
-        
-        <TabsContent value="notifications">
-          <Card>
-            <CardHeader>
-              <CardTitle>Notification Settings</CardTitle>
-              <CardDescription>
-                Configure notification preferences for the dashboard.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-4">
-                <h3 className="text-lg font-medium">Dashboard Notifications</h3>
-                
-                <div className="flex items-center space-x-4">
-                  <div className="flex-1 space-y-1">
-                    <p className="text-sm font-medium">New User Registrations</p>
-                    <p className="text-sm text-muted-foreground">
-                      Show notifications when new users register.
-                    </p>
-                  </div>
-                  <Switch defaultChecked />
-                </div>
-                
-                <div className="flex items-center space-x-4">
-                  <div className="flex-1 space-y-1">
-                    <p className="text-sm font-medium">Content Updates</p>
-                    <p className="text-sm text-muted-foreground">
-                      Show notifications for new PLR content additions.
-                    </p>
-                  </div>
-                  <Switch defaultChecked />
-                </div>
-                
-                <div className="flex items-center space-x-4">
-                  <div className="flex-1 space-y-1">
-                    <p className="text-sm font-medium">System Alerts</p>
-                    <p className="text-sm text-muted-foreground">
-                      Show notifications for system errors and warnings.
-                    </p>
-                  </div>
-                  <Switch defaultChecked />
-                </div>
-                
-                <div className="flex items-center space-x-4">
-                  <div className="flex-1 space-y-1">
-                    <p className="text-sm font-medium">License Expirations</p>
-                    <p className="text-sm text-muted-foreground">
-                      Show notifications for upcoming PLR license expirations.
-                    </p>
-                  </div>
-                  <Switch defaultChecked />
-                </div>
-              </div>
-              
-              <div className="space-y-4">
-                <h3 className="text-lg font-medium">Email Notifications</h3>
-                
-                <div className="flex items-center space-x-4">
-                  <div className="flex-1 space-y-1">
-                    <p className="text-sm font-medium">Daily Summary</p>
-                    <p className="text-sm text-muted-foreground">
-                      Receive daily email summaries of activity.
-                    </p>
-                  </div>
-                  <Switch />
-                </div>
-                
-                <div className="flex items-center space-x-4">
-                  <div className="flex-1 space-y-1">
-                    <p className="text-sm font-medium">Important Alerts</p>
-                    <p className="text-sm text-muted-foreground">
-                      Receive email notifications for critical system alerts.
-                    </p>
-                  </div>
-                  <Switch defaultChecked />
-                </div>
-              </div>
-              
-              <Button>Save Notification Settings</Button>
-            </CardContent>
+            <CardFooter className="flex justify-end">
+              <Button onClick={handleSave} disabled={isSaving}>
+                {isSaving ? (
+                  <>
+                    <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save className="mr-2 h-4 w-4" />
+                    Save Changes
+                  </>
+                )}
+              </Button>
+            </CardFooter>
           </Card>
         </TabsContent>
       </Tabs>
