@@ -54,6 +54,13 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { ThemeProvider } from "./context/ThemeContext";
 import { FileExplorerProvider } from "./context/FileExplorerContext";
 
+// Import new pages
+import PLRLibraryPage from "./pages/PLRLibraryPage";
+import BlogManagementPage from "./pages/BlogManagementPage";
+import UserManagementPage from "./pages/admin/UserManagementPage";
+import SystemSettingsPage from "./pages/admin/SystemSettingsPage";
+import AnalyticsPage from "./pages/admin/AnalyticsPage";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -101,6 +108,11 @@ const App = () => (
                   <Route path="/contact" element={<Contact />} />
                   <Route element={<ProtectedRoute />}>
                     <Route path="/dashboard" element={<Index />} />
+                    <Route path="/plr-library" element={<PLRLibraryPage />} />
+                    <Route path="/blog-management" element={<BlogManagementPage />} />
+                    <Route path="/admin/users" element={<UserManagementPage />} />
+                    <Route path="/admin/settings" element={<SystemSettingsPage />} />
+                    <Route path="/admin/analytics" element={<AnalyticsPage />} />
                     <Route path="/tools/brand-kit" element={<BrandKitToolApp />} />
                     <Route path="/tools/content-spinner" element={<ContentSpinnerApp />} />
                     <Route path="/tools/seo-analyzer" element={<SeoAnalyzerApp />} />

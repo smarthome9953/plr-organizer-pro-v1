@@ -5,20 +5,18 @@ import {
   Home,
   FileText,
   PieChart,
+  Settings,
+  Users,
+  BookOpen,
+  FileScan,
   Palette,
   FolderIcon,
   Wrench,
   HelpCircle,
-  BookOpen,
-  RefreshCw,
-  FileSearch,
   Shield,
-  PercentSquare,
   Globe,
-  FileType,
-  FileScan,
-  FileCode,
-  Replace
+  Database,
+  BarChart
 } from 'lucide-react';
 import {
   Sidebar,
@@ -64,6 +62,14 @@ const SideNav: React.FC = () => {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={isActive('/plr-library')}>
+                  <Link to="/plr-library">
+                    <FileText className="mr-2 h-4 w-4" />
+                    <span>PLR Library</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={isActive('/scan')}>
                   <Link to="/scan">
                     <FileScan className="mr-2 h-4 w-4" />
@@ -72,23 +78,15 @@ const SideNav: React.FC = () => {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link to="/plr-library">
-                    <FileText className="mr-2 h-4 w-4" />
-                    <span>PLR Library</span>
+                <SidebarMenuButton asChild isActive={isActive('/blog-management')}>
+                  <Link to="/blog-management">
+                    <BookOpen className="mr-2 h-4 w-4" />
+                    <span>Blog Management</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link to="/analytics">
-                    <PieChart className="mr-2 h-4 w-4" />
-                    <span>Analytics</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
+                <SidebarMenuButton asChild isActive={isActive('/projects')}>
                   <Link to="/projects">
                     <FolderIcon className="mr-2 h-4 w-4" />
                     <span>Projects</span>
@@ -119,75 +117,35 @@ const SideNav: React.FC = () => {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        
+        <SidebarGroup>
+          <SidebarGroupLabel>Admin</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive('/tools/content-spinner')}>
-                  <Link to="/tools/content-spinner">
-                    <RefreshCw className="mr-2 h-4 w-4" />
-                    <span>Content Spinner</span>
+                <SidebarMenuButton asChild isActive={isActive('/admin/users')}>
+                  <Link to="/admin/users">
+                    <Users className="mr-2 h-4 w-4" />
+                    <span>User Management</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive('/tools/seo-analyzer')}>
-                  <Link to="/tools/seo-analyzer">
-                    <FileSearch className="mr-2 h-4 w-4" />
-                    <span>SEO Analyzer</span>
+                <SidebarMenuButton asChild isActive={isActive('/admin/analytics')}>
+                  <Link to="/admin/analytics">
+                    <BarChart className="mr-2 h-4 w-4" />
+                    <span>Analytics & Reports</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive('/tools/license-tracker')}>
-                  <Link to="/tools/license-tracker">
-                    <Shield className="mr-2 h-4 w-4" />
-                    <span>License Tracker</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive('/tools/uniqueness-meter')}>
-                  <Link to="/tools/uniqueness-meter">
-                    <PercentSquare className="mr-2 h-4 w-4" />
-                    <span>Uniqueness Meter</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive('/tools/translator')}>
-                  <Link to="/tools/translator">
-                    <Globe className="mr-2 h-4 w-4" />
-                    <span>Translator</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive('/tools/file-converter')}>
-                  <Link to="/tools/file-converter">
-                    <FileType className="mr-2 h-4 w-4" />
-                    <span>File Converter</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive('/tools/ocr-tool')}>
-                  <Link to="/tools/ocr-tool">
-                    <FileScan className="mr-2 h-4 w-4" />
-                    <span>OCR Tool</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive('/tools/html-editor')}>
-                  <Link to="/tools/html-editor">
-                    <FileCode className="mr-2 h-4 w-4" />
-                    <span>HTML Editor</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive('/tools/batch-editor')}>
-                  <Link to="/tools/batch-editor">
-                    <Replace className="mr-2 h-4 w-4" />
-                    <span>Batch Editor</span>
+                <SidebarMenuButton asChild isActive={isActive('/admin/settings')}>
+                  <Link to="/admin/settings">
+                    <Settings className="mr-2 h-4 w-4" />
+                    <span>System Settings</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -200,23 +158,7 @@ const SideNav: React.FC = () => {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link to="/resources/plr-software-guides">
-                    <BookOpen className="mr-2 h-4 w-4" />
-                    <span>PLR Software Guides</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link to="/resources/templates">
-                    <FileText className="mr-2 h-4 w-4" />
-                    <span>Templates</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
+                <SidebarMenuButton asChild isActive={isActive('/resources/support')}>
                   <Link to="/resources/support">
                     <HelpCircle className="mr-2 h-4 w-4" />
                     <span>Support Center</span>
