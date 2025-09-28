@@ -2,7 +2,7 @@
 import { useAuth } from '@/context/AuthContext';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
-export const ProtectedRoute = () => {
+const ProtectedRoute = () => {
   const { user, loading } = useAuth();
   const location = useLocation();
   
@@ -19,3 +19,5 @@ export const ProtectedRoute = () => {
   // Use the replace prop to replace instead of push to history stack
   return user ? <Outlet /> : <Navigate to="/auth" state={{ from: location }} replace />;
 };
+
+export default ProtectedRoute;
