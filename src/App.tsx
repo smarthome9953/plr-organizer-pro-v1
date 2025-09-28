@@ -87,7 +87,7 @@ function App() {
           <BrowserRouter>
             <AuthProvider>
               <Routes>
-                {/* Public Routes */}
+                 {/* Public Routes */}
                 <Route path="/" element={<Index />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
@@ -97,7 +97,7 @@ function App() {
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:slug" element={<BlogPost />} />
                 <Route path="/blog/category/:category" element={<BlogCategory />} />
-                <Route path="/landing" element={<Landing />} />
+                <Route path="/dashboard" element={<Landing />} />
                 <Route path="/gdpr-compliance" element={<GdprCompliance />} />
                 <Route path="/cookie-policy" element={<CookiePolicy />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
