@@ -84,8 +84,8 @@ function App() {
     <ThemeProvider>
       <HelmetProvider>
         <QueryClientProvider client={queryClient}>
-          <AuthProvider>
-            <BrowserRouter>
+          <BrowserRouter>
+            <AuthProvider>
               <Routes>
                 {/* Public Routes */}
                 <Route path="/" element={<Index />} />
@@ -155,8 +155,8 @@ function App() {
                 <Route path="*" element={<NotFound />} />
               </Routes>
               <Toaster />
-            </BrowserRouter>
-          </AuthProvider>
+            </AuthProvider>
+          </BrowserRouter>
         </QueryClientProvider>
       </HelmetProvider>
     </ThemeProvider>

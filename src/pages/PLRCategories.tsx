@@ -79,7 +79,7 @@ const PLRCategories = () => {
         .from('plr_categories')
         .insert({
           user_id: user.id,
-          category_name: newCategory.trim()
+          name: newCategory.trim()
         });
         
       if (error) {
@@ -126,7 +126,7 @@ const PLRCategories = () => {
         .from('plr_categories')
         .insert({
           user_id: user.id,
-          category_name: categoryName
+          name: categoryName
         });
         
       if (error) {
