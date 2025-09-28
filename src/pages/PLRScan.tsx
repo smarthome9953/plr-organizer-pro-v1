@@ -249,7 +249,7 @@ const PLRScan = () => {
           .from('plr_files')
           .insert({
             user_id: user.id,
-            file_name: file.name,
+            title: file.name,
             file_path: file.path,
             file_type: file.type,
             category: null,  // Will be categorized later

@@ -15,8 +15,13 @@ import {
 } from 'lucide-react';
 
 interface Category {
-  user_id: string;
-  category_name: string;
+  id: string;
+  user_id: string | null;
+  name: string;
+  description: string | null;
+  color: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
 const PLRCategories = () => {
@@ -65,7 +70,7 @@ const PLRCategories = () => {
     if (!user || !newCategory.trim()) return;
     
     // Check if category already exists
-    if (categories.some(cat => cat.category_name.toLowerCase() === newCategory.trim().toLowerCase())) {
+    if (categories.some(cat => cat.name.toLowerCase() === newCategory.trim().toLowerCase())) {
       toast("Category exists", {
         description: "This category already exists in your library.",
       });
@@ -86,11 +91,8 @@ const PLRCategories = () => {
         throw error;
       }
       
-      // Add to local state
-      setCategories([...categories, {
-        user_id: user.id,
-        category_name: newCategory.trim()
-      }]);
+      // Refresh categories from database
+      await fetchCategories();
       
       toast("Category Added", {
         description: `${newCategory.trim()} has been added to your categories.`,
@@ -112,7 +114,7 @@ const PLRCategories = () => {
     if (!user) return;
     
     // Check if category already exists
-    if (categories.some(cat => cat.category_name.toLowerCase() === categoryName.toLowerCase())) {
+    if (categories.some(cat => cat.name.toLowerCase() === categoryName.toLowerCase())) {
       toast("Category exists", {
         description: "This category already exists in your library.",
       });
@@ -133,11 +135,8 @@ const PLRCategories = () => {
         throw error;
       }
       
-      // Add to local state
-      setCategories([...categories, {
-        user_id: user.id,
-        category_name: categoryName
-      }]);
+      // Refresh categories from database
+      await fetchCategories();
       
       toast("Category Added", {
         description: `${categoryName} has been added to your categories.`,
@@ -160,14 +159,14 @@ const PLRCategories = () => {
         .from('plr_categories')
         .delete()
         .eq('user_id', user.id)
-        .eq('category_name', categoryName);
+        .eq('name', categoryName);
         
       if (error) {
         throw error;
       }
       
       // Remove from local state
-      setCategories(categories.filter(cat => cat.category_name !== categoryName));
+      setCategories(categories.filter(cat => cat.name !== categoryName));
       
       toast("Category Deleted", {
         description: `${categoryName} has been removed from your categories.`,
@@ -214,17 +213,17 @@ const PLRCategories = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
                     {categories.map((category) => (
                       <div 
-                        key={category.category_name} 
+                        key={category.id} 
                         className="flex items-center justify-between bg-accent/50 p-2 rounded"
                       >
                         <div className="flex items-center">
                           <Bookmark className="h-4 w-4 mr-2 text-primary" />
-                          <span className="text-sm">{category.category_name}</span>
+                          <span className="text-sm">{category.name}</span>
                         </div>
                         <Button 
                           variant="ghost" 
                           size="sm"
-                          onClick={() => deleteCategory(category.category_name)}
+                          onClick={() => deleteCategory(category.name)}
                           className="h-6 w-6 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
                         >
                           <X className="h-4 w-4" />
@@ -325,7 +324,7 @@ const PLRCategories = () => {
                 <div className="space-y-2">
                   {popularCategories.map((category) => {
                     const isAdded = categories.some(cat => 
-                      cat.category_name.toLowerCase() === category.toLowerCase()
+                      cat.name.toLowerCase() === category.toLowerCase()
                     );
                     
                     return (

@@ -27,12 +27,12 @@ import {
 
 interface PLRFile {
   id: string;
-  file_name: string;
-  file_path: string;
+  title: string;
+  file_path: string | null;
   file_type: string | null;
   category: string | null;
   tags: string[] | null;
-  created_at: string | null;
+  created_at: string;
 }
 
 const PLRBrowser = () => {
@@ -81,10 +81,10 @@ const PLRBrowser = () => {
     }
   };
 
-  const getFileIcon = (fileType: string | null, fileName: string) => {
+  const getFileIcon = (fileType: string | null, title: string) => {
     if (!fileType) {
       // Try to determine type from filename
-      const extension = fileName.split('.').pop()?.toLowerCase();
+      const extension = title.split('.').pop()?.toLowerCase();
       
       switch (extension) {
         case 'pdf':
@@ -123,9 +123,9 @@ const PLRBrowser = () => {
     }
   };
 
-  const getFileTypeLabel = (fileType: string | null, fileName: string) => {
+  const getFileTypeLabel = (fileType: string | null, title: string) => {
     if (!fileType) {
-      const extension = fileName.split('.').pop()?.toLowerCase();
+      const extension = title.split('.').pop()?.toLowerCase();
       return extension?.toUpperCase() || 'Unknown';
     }
     
@@ -195,7 +195,7 @@ const PLRBrowser = () => {
   // Filter files based on search and category
   const filteredFiles = files.filter(file => {
     const matchesSearch = searchTerm === '' || 
-      file.file_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      file.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (file.category && file.category.toLowerCase().includes(searchTerm.toLowerCase()));
       
     const matchesCategory = selectedCategory === 'all' || file.category === selectedCategory;
@@ -282,15 +282,15 @@ const PLRBrowser = () => {
                 <Card key={file.id} className="hover:shadow-md transition-shadow">
                   <CardHeader className="pb-2">
                     <div className="flex justify-between">
-                      {getFileIcon(file.file_type, file.file_name)}
+                      {getFileIcon(file.file_type, file.title)}
                       <span className="text-xs px-2 py-1 bg-muted rounded-md">
-                        {getFileTypeLabel(file.file_type, file.file_name)}
+                        {getFileTypeLabel(file.file_type, file.title)}
                       </span>
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <h3 className="font-medium truncate mb-1" title={file.file_name}>
-                      {file.file_name}
+                    <h3 className="font-medium truncate mb-1" title={file.title}>
+                      {file.title}
                     </h3>
                     <p className="text-sm text-muted-foreground mb-3">
                       {file.category || 'Uncategorized'}
@@ -329,14 +329,14 @@ const PLRBrowser = () => {
                 <Card key={file.id} className="hover:bg-accent/50 transition-colors">
                   <div className="p-4 flex items-center">
                     <div className="mr-4">
-                      {getFileIcon(file.file_type, file.file_name)}
+                      {getFileIcon(file.file_type, file.title)}
                     </div>
                     <div className="flex-grow">
-                      <h3 className="font-medium" title={file.file_name}>
-                        {file.file_name}
+                      <h3 className="font-medium" title={file.title}>
+                        {file.title}
                       </h3>
                       <div className="flex items-center text-sm text-muted-foreground">
-                        <span className="mr-2">{getFileTypeLabel(file.file_type, file.file_name)}</span>
+                        <span className="mr-2">{getFileTypeLabel(file.file_type, file.title)}</span>
                         <span>•</span>
                         <span className="mx-2">{file.category || 'Uncategorized'}</span>
                       </div>
@@ -396,25 +396,25 @@ const PLRBrowser = () => {
           <DialogHeader>
             <DialogTitle>File Details</DialogTitle>
             <DialogDescription>
-              Details for {selectedFile?.file_name}
+              Details for {selectedFile?.title}
             </DialogDescription>
           </DialogHeader>
           
           {selectedFile && (
             <div className="space-y-4">
               <div className="flex items-center justify-center py-4">
-                {getFileIcon(selectedFile.file_type, selectedFile.file_name)}
+                {getFileIcon(selectedFile.file_type, selectedFile.title)}
               </div>
               
               <div className="space-y-2">
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">File Name</p>
-                  <p>{selectedFile.file_name}</p>
+                  <p>{selectedFile.title}</p>
                 </div>
                 
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">File Type</p>
-                  <p>{getFileTypeLabel(selectedFile.file_type, selectedFile.file_name)}</p>
+                  <p>{getFileTypeLabel(selectedFile.file_type, selectedFile.title)}</p>
                 </div>
                 
                 <div>
