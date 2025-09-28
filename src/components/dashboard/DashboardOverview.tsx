@@ -45,64 +45,67 @@ const DashboardOverview = () => {
   // Mock data for ActivityTimeline
   const timelineItems = [
     {
-      id: 1,
+      id: '1',
       title: 'New PLR package uploaded',
       description: 'Health & Wellness Collection',
-      timestamp: '30 minutes ago',
-      icon: 'FileUp',
+      time: '30 minutes ago',
+      type: 'upload' as const,
     },
     {
-      id: 2,
+      id: '2',
       title: 'License updated',
       description: 'Digital Marketing PLR Bundle',
-      timestamp: '2 hours ago',
-      icon: 'FileCheck',
+      time: '2 hours ago',
+      type: 'edit' as const,
     },
     {
-      id: 3,
+      id: '3',
       title: 'Blog post published',
       description: 'Top 10 Ways to Use PLR Content',
-      timestamp: '5 hours ago',
-      icon: 'FileText',
+      time: '5 hours ago',
+      type: 'view' as const,
     },
     {
-      id: 4,
+      id: '4',
       title: 'New user registered',
       description: 'john.smith@example.com',
-      timestamp: '1 day ago',
-      icon: 'UserPlus',
+      time: '1 day ago',
+      type: 'view' as const,
     },
   ];
 
   // Mock data for ContentTypeChart
   const chartData = [
-    { name: 'Ebooks', value: 35 },
-    { name: 'Articles', value: 25 },
-    { name: 'Videos', value: 15 },
-    { name: 'Templates', value: 10 },
-    { name: 'Graphics', value: 8 },
-    { name: 'Audio', value: 7 },
+    { name: 'Ebooks', value: 35, color: '#8b5cf6' },
+    { name: 'Articles', value: 25, color: '#06b6d4' },
+    { name: 'Videos', value: 15, color: '#10b981' },
+    { name: 'Templates', value: 10, color: '#f59e0b' },
+    { name: 'Graphics', value: 8, color: '#ef4444' },
+    { name: 'Audio', value: 7, color: '#6366f1' },
   ];
 
   // Mock recommendations
   const recommendations = [
     {
+      id: '1',
       title: 'Update Your PLR Content',
       description: 'You have 5 PLR items that need updating to match current trends.',
-      actionLabel: 'View Content',
-      actionUrl: '/plr-library?filter=outdated',
+      actionText: 'View Content',
+      actionHref: '/plr-library?filter=outdated',
     },
     {
+      id: '2',
       title: 'Complete Your Profile',
       description: 'Add your niche and interests to get more relevant PLR recommendations.',
-      actionLabel: 'Edit Profile',
-      actionUrl: '/settings/profile',
+      actionText: 'Edit Profile',
+      actionHref: '/settings/profile',
     },
     {
+      id: '3',
       title: 'Try Our New AI Writer',
       description: 'Generate unique content from your PLR materials with our new AI tool.',
-      actionLabel: 'Try Now',
-      actionUrl: '/tools/ai-writer',
+      actionText: 'Try Now',
+      actionHref: '/tools/ai-writer',
     },
   ];
 

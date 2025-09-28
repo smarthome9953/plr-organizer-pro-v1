@@ -310,7 +310,7 @@ const SystemSettings = () => {
               
               <div className="pt-2">
                 <p className="text-sm text-muted-foreground">
-                  Available variables: <Badge variant="outline">{{name}}</Badge>, <Badge variant="outline">{{email}}</Badge>, <Badge variant="outline">{{link}}</Badge>
+                  Available variables: <Badge variant="outline">{`{{name}}`}</Badge>, <Badge variant="outline">{`{{email}}`}</Badge>, <Badge variant="outline">{`{{link}}`}</Badge>
                 </p>
               </div>
             </CardContent>
