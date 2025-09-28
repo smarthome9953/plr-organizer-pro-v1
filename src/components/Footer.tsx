@@ -6,14 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Facebook, Twitter, Linkedin, Youtube } from 'lucide-react';
-import { useFileExplorer } from '@/context/FileExplorerContext';
-
 const Footer = () => {
-  const {
-    scanResults,
-    selectedFolders
-  } = useFileExplorer();
-  
   const [email, setEmail] = useState('');
   const [consentChecked, setConsentChecked] = useState(false);
   
@@ -131,8 +124,7 @@ const Footer = () => {
           <div className="flex items-center space-x-2 text-muted-foreground">
             {/* Add payment method icons if applicable */}
             <div className="text-xs">
-              {selectedFolders.length > 0 && <span>{selectedFolders.length} folder{selectedFolders.length !== 1 ? 's' : ''} selected</span>}
-              {scanResults.length > 0 && <span className="ml-4">{scanResults.length} PLR package{scanResults.length !== 1 ? 's' : ''} found</span>}
+              Secure & Trusted Platform
             </div>
           </div>
         </div>

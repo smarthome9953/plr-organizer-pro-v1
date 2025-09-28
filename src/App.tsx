@@ -6,6 +6,7 @@ import { HelmetProvider } from 'react-helmet-async';
 // Providers
 import { ThemeProvider } from '@/context/ThemeContext';
 import { AuthProvider } from '@/context/AuthContext';
+import { FileExplorerProvider } from '@/context/FileExplorerContext';
 
 // Layouts & Core Components
 import { Toaster } from '@/components/ui/toaster';
@@ -85,7 +86,8 @@ function App() {
       <HelmetProvider>
         <QueryClientProvider client={queryClient}>
           <BrowserRouter>
-            <AuthProvider>
+            <FileExplorerProvider>
+              <AuthProvider>
               <Routes>
                  {/* Public Routes */}
                 <Route path="/" element={<Index />} />
@@ -155,7 +157,8 @@ function App() {
                 <Route path="*" element={<NotFound />} />
               </Routes>
               <Toaster />
-            </AuthProvider>
+              </AuthProvider>
+            </FileExplorerProvider>
           </BrowserRouter>
         </QueryClientProvider>
       </HelmetProvider>
