@@ -155,19 +155,32 @@ export default function Header({
                           </Link>
                         </NavigationMenuLink>
                       </li>
-                      <li>
-                        <NavigationMenuLink asChild>
-                          <Link to="/html-editor" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
-                            <div className="flex items-center text-sm font-medium leading-none">
-                              <FileCode className="mr-2 h-4 w-4" />
-                              HTML Editor
-                            </div>
-                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground mt-1">
-                              Create & format website content without coding
-                            </p>
-                          </Link>
-                        </NavigationMenuLink>
-                      </li>
+                       <li>
+                         <NavigationMenuLink asChild>
+                           <Link to="/html-editor" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                             <div className="flex items-center text-sm font-medium leading-none">
+                               <FileCode className="mr-2 h-4 w-4" />
+                               HTML Editor
+                             </div>
+                             <p className="line-clamp-2 text-sm leading-snug text-muted-foreground mt-1">
+                               Create & format website content without coding
+                             </p>
+                           </Link>
+                         </NavigationMenuLink>
+                       </li>
+                       <li>
+                         <NavigationMenuLink asChild>
+                           <Link to="/brand-kit-tool" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                             <div className="flex items-center text-sm font-medium leading-none">
+                               <Palette className="mr-2 h-4 w-4" />
+                               Brand Kit Tool
+                             </div>
+                             <p className="line-clamp-2 text-sm leading-snug text-muted-foreground mt-1">
+                               Create consistent branding for PLR content
+                             </p>
+                           </Link>
+                         </NavigationMenuLink>
+                       </li>
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
@@ -192,11 +205,17 @@ export default function Header({
                           PLR Software FAQs
                         </Link>
                       </li>
-                      <li>
-                        <Link to="/resources/support" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
-                          Support Center
-                        </Link>
-                      </li>
+                       <li>
+                         <Link to="/resources/support" className={`${navigationMenuTriggerStyle()} w-full justify-start`}>
+                           Support Center
+                         </Link>
+                       </li>
+                       <li>
+                         <Link to="/brand-guidelines" className={`${navigationMenuTriggerStyle()} w-full justify-start flex items-center`}>
+                           <Palette className="h-4 w-4 mr-2" />
+                           Brand Guidelines
+                         </Link>
+                       </li>
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>

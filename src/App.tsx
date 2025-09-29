@@ -48,6 +48,7 @@ import OcrTool from '@/pages/OcrTool';
 import OcrToolApp from '@/pages/OcrToolApp';
 import Translator from '@/pages/Translator';
 import TranslatorApp from '@/pages/TranslatorApp';
+import BrandKitGuide from '@/pages/BrandKitGuide';
 import BrandKitTool from '@/pages/BrandKitTool';
 import BrandKitToolApp from '@/pages/BrandKitToolApp';
 import UniquenessMeter from '@/pages/UniquenessMeter';
@@ -127,6 +128,7 @@ function App() {
                 <Route path="/translator/app" element={<TranslatorApp />} />
                 <Route path="/brand-kit-tool" element={<BrandKitTool />} />
                 <Route path="/brand-kit-tool/app" element={<BrandKitToolApp />} />
+                <Route path="/brand-guidelines" element={<BrandKitGuide />} />
                 <Route path="/uniqueness-meter" element={<UniquenessMeter />} />
                 <Route path="/uniqueness-meter/app" element={<UniquenessMeterApp />} />
                 <Route path="/seo-analyzer" element={<SeoAnalyzer />} />
