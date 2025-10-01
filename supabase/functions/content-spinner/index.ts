@@ -99,9 +99,10 @@ Apply ${uniquenessDescription} to the content.`;
     );
     
   } catch (error) {
-    console.error('Error in content spinner function:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Internal server error';
+    console.error('Error in content-spinner function:', errorMessage);
     return new Response(
-      JSON.stringify({ error: error.message || 'Internal server error' }),
+      JSON.stringify({ error: errorMessage }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }

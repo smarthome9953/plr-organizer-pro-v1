@@ -34,16 +34,31 @@ const PLRDashboard = () => {
         // Get category stats using count aggregation
         const { data, error: categoryError } = await supabase
           .from('plr_files')
-          .select('category')
+          .select('category_id')
           .eq('user_id', user.id);
           
         if (categoryError) {
           console.error('Error fetching category stats:', categoryError);
         } else if (data) {
+          // Get category names
+          const categoryIds = Array.from(new Set(data.map(f => f.category_id).filter(Boolean)));
+          
+          let categoryMap: Record<string, string> = {};
+          if (categoryIds.length > 0) {
+            const { data: categoriesData } = await supabase
+              .from('plr_categories')
+              .select('id, name')
+              .in('id', categoryIds);
+            
+            if (categoriesData) {
+              categoryMap = Object.fromEntries(categoriesData.map(c => [c.id, c.name]));
+            }
+          }
+          
           // Manual grouping since supabase-js doesn't support group directly
           const stats: Record<string, number> = {};
           data.forEach(row => {
-            const category = row.category || 'Uncategorized';
+            const category = row.category_id ? categoryMap[row.category_id] || 'Unknown' : 'Uncategorized';
             stats[category] = (stats[category] || 0) + 1;
           });
           

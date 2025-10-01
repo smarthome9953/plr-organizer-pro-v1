@@ -27,12 +27,16 @@ import {
 
 interface PLRFile {
   id: string;
-  title: string;
-  file_path: string | null;
-  file_type: string | null;
-  category: string | null;
-  tags: string[] | null;
+  file_name: string;
+  file_path: string;
+  file_type: string;
+  category_id: string | null;
+  tags: string[];
   created_at: string;
+  file_size: number;
+  description: string | null;
+  license_type: string | null;
+  confidence_score: number;
 }
 
 const PLRBrowser = () => {
@@ -68,9 +72,18 @@ const PLRBrowser = () => {
       
       setFiles(filesData || []);
       
-      // Extract unique categories
-      const uniqueCategories = Array.from(new Set(filesData?.map(file => file.category).filter(Boolean) as string[]));
-      setCategories(uniqueCategories);
+      // Get unique category IDs and fetch category names
+      const categoryIds = Array.from(new Set(filesData?.map(file => file.category_id).filter(Boolean) as string[]));
+      
+      if (categoryIds.length > 0) {
+        const { data: categoriesData } = await supabase
+          .from('plr_categories')
+          .select('id, name')
+          .in('id', categoryIds);
+        
+        const categoryNames = categoriesData?.map(cat => cat.name) || [];
+        setCategories(categoryNames);
+      }
     } catch (error) {
       console.error('Error fetching PLR files:', error);
       toast("Failed to load files", {
@@ -81,10 +94,10 @@ const PLRBrowser = () => {
     }
   };
 
-  const getFileIcon = (fileType: string | null, title: string) => {
+  const getFileIcon = (fileType: string | null, fileName: string) => {
     if (!fileType) {
       // Try to determine type from filename
-      const extension = title.split('.').pop()?.toLowerCase();
+      const extension = fileName.split('.').pop()?.toLowerCase();
       
       switch (extension) {
         case 'pdf':
@@ -195,10 +208,10 @@ const PLRBrowser = () => {
   // Filter files based on search and category
   const filteredFiles = files.filter(file => {
     const matchesSearch = searchTerm === '' || 
-      file.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (file.category && file.category.toLowerCase().includes(searchTerm.toLowerCase()));
+      file.file_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (file.description && file.description.toLowerCase().includes(searchTerm.toLowerCase()));
       
-    const matchesCategory = selectedCategory === 'all' || file.category === selectedCategory;
+    const matchesCategory = selectedCategory === 'all' || file.category_id === selectedCategory;
     
     return matchesSearch && matchesCategory;
   });
@@ -282,18 +295,18 @@ const PLRBrowser = () => {
                 <Card key={file.id} className="hover:shadow-md transition-shadow">
                   <CardHeader className="pb-2">
                     <div className="flex justify-between">
-                      {getFileIcon(file.file_type, file.title)}
+                      {getFileIcon(file.file_type, file.file_name)}
                       <span className="text-xs px-2 py-1 bg-muted rounded-md">
-                        {getFileTypeLabel(file.file_type, file.title)}
+                        {getFileTypeLabel(file.file_type, file.file_name)}
                       </span>
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <h3 className="font-medium truncate mb-1" title={file.title}>
-                      {file.title}
+                    <h3 className="font-medium truncate mb-1" title={file.file_name}>
+                      {file.file_name}
                     </h3>
                     <p className="text-sm text-muted-foreground mb-3">
-                      {file.category || 'Uncategorized'}
+                      {file.category_id ? 'Categorized' : 'Uncategorized'}
                     </p>
                     <div className="flex space-x-2">
                       <Button 
@@ -329,16 +342,16 @@ const PLRBrowser = () => {
                 <Card key={file.id} className="hover:bg-accent/50 transition-colors">
                   <div className="p-4 flex items-center">
                     <div className="mr-4">
-                      {getFileIcon(file.file_type, file.title)}
+                      {getFileIcon(file.file_type, file.file_name)}
                     </div>
                     <div className="flex-grow">
-                      <h3 className="font-medium" title={file.title}>
-                        {file.title}
+                      <h3 className="font-medium" title={file.file_name}>
+                        {file.file_name}
                       </h3>
                       <div className="flex items-center text-sm text-muted-foreground">
-                        <span className="mr-2">{getFileTypeLabel(file.file_type, file.title)}</span>
+                        <span className="mr-2">{getFileTypeLabel(file.file_type, file.file_name)}</span>
                         <span>•</span>
-                        <span className="mx-2">{file.category || 'Uncategorized'}</span>
+                        <span className="mx-2">{file.category_id ? 'Categorized' : 'Uncategorized'}</span>
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
@@ -396,30 +409,30 @@ const PLRBrowser = () => {
           <DialogHeader>
             <DialogTitle>File Details</DialogTitle>
             <DialogDescription>
-              Details for {selectedFile?.title}
+              Details for {selectedFile?.file_name}
             </DialogDescription>
           </DialogHeader>
           
           {selectedFile && (
             <div className="space-y-4">
               <div className="flex items-center justify-center py-4">
-                {getFileIcon(selectedFile.file_type, selectedFile.title)}
+                {getFileIcon(selectedFile.file_type, selectedFile.file_name)}
               </div>
               
               <div className="space-y-2">
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">File Name</p>
-                  <p>{selectedFile.title}</p>
+                  <p>{selectedFile.file_name}</p>
                 </div>
                 
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">File Type</p>
-                  <p>{getFileTypeLabel(selectedFile.file_type, selectedFile.title)}</p>
+                  <p>{getFileTypeLabel(selectedFile.file_type, selectedFile.file_name)}</p>
                 </div>
                 
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Category</p>
-                  <p>{selectedFile.category || 'Uncategorized'}</p>
+                  <p>{selectedFile.category_id ? 'Categorized' : 'Uncategorized'}</p>
                 </div>
                 
                 <div>

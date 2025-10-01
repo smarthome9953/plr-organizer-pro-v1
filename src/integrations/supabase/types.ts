@@ -14,96 +14,146 @@ export type Database = {
   }
   public: {
     Tables: {
+      file_versions: {
+        Row: {
+          changes_description: string | null
+          created_at: string | null
+          file_id: string
+          file_size: number
+          id: string
+          storage_path: string
+          user_id: string
+          version_number: number
+        }
+        Insert: {
+          changes_description?: string | null
+          created_at?: string | null
+          file_id: string
+          file_size: number
+          id?: string
+          storage_path: string
+          user_id: string
+          version_number: number
+        }
+        Update: {
+          changes_description?: string | null
+          created_at?: string | null
+          file_id?: string
+          file_size?: number
+          id?: string
+          storage_path?: string
+          user_id?: string
+          version_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "file_versions_file_id_fkey"
+            columns: ["file_id"]
+            isOneToOne: false
+            referencedRelation: "plr_files"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       plr_categories: {
         Row: {
           color: string | null
-          created_at: string
+          created_at: string | null
           description: string | null
+          icon: string | null
           id: string
           name: string
-          updated_at: string
-          user_id: string | null
+          updated_at: string | null
+          user_id: string
         }
         Insert: {
           color?: string | null
-          created_at?: string
+          created_at?: string | null
           description?: string | null
+          icon?: string | null
           id?: string
           name: string
-          updated_at?: string
-          user_id?: string | null
+          updated_at?: string | null
+          user_id: string
         }
         Update: {
           color?: string | null
-          created_at?: string
+          created_at?: string | null
           description?: string | null
+          icon?: string | null
           id?: string
           name?: string
-          updated_at?: string
-          user_id?: string | null
+          updated_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }
       plr_files: {
         Row: {
-          author: string | null
-          category: string | null
           category_id: string | null
-          created_at: string
+          confidence_score: number | null
+          content_hash: string | null
+          created_at: string | null
           description: string | null
-          file_path: string | null
-          file_size: number | null
-          file_type: string | null
+          file_name: string
+          file_path: string
+          file_size: number
+          file_type: string
           id: string
+          is_plr: boolean | null
+          last_modified: string | null
+          license_text: string | null
           license_type: string | null
           notes: string | null
-          publication_date: string | null
-          source: string | null
+          quality_score: number | null
+          storage_path: string | null
           tags: string[] | null
-          title: string
-          updated_at: string
+          updated_at: string | null
           user_id: string
-          version: string | null
         }
         Insert: {
-          author?: string | null
-          category?: string | null
           category_id?: string | null
-          created_at?: string
+          confidence_score?: number | null
+          content_hash?: string | null
+          created_at?: string | null
           description?: string | null
-          file_path?: string | null
-          file_size?: number | null
-          file_type?: string | null
+          file_name: string
+          file_path: string
+          file_size?: number
+          file_type: string
           id?: string
+          is_plr?: boolean | null
+          last_modified?: string | null
+          license_text?: string | null
           license_type?: string | null
           notes?: string | null
-          publication_date?: string | null
-          source?: string | null
+          quality_score?: number | null
+          storage_path?: string | null
           tags?: string[] | null
-          title: string
-          updated_at?: string
+          updated_at?: string | null
           user_id: string
-          version?: string | null
         }
         Update: {
-          author?: string | null
-          category?: string | null
           category_id?: string | null
-          created_at?: string
+          confidence_score?: number | null
+          content_hash?: string | null
+          created_at?: string | null
           description?: string | null
-          file_path?: string | null
-          file_size?: number | null
-          file_type?: string | null
+          file_name?: string
+          file_path?: string
+          file_size?: number
+          file_type?: string
           id?: string
+          is_plr?: boolean | null
+          last_modified?: string | null
+          license_text?: string | null
           license_type?: string | null
           notes?: string | null
-          publication_date?: string | null
-          source?: string | null
+          quality_score?: number | null
+          storage_path?: string | null
           tags?: string[] | null
-          title?: string
-          updated_at?: string
+          updated_at?: string | null
           user_id?: string
-          version?: string | null
         }
         Relationships: [
           {
@@ -117,36 +167,63 @@ export type Database = {
       }
       profiles: {
         Row: {
-          avatar_url: string | null
-          bio: string | null
-          created_at: string
-          display_name: string | null
+          created_at: string | null
           email: string | null
+          full_name: string | null
           id: string
-          role: string | null
-          updated_at: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      scan_history: {
+        Row: {
+          created_at: string | null
+          files_found: number | null
+          folders_scanned: string[] | null
+          id: string
+          plr_files_detected: number | null
+          scan_duration: number | null
+          scan_options: Json | null
+          scan_type: string
+          status: string
           user_id: string
         }
         Insert: {
-          avatar_url?: string | null
-          bio?: string | null
-          created_at?: string
-          display_name?: string | null
-          email?: string | null
+          created_at?: string | null
+          files_found?: number | null
+          folders_scanned?: string[] | null
           id?: string
-          role?: string | null
-          updated_at?: string
+          plr_files_detected?: number | null
+          scan_duration?: number | null
+          scan_options?: Json | null
+          scan_type?: string
+          status?: string
           user_id: string
         }
         Update: {
-          avatar_url?: string | null
-          bio?: string | null
-          created_at?: string
-          display_name?: string | null
-          email?: string | null
+          created_at?: string | null
+          files_found?: number | null
+          folders_scanned?: string[] | null
           id?: string
-          role?: string | null
-          updated_at?: string
+          plr_files_detected?: number | null
+          scan_duration?: number | null
+          scan_options?: Json | null
+          scan_type?: string
+          status?: string
           user_id?: string
         }
         Relationships: []
