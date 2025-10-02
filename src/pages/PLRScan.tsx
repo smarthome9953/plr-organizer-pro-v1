@@ -1,6 +1,7 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
+import { useFileExplorer, FileSystemNode } from '@/context/FileExplorerContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { supabase } from '@/integrations/supabase/client';
@@ -25,6 +26,7 @@ interface FileItem {
   size: number;
   confidence?: number;
   isPLR?: boolean;
+  lastModified: number;
 }
 
 interface ScanError {
@@ -36,6 +38,7 @@ const PLRScan = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [files, setFiles] = useState<FileItem[]>([]);
+  const { saveToDatabase } = useFileExplorer();
   const [includeSubfolders, setIncludeSubfolders] = useState<boolean>(true);
   const [extractMetadata, setExtractMetadata] = useState<boolean>(true);
   const [generatePreviews, setGeneratePreviews] = useState<boolean>(true);
@@ -288,6 +291,8 @@ const PLRScan = () => {
       totalSize: newFiles.reduce((sum, file) => sum + file.size, 0),
       duplicatesFound: 0,
       elapsedTime: '00:00:00',
+      plrFilesDetected: 0,
+      errors: []
     });
     
     // Update files and progress
@@ -329,44 +334,48 @@ const PLRScan = () => {
     setProcessingFiles(true);
     
     try {
-      // Process files and upload metadata to Supabase
-      let processed = 0;
-      
-      for (const file of files) {
-        // Insert file metadata into Supabase
-        const { error } = await supabase
-          .from('plr_files')
-          .insert({
-            user_id: user.id,
-            file_name: file.name,
-            file_path: file.path,
-            file_type: file.type,
-            file_size: file.size,
-            category_id: null,  // Will be categorized later
-            tags: [],        // Will be tagged later
-          });
-          
-        if (error) {
-          console.error("Error inserting file metadata:", error);
-          toast("Processing Error", {
-            description: `Error processing ${file.name}. Please try again.`,
-          });
-        }
+      // Convert files to FileSystemNode format
+      const fileNodes: FileSystemNode[] = files.map(file => ({
+        id: crypto.randomUUID(),
+        name: file.name,
+        path: file.path,
+        type: 'file',
+        size: file.size,
+        extension: file.type.split('/').pop() || '',
+        isPlr: true, // Since these are PLR files we're processing
+        confidence: 0.95, // Default high confidence for manually selected files
+        metadata: {
+          mime_type: file.type,
+          last_modified: file.lastModified
+        },
+        lastModified: new Date(file.lastModified),
+        createdAt: new Date()
+      }));
+
+      // Save to database using FileExplorerContext
+      const { success, errors } = await saveToDatabase(fileNodes);
+
+      if (success) {
+        toast("Processing Complete", {
+          description: `Successfully added ${files.length} files to your PLR library.`,
+        });
         
-        processed++;
-        setScanProgress(Math.round((processed / files.length) * 100));
+        // Navigate to the PLR dashboard
+        navigate('/dashboard');
+      } else {
+        console.error("Processing errors:", errors);
+        errors.forEach(error => {
+          toast("Processing Error", {
+            description: error,
+            type: 'error'
+          });
+        });
       }
-      
-      toast("Processing Complete", {
-        description: `Successfully added ${processed} files to your PLR library.`,
-      });
-      
-      // Navigate to the PLR dashboard
-      navigate('/dashboard');
     } catch (err) {
       console.error("Error processing files:", err);
       toast("Processing Error", {
         description: "There was an error processing your files. Please try again.",
+        variant: 'destructive'
       });
     } finally {
       setProcessingFiles(false);
