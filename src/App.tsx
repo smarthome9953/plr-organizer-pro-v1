@@ -102,7 +102,6 @@ function App() {
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:slug" element={<BlogPost />} />
                 <Route path="/blog/category/:category" element={<BlogCategory />} />
-                <Route path="/dashboard" element={<Landing />} />
                 <Route path="/gdpr-compliance" element={<GdprCompliance />} />
                 <Route path="/cookie-policy" element={<CookiePolicy />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
@@ -143,6 +142,7 @@ function App() {
                 {/* Protected Routes */}
                 <Route element={<ProtectedRoute />}>
                   <Route path="/scan" element={<Scan />} />
+                  <Route path="/dashboard" element={<PLRDashboard />} />
                   <Route path="/plr-dashboard" element={<PLRDashboard />} />
                   <Route path="/plr-browser" element={<PLRBrowser />} />
                   <Route path="/plr-categories" element={<PLRCategories />} />
