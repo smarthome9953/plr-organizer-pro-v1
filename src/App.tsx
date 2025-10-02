@@ -89,81 +89,83 @@ function App() {
       <HelmetProvider>
         <QueryClientProvider client={queryClient}>
           <BrowserRouter>
-            <FileExplorerProvider>
-              <AuthProvider>
-              <Routes>
-                 {/* Public Routes */}
-                <Route path="/" element={<Index />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/onboarding" element={<Onboarding />} />
-                <Route path="/careers" element={<Careers />} />
-                <Route path="/affiliates" element={<Affiliates />} />
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/blog/:slug" element={<BlogPost />} />
-                <Route path="/blog/category/:category" element={<BlogCategory />} />
-                <Route path="/gdpr-compliance" element={<GdprCompliance />} />
-                <Route path="/cookie-policy" element={<CookiePolicy />} />
-                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                <Route path="/terms-of-service" element={<TermsOfService />} />
-                <Route path="/resources" element={<Resources />} />
-                <Route path="/tools" element={<Tools />} />
+            <AuthProvider>
+              <WebSocketProvider>
+                <FileExplorerProvider>
+                  <Routes>
+                    {/* Public Routes */}
+                    <Route path="/" element={<Index />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/auth" element={<Auth />} />
+                    <Route path="/onboarding" element={<Onboarding />} />
+                    <Route path="/careers" element={<Careers />} />
+                    <Route path="/affiliates" element={<Affiliates />} />
+                    <Route path="/blog" element={<Blog />} />
+                    <Route path="/blog/:slug" element={<BlogPost />} />
+                    <Route path="/blog/category/:category" element={<BlogCategory />} />
+                    <Route path="/gdpr-compliance" element={<GdprCompliance />} />
+                    <Route path="/cookie-policy" element={<CookiePolicy />} />
+                    <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                    <Route path="/terms-of-service" element={<TermsOfService />} />
+                    <Route path="/resources" element={<Resources />} />
+                    <Route path="/tools" element={<Tools />} />
 
-                {/* Templates */}
-                <Route path="/templates" element={<Templates />} />
-                <Route path="/templates/:category" element={<TemplateCategory />} />
-                <Route path="/templates/:category/:id" element={<TemplateDetail />} />
+                    {/* Templates */}
+                    <Route path="/templates" element={<Templates />} />
+                    <Route path="/templates/:category" element={<TemplateCategory />} />
+                    <Route path="/templates/:category/:id" element={<TemplateDetail />} />
 
-                {/* PLR Tools */}
-                <Route path="/html-editor" element={<HtmlEditor />} />
-                <Route path="/html-editor/app" element={<HtmlEditorApp />} />
-                <Route path="/batch-editor" element={<BatchEditor />} />
-                <Route path="/batch-editor/app" element={<BatchEditorApp />} />
-                <Route path="/content-spinner" element={<ContentSpinner />} />
-                <Route path="/content-spinner/app" element={<ContentSpinnerApp />} />
-                <Route path="/file-converter" element={<FileConverter />} />
-                <Route path="/file-converter/app" element={<FileConverterApp />} />
-                <Route path="/ocr-tool" element={<OcrTool />} />
-                <Route path="/ocr-tool/app" element={<OcrToolApp />} />
-                <Route path="/translator" element={<Translator />} />
-                <Route path="/translator/app" element={<TranslatorApp />} />
-                <Route path="/brand-kit-tool" element={<BrandKitTool />} />
-                <Route path="/brand-kit-tool/app" element={<BrandKitToolApp />} />
-                <Route path="/brand-guidelines" element={<BrandKitGuide />} />
-                <Route path="/uniqueness-meter" element={<UniquenessMeter />} />
-                <Route path="/uniqueness-meter/app" element={<UniquenessMeterApp />} />
-                <Route path="/seo-analyzer" element={<SeoAnalyzer />} />
-                <Route path="/seo-analyzer/app" element={<SeoAnalyzerApp />} />
+                    {/* PLR Tools */}
+                    <Route path="/html-editor" element={<HtmlEditor />} />
+                    <Route path="/html-editor/app" element={<HtmlEditorApp />} />
+                    <Route path="/batch-editor" element={<BatchEditor />} />
+                    <Route path="/batch-editor/app" element={<BatchEditorApp />} />
+                    <Route path="/content-spinner" element={<ContentSpinner />} />
+                    <Route path="/content-spinner/app" element={<ContentSpinnerApp />} />
+                    <Route path="/file-converter" element={<FileConverter />} />
+                    <Route path="/file-converter/app" element={<FileConverterApp />} />
+                    <Route path="/ocr-tool" element={<OcrTool />} />
+                    <Route path="/ocr-tool/app" element={<OcrToolApp />} />
+                    <Route path="/translator" element={<Translator />} />
+                    <Route path="/translator/app" element={<TranslatorApp />} />
+                    <Route path="/brand-kit-tool" element={<BrandKitTool />} />
+                    <Route path="/brand-kit-tool/app" element={<BrandKitToolApp />} />
+                    <Route path="/brand-guidelines" element={<BrandKitGuide />} />
+                    <Route path="/uniqueness-meter" element={<UniquenessMeter />} />
+                    <Route path="/uniqueness-meter/app" element={<UniquenessMeterApp />} />
+                    <Route path="/seo-analyzer" element={<SeoAnalyzer />} />
+                    <Route path="/seo-analyzer/app" element={<SeoAnalyzerApp />} />
 
-                {/* PLR Software Guides & FAQ */}
-                <Route path="/plr-software-guides" element={<PLRSoftwareGuides />} />
-                <Route path="/plr-software-faq" element={<PLRSoftwareFAQ />} />
+                    {/* PLR Software Guides & FAQ */}
+                    <Route path="/plr-software-guides" element={<PLRSoftwareGuides />} />
+                    <Route path="/plr-software-faq" element={<PLRSoftwareFAQ />} />
 
-                {/* Protected Routes */}
-                <Route element={<ProtectedRoute />}>
-                  <Route path="/scan" element={<Scan />} />
-                  <Route path="/dashboard" element={<PLRDashboard />} />
-                  <Route path="/plr-dashboard" element={<PLRDashboard />} />
-                  <Route path="/plr-browser" element={<PLRBrowser />} />
-                  <Route path="/plr-categories" element={<PLRCategories />} />
-                  <Route path="/plr-library" element={<PLRLibraryPage />} />
-                  <Route path="/plr-scan" element={<PLRScan />} />
-                  <Route path="/blog-management" element={<BlogManagementPage />} />
-                  <Route path="/license-tracker" element={<LicenseTracker />} />
-                  <Route path="/license-tracker/app" element={<LicenseTrackerApp />} />
-                  <Route path="/admin/user-management" element={<UserManagementPage />} />
-                  <Route path="/admin/system-settings" element={<SystemSettingsPage />} />
-                  <Route path="/admin/analytics" element={<AnalyticsPage />} />
-                  <Route path="/tool-verification" element={<ToolVerificationPage />} />
-                </Route>
+                    {/* Protected Routes */}
+                    <Route element={<ProtectedRoute />}>
+                      <Route path="/scan" element={<Scan />} />
+                      <Route path="/dashboard" element={<PLRDashboard />} />
+                      <Route path="/plr-dashboard" element={<PLRDashboard />} />
+                      <Route path="/plr-browser" element={<PLRBrowser />} />
+                      <Route path="/plr-categories" element={<PLRCategories />} />
+                      <Route path="/plr-library" element={<PLRLibraryPage />} />
+                      <Route path="/plr-scan" element={<PLRScan />} />
+                      <Route path="/blog-management" element={<BlogManagementPage />} />
+                      <Route path="/license-tracker" element={<LicenseTracker />} />
+                      <Route path="/license-tracker/app" element={<LicenseTrackerApp />} />
+                      <Route path="/admin/user-management" element={<UserManagementPage />} />
+                      <Route path="/admin/system-settings" element={<SystemSettingsPage />} />
+                      <Route path="/admin/analytics" element={<AnalyticsPage />} />
+                      <Route path="/tool-verification" element={<ToolVerificationPage />} />
+                    </Route>
 
-                {/* Catch-all route - 404 */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-              <Toaster />
-              </AuthProvider>
-            </FileExplorerProvider>
+                    {/* Catch-all route - 404 */}
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                  <Toaster />
+                </FileExplorerProvider>
+              </WebSocketProvider>
+            </AuthProvider>
           </BrowserRouter>
         </QueryClientProvider>
       </HelmetProvider>
