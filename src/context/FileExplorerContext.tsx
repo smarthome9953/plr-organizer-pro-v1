@@ -19,6 +19,43 @@ export interface FileSystemNode {
   extension?: string;
   isPlr?: boolean;
   confidence?: number;
+  meta      value={{
+        fileSystem,
+        selectedFolders,
+        expandFolder,
+        collapseFolder,
+        toggleFolderSelection,
+        addDirectoryToFileSystem,
+        isScanning,
+        setIsScanning,
+        scanProgress,
+        setScanProgress,
+        currentScannedFolder,
+        setCurrentScannedFolder,
+        scanResults,
+        setScanResults,
+        saveToDatabase,
+        lastScanId,
+        setLastScanId,tring, any>;
+  lastModified?: Date;
+  createdAt?: Date;
+}
+
+interface PlrFileRecord {
+  id: string;
+  user_id: string;
+  category_id?: string;
+  file_name: string;
+  file_path: string;
+  file_size: number;
+  file_type: string;
+  license_type?: string;
+  confidence_score?: number;
+  tags?: string[];
+  quality_score?: number;
+  metadata?: Record<string, any>;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface ScanOptions {
@@ -48,6 +85,9 @@ interface FileExplorerContextType {
   currentScannedFolder: string;
   setCurrentScannedFolder: (folder: string) => void;
   scanResults: FileSystemNode[];
+  saveToDatabase: (files: FileSystemNode[]) => Promise<{ success: boolean; errors: string[] }>;
+  lastScanId: string | null;
+  setLastScanId: (id: string | null) => void;
   startScan: () => void;
   cancelScan: () => void;
   scanOptions: ScanOptions;
@@ -223,6 +263,75 @@ export const FileExplorerProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const [scanProgress, setScanProgress] = useState<number>(0);
   const [currentScannedFolder, setCurrentScannedFolder] = useState<string>('');
   const [scanResults, setScanResults] = useState<FileSystemNode[]>([]);
+  const [lastScanId, setLastScanId] = useState<string | null>(null);
+
+  const saveToDatabase = async (files: FileSystemNode[]): Promise<{ success: boolean; errors: string[] }> => {
+    const errors: string[] = [];
+    const user = supabase.auth.getUser();
+    
+    if (!user) {
+      return { success: false, errors: ['User not authenticated'] };
+    }
+
+    try {
+      // First create a scan history entry
+      const { data: scanHistory, error: scanError } = await supabase
+        .from('scan_history')
+        .insert({
+          user_id: (await user).data.user?.id,
+          total_files: files.length,
+          plr_files_found: files.filter(f => f.isPlr).length,
+          scan_date: new Date().toISOString()
+        })
+        .select('id')
+        .single();
+
+      if (scanError) {
+        console.error('Error creating scan history:', scanError);
+        errors.push('Failed to create scan history');
+        return { success: false, errors };
+      }
+
+      setLastScanId(scanHistory.id);
+
+      // Then insert file records
+      for (const file of files) {
+        if (file.type === 'file' && file.isPlr) {
+          const { error: fileError } = await supabase
+            .from('plr_files')
+            .insert({
+              user_id: (await user).data.user?.id,
+              scan_id: scanHistory.id,
+              file_name: file.name,
+              file_path: file.path,
+              file_size: file.size || 0,
+              file_type: file.extension || 'unknown',
+              license_type: 'PLR', // Default to PLR since we detected it
+              confidence_score: file.confidence || 0.0,
+              metadata: file.metadata || {},
+              created_at: file.createdAt?.toISOString() || new Date().toISOString(),
+              updated_at: file.lastModified?.toISOString() || new Date().toISOString()
+            });
+
+          if (fileError) {
+            console.error('Error saving file:', file.path, fileError);
+            errors.push(`Failed to save ${file.path}: ${fileError.message}`);
+          }
+        }
+      }
+
+      return {
+        success: errors.length === 0,
+        errors
+      };
+    } catch (error) {
+      console.error('Database operation failed:', error);
+      return {
+        success: false,
+        errors: ['Database operation failed: ' + (error as Error).message]
+      };
+    }
+  };
   const [savedScanProfiles, setSavedScanProfiles] = useState<ScanProfile[]>(loadSavedProfiles());
   const [scanCancelled, setScanCancelled] = useState(false);
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {

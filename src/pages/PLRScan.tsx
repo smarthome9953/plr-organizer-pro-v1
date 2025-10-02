@@ -556,6 +556,20 @@ const PLRScan = () => {
                       <Progress value={scanProgress} className="h-2" />
                     </div>
                   )}
+
+                  {stats.errors.length > 0 && (
+                    <div className="mt-4 p-4 bg-destructive/10 rounded-md border border-destructive">
+                      <h3 className="text-sm font-medium flex items-center text-destructive">
+                        <AlertCircle className="mr-2 h-4 w-4" />
+                        Scan Errors
+                      </h3>
+                      <ul className="mt-2 space-y-1 text-sm text-destructive">
+                        {stats.errors.map((error, index) => (
+                          <li key={index}>{error}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -579,6 +593,10 @@ const PLRScan = () => {
                 <div className="flex justify-between">
                   <span>Total Size:</span>
                   <span className="font-medium">{formatBytes(stats.totalSize)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>PLR Files Detected:</span>
+                  <span className="font-medium">{stats.plrFilesDetected}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Duplicates Found:</span>
