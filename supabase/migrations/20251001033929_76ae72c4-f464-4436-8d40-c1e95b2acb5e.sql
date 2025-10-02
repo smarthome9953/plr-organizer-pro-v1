@@ -11,17 +11,38 @@ CREATE TABLE IF NOT EXISTS public.profiles (
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 
 -- Profiles policies
-CREATE POLICY "Users can view their own profile"
-  ON public.profiles FOR SELECT
-  USING (auth.uid() = id);
+DO $$ 
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE tablename = 'profiles' 
+    AND policyname = 'Users can view their own profile'
+  ) THEN
+    CREATE POLICY "Users can view their own profile"
+      ON public.profiles FOR SELECT
+      USING (auth.uid() = id);
+  END IF;
 
-CREATE POLICY "Users can update their own profile"
-  ON public.profiles FOR UPDATE
-  USING (auth.uid() = id);
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE tablename = 'profiles' 
+    AND policyname = 'Users can update their own profile'
+  ) THEN
+    CREATE POLICY "Users can update their own profile"
+      ON public.profiles FOR UPDATE
+      USING (auth.uid() = id);
+  END IF;
 
-CREATE POLICY "Users can insert their own profile"
-  ON public.profiles FOR INSERT
-  WITH CHECK (auth.uid() = id);
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE tablename = 'profiles' 
+    AND policyname = 'Users can insert their own profile'
+  ) THEN
+    CREATE POLICY "Users can insert their own profile"
+      ON public.profiles FOR INSERT
+      WITH CHECK (auth.uid() = id);
+  END IF;
+END $$;
 
 -- Create PLR categories table
 CREATE TABLE IF NOT EXISTS public.plr_categories (
@@ -39,21 +60,48 @@ CREATE TABLE IF NOT EXISTS public.plr_categories (
 ALTER TABLE public.plr_categories ENABLE ROW LEVEL SECURITY;
 
 -- Category policies
-CREATE POLICY "Users can view their own categories"
-  ON public.plr_categories FOR SELECT
-  USING (auth.uid() = user_id);
+DO $$ 
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE tablename = 'plr_categories' 
+    AND policyname = 'Users can view their own categories'
+  ) THEN
+    CREATE POLICY "Users can view their own categories"
+      ON public.plr_categories FOR SELECT
+      USING (auth.uid() = user_id);
+  END IF;
 
-CREATE POLICY "Users can create their own categories"
-  ON public.plr_categories FOR INSERT
-  WITH CHECK (auth.uid() = user_id);
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE tablename = 'plr_categories' 
+    AND policyname = 'Users can create their own categories'
+  ) THEN
+    CREATE POLICY "Users can create their own categories"
+      ON public.plr_categories FOR INSERT
+      WITH CHECK (auth.uid() = user_id);
+  END IF;
 
-CREATE POLICY "Users can update their own categories"
-  ON public.plr_categories FOR UPDATE
-  USING (auth.uid() = user_id);
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE tablename = 'plr_categories' 
+    AND policyname = 'Users can update their own categories'
+  ) THEN
+    CREATE POLICY "Users can update their own categories"
+      ON public.plr_categories FOR UPDATE
+      USING (auth.uid() = user_id);
+  END IF;
 
-CREATE POLICY "Users can delete their own categories"
-  ON public.plr_categories FOR DELETE
-  USING (auth.uid() = user_id);
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE tablename = 'plr_categories' 
+    AND policyname = 'Users can delete their own categories'
+  ) THEN
+    CREATE POLICY "Users can delete their own categories"
+      ON public.plr_categories FOR DELETE
+      USING (auth.uid() = user_id);
+  END IF;
+END $$;
 
 -- Create PLR files table
 CREATE TABLE IF NOT EXISTS public.plr_files (
@@ -83,21 +131,48 @@ CREATE TABLE IF NOT EXISTS public.plr_files (
 ALTER TABLE public.plr_files ENABLE ROW LEVEL SECURITY;
 
 -- Files policies
-CREATE POLICY "Users can view their own files"
-  ON public.plr_files FOR SELECT
-  USING (auth.uid() = user_id);
+DO $$ 
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE tablename = 'plr_files' 
+    AND policyname = 'Users can view their own files'
+  ) THEN
+    CREATE POLICY "Users can view their own files"
+      ON public.plr_files FOR SELECT
+      USING (auth.uid() = user_id);
+  END IF;
 
-CREATE POLICY "Users can create their own files"
-  ON public.plr_files FOR INSERT
-  WITH CHECK (auth.uid() = user_id);
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE tablename = 'plr_files' 
+    AND policyname = 'Users can create their own files'
+  ) THEN
+    CREATE POLICY "Users can create their own files"
+      ON public.plr_files FOR INSERT
+      WITH CHECK (auth.uid() = user_id);
+  END IF;
 
-CREATE POLICY "Users can update their own files"
-  ON public.plr_files FOR UPDATE
-  USING (auth.uid() = user_id);
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE tablename = 'plr_files' 
+    AND policyname = 'Users can update their own files'
+  ) THEN
+    CREATE POLICY "Users can update their own files"
+      ON public.plr_files FOR UPDATE
+      USING (auth.uid() = user_id);
+  END IF;
 
-CREATE POLICY "Users can delete their own files"
-  ON public.plr_files FOR DELETE
-  USING (auth.uid() = user_id);
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE tablename = 'plr_files' 
+    AND policyname = 'Users can delete their own files'
+  ) THEN
+    CREATE POLICY "Users can delete their own files"
+      ON public.plr_files FOR DELETE
+      USING (auth.uid() = user_id);
+  END IF;
+END $$;
 
 -- Create scan history table
 CREATE TABLE IF NOT EXISTS public.scan_history (
@@ -117,13 +192,28 @@ CREATE TABLE IF NOT EXISTS public.scan_history (
 ALTER TABLE public.scan_history ENABLE ROW LEVEL SECURITY;
 
 -- Scan history policies
-CREATE POLICY "Users can view their own scan history"
-  ON public.scan_history FOR SELECT
-  USING (auth.uid() = user_id);
+DO $$ 
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE tablename = 'scan_history' 
+    AND policyname = 'Users can view their own scan history'
+  ) THEN
+    CREATE POLICY "Users can view their own scan history"
+      ON public.scan_history FOR SELECT
+      USING (auth.uid() = user_id);
+  END IF;
 
-CREATE POLICY "Users can create their own scan history"
-  ON public.scan_history FOR INSERT
-  WITH CHECK (auth.uid() = user_id);
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE tablename = 'scan_history' 
+    AND policyname = 'Users can create their own scan history'
+  ) THEN
+    CREATE POLICY "Users can create their own scan history"
+      ON public.scan_history FOR INSERT
+      WITH CHECK (auth.uid() = user_id);
+  END IF;
+END $$;
 
 -- Create file versions table for tracking changes
 CREATE TABLE IF NOT EXISTS public.file_versions (
@@ -141,13 +231,28 @@ CREATE TABLE IF NOT EXISTS public.file_versions (
 ALTER TABLE public.file_versions ENABLE ROW LEVEL SECURITY;
 
 -- File versions policies
-CREATE POLICY "Users can view their own file versions"
-  ON public.file_versions FOR SELECT
-  USING (auth.uid() = user_id);
+DO $$ 
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE tablename = 'file_versions' 
+    AND policyname = 'Users can view their own file versions'
+  ) THEN
+    CREATE POLICY "Users can view their own file versions"
+      ON public.file_versions FOR SELECT
+      USING (auth.uid() = user_id);
+  END IF;
 
-CREATE POLICY "Users can create their own file versions"
-  ON public.file_versions FOR INSERT
-  WITH CHECK (auth.uid() = user_id);
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE tablename = 'file_versions' 
+    AND policyname = 'Users can create their own file versions'
+  ) THEN
+    CREATE POLICY "Users can create their own file versions"
+      ON public.file_versions FOR INSERT
+      WITH CHECK (auth.uid() = user_id);
+  END IF;
+END $$;
 
 -- Create storage buckets for PLR content
 INSERT INTO storage.buckets (id, name, public) 
@@ -155,21 +260,48 @@ VALUES ('plr-content', 'plr-content', false)
 ON CONFLICT (id) DO NOTHING;
 
 -- Storage policies for PLR content
-CREATE POLICY "Users can view their own PLR content"
-  ON storage.objects FOR SELECT
-  USING (bucket_id = 'plr-content' AND auth.uid()::text = (storage.foldername(name))[1]);
+DO $$ 
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE tablename = 'objects' 
+    AND policyname = 'Users can view their own PLR content'
+  ) THEN
+    CREATE POLICY "Users can view their own PLR content"
+      ON storage.objects FOR SELECT
+      USING (bucket_id = 'plr-content' AND auth.uid()::text = (storage.foldername(name))[1]);
+  END IF;
 
-CREATE POLICY "Users can upload their own PLR content"
-  ON storage.objects FOR INSERT
-  WITH CHECK (bucket_id = 'plr-content' AND auth.uid()::text = (storage.foldername(name))[1]);
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE tablename = 'objects' 
+    AND policyname = 'Users can upload their own PLR content'
+  ) THEN
+    CREATE POLICY "Users can upload their own PLR content"
+      ON storage.objects FOR INSERT
+      WITH CHECK (bucket_id = 'plr-content' AND auth.uid()::text = (storage.foldername(name))[1]);
+  END IF;
 
-CREATE POLICY "Users can update their own PLR content"
-  ON storage.objects FOR UPDATE
-  USING (bucket_id = 'plr-content' AND auth.uid()::text = (storage.foldername(name))[1]);
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE tablename = 'objects' 
+    AND policyname = 'Users can update their own PLR content'
+  ) THEN
+    CREATE POLICY "Users can update their own PLR content"
+      ON storage.objects FOR UPDATE
+      USING (bucket_id = 'plr-content' AND auth.uid()::text = (storage.foldername(name))[1]);
+  END IF;
 
-CREATE POLICY "Users can delete their own PLR content"
-  ON storage.objects FOR DELETE
-  USING (bucket_id = 'plr-content' AND auth.uid()::text = (storage.foldername(name))[1]);
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE tablename = 'objects' 
+    AND policyname = 'Users can delete their own PLR content'
+  ) THEN
+    CREATE POLICY "Users can delete their own PLR content"
+      ON storage.objects FOR DELETE
+      USING (bucket_id = 'plr-content' AND auth.uid()::text = (storage.foldername(name))[1]);
+  END IF;
+END $$;
 
 -- Create function to update updated_at timestamp
 CREATE OR REPLACE FUNCTION public.handle_updated_at()
