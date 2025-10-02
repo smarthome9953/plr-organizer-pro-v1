@@ -18,7 +18,7 @@ function ConnectionStatus() {
         <TooltipTrigger asChild>
           <span>
             {isConnected ? (
-              <Badge variant="success" className="flex items-center gap-1">
+              <Badge variant="default" className="flex items-center gap-1">
                 <Wifi className="h-4 w-4" /> Online
               </Badge>
             ) : (

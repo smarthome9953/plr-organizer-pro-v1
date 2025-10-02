@@ -88,13 +88,15 @@ const PLRScan = () => {
       { name: 'empty-file.txt', content: '', isPLR: false },
     ];
 
+    const now = Date.now();
     const files: FileItem[] = testFiles.map(file => ({
       name: file.name,
       path: `/test-folder/${file.name}`,
       type: file.name.split('.').pop() || '',
       size: file.content.length,
       isPLR: file.isPLR,
-      confidence: file.isPLR ? 0.95 : 0.1
+      confidence: file.isPLR ? 0.95 : 0.1,
+      lastModified: now
     }));
 
     return files;
@@ -150,8 +152,7 @@ const PLRScan = () => {
       errors: [...prev.errors, error.message || 'Unknown error occurred']
     }));
     toast('Scan Error', {
-      description: error.message || 'An error occurred during scanning',
-      variant: 'destructive'
+      description: error.message || 'An error occurred during scanning'
     });
     setScanning(false);
     setIsScanning(false);
@@ -201,6 +202,7 @@ const PLRScan = () => {
                   path: filePath,
                   type: file.type || getFileExtension(file.name),
                   size: file.size,
+                  lastModified: file.lastModified,
                 });
                 
                 setStats(prev => ({
@@ -273,16 +275,16 @@ const PLRScan = () => {
     
     // Process selected files
     const newFiles: FileItem[] = [];
-    
     Array.from(selectedFiles).forEach((file) => {
       newFiles.push({
         name: file.name,
         path: file.name,
         type: file.type || getFileExtension(file.name),
         size: file.size,
+        lastModified: file.lastModified,
       });
     });
-    
+
     // Update stats
     setStats({
       filesScanned: newFiles.length,
@@ -365,18 +367,15 @@ const PLRScan = () => {
         console.error("Processing errors:", errors);
         errors.forEach(error => {
           toast("Processing Error", {
-            description: error,
-            type: 'error'
+            description: error
           });
         });
       }
     } catch (err) {
       console.error("Error processing files:", err);
       toast("Processing Error", {
-        description: "There was an error processing your files. Please try again.",
-        variant: 'destructive'
+        description: "There was an error processing your files. Please try again."
       });
-    } finally {
       setProcessingFiles(false);
     }
   };
