@@ -100,8 +100,6 @@ interface FileExplorerContextType {
   saveScanProfile: (name: string) => void;
   loadScanProfile: (profileId: string) => void;
   deleteScanProfile: (profileId: string) => void;
-  theme: 'light' | 'dark';
-  toggleTheme: () => void;
 }
 
 // Mock data for initial filesystem
@@ -799,21 +797,6 @@ export const FileExplorerProvider: React.FC<{ children: React.ReactNode }> = ({ 
         generateVirtualView,
         expandVirtualView,
         collapseVirtualView,
-        theme,
-        toggleTheme,
-        fileSystem,
-        selectedFolders,
-        expandFolder,
-        collapseFolder,
-        toggleFolderSelection,
-        addDirectoryToFileSystem,
-        isScanning,
-        setIsScanning,
-        scanProgress,
-        setScanProgress,
-        currentScannedFolder,
-        setCurrentScannedFolder,
-        scanResults,
         startScan,
         cancelScan,
         scanOptions,

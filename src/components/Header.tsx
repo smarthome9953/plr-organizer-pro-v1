@@ -8,6 +8,34 @@ import { Badge } from '@/components/ui/badge';
 import { Moon, Sun, Palette, Wrench, RefreshCw, FileSearch, Shield, PercentSquare, Globe, FileText, FileCode, FileScan, Wifi, WifiOff } from 'lucide-react';
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+
+// Simple ConnectionStatus component example
+function ConnectionStatus() {
+  const { isConnected } = useWebSocket?.() || { isConnected: false };
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <span>
+            {isConnected ? (
+              <Badge variant="success" className="flex items-center gap-1">
+                <Wifi className="h-4 w-4" /> Online
+              </Badge>
+            ) : (
+              <Badge variant="destructive" className="flex items-center gap-1">
+                <WifiOff className="h-4 w-4" /> Offline
+              </Badge>
+            )}
+          </span>
+        </TooltipTrigger>
+        <TooltipContent>
+          {isConnected ? "Connected to server" : "Not connected to server"}
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
+
 export function ThemeToggle() {
   const {
     theme,

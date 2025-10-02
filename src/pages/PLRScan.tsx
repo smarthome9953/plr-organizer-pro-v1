@@ -15,7 +15,6 @@ import {
   AlertCircle, CheckCircle2, Loader2
 } from 'lucide-react';
 import ScanProgressBar from '@/components/ScanProgressBar';
-import { useFileExplorer } from '@/context/FileExplorerContext';
 
 // No need to redefine interfaces here since they're now in vite-env.d.ts
 

@@ -176,3 +176,5 @@ export function PLRBrowser() {
     </div>
   );
 }
+
+export default PLRBrowser;
