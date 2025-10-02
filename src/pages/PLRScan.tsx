@@ -402,20 +402,32 @@ const PLRScan = () => {
                         <p className="text-sm text-muted-foreground mb-4">
                           Choose a folder containing your PLR files to scan and organize
                         </p>
-                        <Button 
-                          onClick={handleFolderSelect}
-                          disabled={scanning || processingFiles}
-                          className="mx-auto"
-                        >
-                          {scanning ? (
-                            <>
-                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                              Scanning...
-                            </>
-                          ) : (
-                            <>Browse Folders</>
-                          )}
-                        </Button>
+                        <div className="flex justify-center space-x-4">
+                          <Button 
+                            onClick={handleFolderSelect}
+                            disabled={scanning || processingFiles}
+                          >
+                            {scanning ? (
+                              <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Scanning...
+                              </>
+                            ) : (
+                              <>
+                                <FolderOpen className="mr-2 h-4 w-4" />
+                                Browse Folders
+                              </>
+                            )}
+                          </Button>
+                          <Button 
+                            onClick={handleTestScan}
+                            disabled={scanning || processingFiles}
+                            variant="secondary"
+                          >
+                            <FileText className="mr-2 h-4 w-4" />
+                            Test Scan
+                          </Button>
+                        </div>
                       </div>
                     </TabsContent>
                     
