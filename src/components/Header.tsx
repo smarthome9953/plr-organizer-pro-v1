@@ -11,7 +11,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 
 // Simple ConnectionStatus component example
 function ConnectionStatus() {
-  const { isConnected } = useWebSocket?.() || { isConnected: false };
+  const { isConnected } = useWebSocket();
   return (
     <TooltipProvider>
       <Tooltip>
