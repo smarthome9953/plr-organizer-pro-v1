@@ -1,8 +1,9 @@
 
 import React from 'react';
-import { Folder, FolderOpen, HardDrive, ChevronRight, ChevronDown } from 'lucide-react';
+import { Folder, FolderOpen, HardDrive, ChevronRight, ChevronDown, Plus } from 'lucide-react';
 import { useFileExplorer, FileSystemNode } from '@/context/FileExplorerContext';
 import { formatBytes } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 const FolderNavigation = () => {
   const { 
@@ -10,7 +11,8 @@ const FolderNavigation = () => {
     selectedFolders, 
     expandFolder, 
     collapseFolder, 
-    toggleFolderSelection 
+    toggleFolderSelection,
+    addDirectoryToFileSystem
   } = useFileExplorer();
 
   const renderFileSystem = (nodes: FileSystemNode[]) => {
@@ -122,9 +124,27 @@ const FolderNavigation = () => {
 
   return (
     <div className="p-4 h-full overflow-auto border-r">
-      <h2 className="font-semibold mb-4">Folders</h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="font-semibold">Folders</h2>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={addDirectoryToFileSystem}
+          className="h-8 w-8 p-0"
+          title="Add Directory"
+        >
+          <Plus className="h-4 w-4" />
+        </Button>
+      </div>
       <div className="space-y-2">
-        {renderFileSystem(fileSystem)}
+        {fileSystem.length === 0 ? (
+          <div className="text-sm text-muted-foreground text-center py-8">
+            <p>No folders added yet.</p>
+            <p className="mt-2">Click the + button to add a directory.</p>
+          </div>
+        ) : (
+          renderFileSystem(fileSystem)
+        )}
       </div>
     </div>
   );

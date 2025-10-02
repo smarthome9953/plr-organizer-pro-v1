@@ -1,5 +1,8 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { FileSystemService } from '@/services/fileSystemService';
+import { toast } from 'sonner';
 
 // Types for our file system
 export interface FileSystemNode {
@@ -37,12 +40,13 @@ interface FileExplorerContextType {
   expandFolder: (nodeId: string) => void;
   collapseFolder: (nodeId: string) => void;
   toggleFolderSelection: (node: FileSystemNode) => void;
+  addDirectoryToFileSystem: () => Promise<void>;
   isScanning: boolean;
-  setIsScanning: (scanning: boolean) => void; // Added setter
+  setIsScanning: (scanning: boolean) => void;
   scanProgress: number;
-  setScanProgress: (progress: number) => void; // Added setter
+  setScanProgress: (progress: number) => void;
   currentScannedFolder: string;
-  setCurrentScannedFolder: (folder: string) => void; // Added setter
+  setCurrentScannedFolder: (folder: string) => void;
   scanResults: FileSystemNode[];
   startScan: () => void;
   cancelScan: () => void;
@@ -213,13 +217,14 @@ const loadSavedProfiles = (): ScanProfile[] => {
 const FileExplorerContext = createContext<FileExplorerContextType | undefined>(undefined);
 
 export const FileExplorerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [fileSystem, setFileSystem] = useState<FileSystemNode[]>(initialFileSystem);
+  const [fileSystem, setFileSystem] = useState<FileSystemNode[]>([]);
   const [selectedFolders, setSelectedFolders] = useState<FileSystemNode[]>([]);
   const [isScanning, setIsScanning] = useState<boolean>(false);
   const [scanProgress, setScanProgress] = useState<number>(0);
   const [currentScannedFolder, setCurrentScannedFolder] = useState<string>('');
   const [scanResults, setScanResults] = useState<FileSystemNode[]>([]);
   const [savedScanProfiles, setSavedScanProfiles] = useState<ScanProfile[]>(loadSavedProfiles());
+  const [scanCancelled, setScanCancelled] = useState(false);
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     const savedTheme = localStorage.getItem('plrOrganizerTheme');
     return savedTheme === 'dark' ? 'dark' : 'light';
@@ -278,6 +283,49 @@ export const FileExplorerProvider: React.FC<{ children: React.ReactNode }> = ({ 
     );
   };
 
+  // Add directory to file system
+  const addDirectoryToFileSystem = async () => {
+    try {
+      if (!FileSystemService.isSupported()) {
+        toast.error('File System Access API is not supported in this browser. Please use Chrome, Edge, or Opera.');
+        return;
+      }
+
+      const dirHandle = await FileSystemService.pickDirectory();
+      
+      if (!dirHandle) {
+        return;
+      }
+
+      toast.loading('Reading directory structure...', { id: 'reading-dir' });
+
+      const maxDepth = scanOptions.scanDepth === 'unlimited' ? 10 : parseInt(scanOptions.scanDepth);
+      
+      const rootNode = await FileSystemService.readDirectory(
+        dirHandle,
+        (progress) => {
+          console.log('Reading:', progress.currentPath);
+        },
+        maxDepth
+      );
+
+      setFileSystem((prev) => {
+        const exists = prev.some(node => node.path === rootNode.path);
+        if (exists) {
+          toast.warning('Directory already added', { id: 'reading-dir' });
+          return prev;
+        }
+        
+        toast.success('Directory added successfully', { id: 'reading-dir' });
+        return [...prev, rootNode];
+      });
+
+    } catch (error) {
+      console.error('Error adding directory:', error);
+      toast.error('Failed to add directory: ' + (error as Error).message, { id: 'reading-dir' });
+    }
+  };
+
   // Toggle folder selection
   const toggleFolderSelection = (node: FileSystemNode) => {
     const isAlreadySelected = selectedFolders.some(folder => folder.id === node.id);
@@ -290,41 +338,121 @@ export const FileExplorerProvider: React.FC<{ children: React.ReactNode }> = ({ 
   };
 
   // Start scan with selected folders
-  const startScan = () => {
+  const startScan = async () => {
     if (selectedFolders.length === 0) {
+      toast.error('Please select at least one folder to scan');
       return;
     }
 
     setIsScanning(true);
     setScanProgress(0);
+    setScanCancelled(false);
+    setScanResults([]);
     setCurrentScannedFolder(selectedFolders[0].path);
+    
+    try {
+      const selectedPaths = selectedFolders.map(f => f.path);
+      const maxDepth = scanOptions.scanDepth === 'unlimited' ? 10 : parseInt(scanOptions.scanDepth);
+      
+      const filesToScan = await FileSystemService.collectFilesForScanning(
+        fileSystem,
+        selectedPaths,
+        scanOptions.fileTypes,
+        maxDepth
+      );
 
-    // Filter results based on file types
-    const filteredMockPlrFiles = scanOptions.scanSpeed === 'deep' 
-      ? mockPlrFiles 
-      : mockPlrFiles.filter(file => {
-          // For quick scan we only return high confidence results
-          return file.confidence && file.confidence > 0.9;
+      if (filesToScan.length === 0) {
+        toast.info('No files found matching the selected criteria');
+        setIsScanning(false);
+        return;
+      }
+
+      toast.loading(`Analyzing ${filesToScan.length} files...`, { id: 'scanning' });
+
+      const batchSize = 10;
+      const batches = [];
+      
+      for (let i = 0; i < filesToScan.length; i += batchSize) {
+        batches.push(filesToScan.slice(i, i + batchSize));
+      }
+
+      const allResults: any[] = [];
+      let processedFiles = 0;
+
+      for (const batch of batches) {
+        if (scanCancelled) break;
+
+        const { data, error } = await supabase.functions.invoke('plr-analyzer', {
+          body: { files: batch }
         });
 
-    // Simulate scanning process
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress += 2;
-      setScanProgress(progress);
-      
-      if (progress >= 100) {
-        clearInterval(interval);
-        setIsScanning(false);
-        setScanResults(filteredMockPlrFiles);
-      } else if (progress > 50 && progress < 75) {
-        setCurrentScannedFolder(selectedFolders.length > 1 ? selectedFolders[1].path : selectedFolders[0].path);
+        if (error) {
+          console.error('Error analyzing batch:', error);
+          continue;
+        }
+
+        if (data?.results) {
+          const plrFiles = data.results.filter((r: any) => r.isPLR);
+          allResults.push(...plrFiles);
+        }
+
+        processedFiles += batch.length;
+        setScanProgress(Math.round((processedFiles / filesToScan.length) * 100));
       }
-    }, 100);
+
+      if (allResults.length > 0) {
+        const { data: { user } } = await supabase.auth.getUser();
+        
+        if (user) {
+          const { error: insertError } = await supabase.from('plr_files').insert(
+            allResults.map(file => ({
+              user_id: user.id,
+              file_name: file.file.split('/').pop(),
+              file_path: file.file,
+              file_size: filesToScan.find((f: any) => f.path === file.file)?.size || 0,
+              file_type: file.contentType,
+              is_plr: true,
+              confidence_score: file.confidence,
+              quality_score: file.qualityRating === 'A' ? 90 : file.qualityRating === 'B' ? 70 : file.qualityRating === 'C' ? 50 : 30,
+              license_type: file.licenseType,
+              tags: file.tags,
+              description: `${file.contentType} content in ${file.niche} niche`,
+            }))
+          );
+
+          if (insertError) {
+            console.error('Error saving results:', insertError);
+          }
+        }
+      }
+
+      setScanResults(allResults.map(r => ({
+        id: crypto.randomUUID(),
+        name: r.file.split('/').pop(),
+        path: r.file,
+        type: 'file',
+        isPlr: true,
+        confidence: r.confidence
+      })));
+      
+      if (!scanCancelled) {
+        toast.success(`Scan complete! Found ${allResults.length} PLR files.`, { id: 'scanning' });
+      } else {
+        toast.info('Scan cancelled', { id: 'scanning' });
+      }
+
+    } catch (error) {
+      console.error('Scan error:', error);
+      toast.error('Scan failed: ' + (error as Error).message, { id: 'scanning' });
+    } finally {
+      setIsScanning(false);
+      setScanProgress(0);
+    }
   };
 
   // Cancel ongoing scan
   const cancelScan = () => {
+    setScanCancelled(true);
     setIsScanning(false);
     setScanProgress(0);
     setCurrentScannedFolder('');
@@ -375,12 +503,13 @@ export const FileExplorerProvider: React.FC<{ children: React.ReactNode }> = ({ 
         expandFolder,
         collapseFolder,
         toggleFolderSelection,
+        addDirectoryToFileSystem,
         isScanning,
-        setIsScanning, // Added setter
+        setIsScanning,
         scanProgress,
-        setScanProgress, // Added setter
+        setScanProgress,
         currentScannedFolder,
-        setCurrentScannedFolder, // Added setter
+        setCurrentScannedFolder,
         scanResults,
         startScan,
         cancelScan,
