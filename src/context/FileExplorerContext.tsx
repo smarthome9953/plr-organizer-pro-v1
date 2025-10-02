@@ -800,7 +800,7 @@ export const FileExplorerProvider: React.FC<{ children: React.ReactNode }> = ({ 
         expandVirtualView,
         collapseVirtualView,
         theme,
-        toggleTheme
+        toggleTheme,
         fileSystem,
         selectedFolders,
         expandFolder,
