@@ -29,20 +29,26 @@ export function SmartTags() {
 
       if (!filePaths.length) return;
 
-      const { data: tags, error } = await supabase
+      const { data: fileTags, error: fileTagsError } = await supabase
         .from('plr_file_tags')
-        .select('tag_id, tags(name)')
+        .select(`
+          tag_id,
+          tags:tag_id (
+            id,
+            name
+          )
+        `)
         .in('file_path', filePaths);
 
-      if (error) {
-        console.error('Error loading tags:', error);
+      if (fileTagsError) {
+        console.error('Error loading tags:', fileTagsError);
         return;
       }
 
-      if (tags) {
-        const tagCounts = tags.reduce((acc, { tags: tag }) => {
-          if (tag?.name) {
-            acc[tag.name] = (acc[tag.name] || 0) + 1;
+      if (fileTags) {
+        const tagCounts = fileTags.reduce((acc, { tags }) => {
+          if (tags?.name) {
+            acc[tags.name] = (acc[tags.name] || 0) + 1;
           }
           return acc;
         }, {} as Record<string, number>);
