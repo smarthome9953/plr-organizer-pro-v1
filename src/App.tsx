@@ -7,6 +7,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { AuthProvider } from '@/context/AuthContext';
 import { FileExplorerProvider } from '@/context/FileExplorerContext';
+import { WebSocketProvider } from '@/context/WebSocketContext';
 
 // Layouts & Core Components
 import { Toaster } from '@/components/ui/toaster';

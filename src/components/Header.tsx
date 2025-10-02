@@ -3,8 +3,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/context/ThemeContext';
-import { Moon, Sun, Palette, Wrench, RefreshCw, FileSearch, Shield, PercentSquare, Globe, FileText, FileCode, FileScan } from 'lucide-react';
+import { useWebSocket } from '@/context/WebSocketContext';
+import { Badge } from '@/components/ui/badge';
+import { Moon, Sun, Palette, Wrench, RefreshCw, FileSearch, Shield, PercentSquare, Globe, FileText, FileCode, FileScan, Wifi, WifiOff } from 'lucide-react';
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 export function ThemeToggle() {
   const {
     theme,
@@ -23,10 +26,11 @@ export default function Header({
   return <header className="border-b">
       <div className="container mx-auto px-4 py-2">
         <div className="flex justify-between items-center">
-          <div className="flex items-center">
+          <div className="flex items-center gap-4">
             <Link to="/" className="flex items-center">
               <img src="/lovable-uploads/34f6c58f-7ead-48ed-8bf9-bed0734b95c5.png" alt="PLR Organizer Pro - Private Label Rights Content Management Software" className="h-12 mr-3" />
             </Link>
+            <ConnectionStatus />
           </div>
           
           <div className="flex-1 flex justify-center items-center"> 
