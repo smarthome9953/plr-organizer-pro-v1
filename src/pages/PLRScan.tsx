@@ -23,6 +23,13 @@ interface FileItem {
   path: string;
   type: string;
   size: number;
+  confidence?: number;
+  isPLR?: boolean;
+}
+
+interface ScanError {
+  path: string;
+  error: string;
 }
 
 const PLRScan = () => {
@@ -48,6 +55,8 @@ const PLRScan = () => {
   const [stats, setStats] = useState({
     filesScanned: 0,
     foldersProcessed: 0,
+    plrFilesDetected: 0,
+    errors: [] as string[],
     totalSize: 0,
     duplicatesFound: 0,
     elapsedTime: '00:00:00',
@@ -68,6 +77,84 @@ const PLRScan = () => {
     return timer;
   }, []);
 
+  // Function to create a test folder structure
+  const createTestFiles = async () => {
+    const testFiles = [
+      { name: 'sample-plr-ebook.pdf', content: 'PLR Content License: This content can be modified and resold', isPLR: true },
+      { name: 'regular-document.txt', content: 'Regular content without PLR license', isPLR: false },
+      { name: 'plr-article.docx', content: 'Private Label Rights included with purchase', isPLR: true },
+      { name: 'empty-file.txt', content: '', isPLR: false },
+    ];
+
+    const files: FileItem[] = testFiles.map(file => ({
+      name: file.name,
+      path: `/test-folder/${file.name}`,
+      type: file.name.split('.').pop() || '',
+      size: file.content.length,
+      isPLR: file.isPLR,
+      confidence: file.isPLR ? 0.95 : 0.1
+    }));
+
+    return files;
+  };
+
+  const handleTestScan = async () => {
+    try {
+      setScanning(true);
+      setContextScanProgress(0);
+      setIsScanning(true);
+      setStats(prev => ({ ...prev, errors: [] }));
+      
+      const timer = startTimer();
+      
+      // Simulate file scanning
+      const testFiles = await createTestFiles();
+      
+      // Simulate progress
+      for (let i = 0; i <= 100; i += 10) {
+        await new Promise(resolve => setTimeout(resolve, 200));
+        setContextScanProgress(i);
+      }
+      
+      // Update stats
+      setStats(prev => ({
+        ...prev,
+        filesScanned: testFiles.length,
+        foldersProcessed: 1,
+        plrFilesDetected: testFiles.filter(f => f.isPLR).length,
+        totalSize: testFiles.reduce((acc, f) => acc + f.size, 0)
+      }));
+      
+      setFiles(testFiles);
+      
+      clearInterval(timer);
+      setScanning(false);
+      setIsScanning(false);
+      setContextScanProgress(100);
+      
+      toast('Test Scan Complete', {
+        description: `Found ${testFiles.filter(f => f.isPLR).length} PLR files in test data`,
+      });
+      
+    } catch (error) {
+      handleScanError(error);
+    }
+  };
+
+  const handleScanError = (error: any) => {
+    console.error('Scan error:', error);
+    setStats(prev => ({
+      ...prev,
+      errors: [...prev.errors, error.message || 'Unknown error occurred']
+    }));
+    toast('Scan Error', {
+      description: error.message || 'An error occurred during scanning',
+      variant: 'destructive'
+    });
+    setScanning(false);
+    setIsScanning(false);
+  };
+
   const handleFolderSelect = async () => {
     try {
       // Check if File System Access API is supported
@@ -86,8 +173,10 @@ const PLRScan = () => {
       const timer = startTimer();
 
       try {
+        console.log('Starting folder scan...');
         const dirHandle = await window.showDirectoryPicker();
         setCurrentScannedFolder(dirHandle.name);
+        console.log(`Selected folder: ${dirHandle.name}`);
         
         // Process folder contents
         const newFiles: FileItem[] = [];
