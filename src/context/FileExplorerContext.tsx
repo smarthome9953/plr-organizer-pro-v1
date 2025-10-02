@@ -5,11 +5,21 @@ import { FileSystemService } from '@/services/fileSystemService';
 import { toast } from 'sonner';
 
 // Types for our file system
+export type ViewType = 'physical' | 'category' | 'date' | 'license' | 'quality';
+
+export interface VirtualView {
+  id: string;
+  name: string;
+  type: ViewType;
+  nodes: FileSystemNode[];
+  expanded?: boolean;
+}
+
 export interface FileSystemNode {
   id: string;
   name: string;
   path: string;
-  type: 'file' | 'folder' | 'drive';
+  type: 'file' | 'folder' | 'drive' | 'virtual';
   size?: number;
   children?: FileSystemNode[];
   expanded?: boolean;
@@ -19,24 +29,10 @@ export interface FileSystemNode {
   extension?: string;
   isPlr?: boolean;
   confidence?: number;
-  meta      value={{
-        fileSystem,
-        selectedFolders,
-        expandFolder,
-        collapseFolder,
-        toggleFolderSelection,
-        addDirectoryToFileSystem,
-        isScanning,
-        setIsScanning,
-        scanProgress,
-        setScanProgress,
-        currentScannedFolder,
-        setCurrentScannedFolder,
-        scanResults,
-        setScanResults,
-        saveToDatabase,
-        lastScanId,
-        setLastScanId,tring, any>;
+  category?: string;
+  licenseType?: string;
+  qualityScore?: number;
+  metadata?: Record<string, any>;
   lastModified?: Date;
   createdAt?: Date;
 }
@@ -44,7 +40,7 @@ export interface FileSystemNode {
 interface PlrFileRecord {
   id: string;
   user_id: string;
-  category_id?: string;
+  category?: string;
   file_name: string;
   file_path: string;
   file_size: number;
@@ -88,6 +84,14 @@ interface FileExplorerContextType {
   saveToDatabase: (files: FileSystemNode[]) => Promise<{ success: boolean; errors: string[] }>;
   lastScanId: string | null;
   setLastScanId: (id: string | null) => void;
+  activeView: ViewType;
+  setActiveView: (view: ViewType) => void;
+  virtualViews: VirtualView[];
+  generateVirtualView: (viewType: ViewType) => void;
+  expandVirtualView: (viewId: string) => void;
+  collapseVirtualView: (viewId: string) => void;
+  theme: 'light' | 'dark';
+  toggleTheme: () => void;
   startScan: () => void;
   cancelScan: () => void;
   scanOptions: ScanOptions;
@@ -264,6 +268,8 @@ export const FileExplorerProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const [currentScannedFolder, setCurrentScannedFolder] = useState<string>('');
   const [scanResults, setScanResults] = useState<FileSystemNode[]>([]);
   const [lastScanId, setLastScanId] = useState<string | null>(null);
+  const [activeView, setActiveView] = useState<ViewType>('physical');
+  const [virtualViews, setVirtualViews] = useState<VirtualView[]>([]);
 
   const saveToDatabase = async (files: FileSystemNode[]): Promise<{ success: boolean; errors: string[] }> => {
     const errors: string[] = [];
@@ -604,9 +610,197 @@ export const FileExplorerProvider: React.FC<{ children: React.ReactNode }> = ({ 
     setTheme(prev => prev === 'light' ? 'dark' : 'light');
   };
 
+  // Generate virtual view based on type
+  const generateVirtualView = async (viewType: ViewType) => {
+    const { data: plrFiles } = await supabase
+      .from('plr_files')
+      .select('*')
+      .eq('user_id', (await supabase.auth.getUser()).data.user?.id);
+
+    if (!plrFiles) return;
+
+    const files = plrFiles as PlrFileRecord[];
+    let nodes: FileSystemNode[] = [];
+    
+    switch (viewType) {
+      case 'category':
+        const categories = new Map<string, FileSystemNode[]>();
+        plrFiles.forEach(file => {
+          const category = file.category_id || 'Uncategorized';
+          if (!categories.has(category)) {
+            categories.set(category, []);
+          }
+          categories.get(category)?.push({
+            id: file.id,
+            name: file.file_name,
+            path: file.file_path,
+            type: 'file',
+            size: file.file_size,
+            isPlr: true,
+            category: category,
+            licenseType: file.license_type,
+            qualityScore: file.quality_score
+          });
+        });
+        nodes = Array.from(categories.entries()).map(([category, files]) => ({
+          id: `category-${category}`,
+          name: category,
+          path: `virtual://${category}`,
+          type: 'virtual',
+          children: files,
+          expanded: false
+        }));
+        break;
+
+      case 'date':
+        const dateGroups = new Map<string, FileSystemNode[]>();
+        plrFiles.forEach(file => {
+          const date = new Date(file.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+          if (!dateGroups.has(date)) {
+            dateGroups.set(date, []);
+          }
+          dateGroups.get(date)?.push({
+            id: file.id,
+            name: file.file_name,
+            path: file.file_path,
+            type: 'file',
+            size: file.file_size,
+            isPlr: true,
+            category: file.category,
+            licenseType: file.license_type,
+            qualityScore: file.quality_score
+          });
+        });
+        nodes = Array.from(dateGroups.entries()).map(([date, files]) => ({
+          id: `date-${date}`,
+          name: date,
+          path: `virtual://${date}`,
+          type: 'virtual',
+          children: files,
+          expanded: false
+        }));
+        break;
+
+      case 'license':
+        const licenseGroups = new Map<string, FileSystemNode[]>();
+        plrFiles.forEach(file => {
+          const license = file.license_type || 'Unknown';
+          if (!licenseGroups.has(license)) {
+            licenseGroups.set(license, []);
+          }
+          licenseGroups.get(license)?.push({
+            id: file.id,
+            name: file.file_name,
+            path: file.file_path,
+            type: 'file',
+            size: file.file_size,
+            isPlr: true,
+            category: file.category,
+            licenseType: file.license_type,
+            qualityScore: file.quality_score
+          });
+        });
+        nodes = Array.from(licenseGroups.entries()).map(([license, files]) => ({
+          id: `license-${license}`,
+          name: license,
+          path: `virtual://${license}`,
+          type: 'virtual',
+          children: files,
+          expanded: false
+        }));
+        break;
+
+      case 'quality':
+        const qualityGroups = new Map<string, FileSystemNode[]>();
+        const qualityLevels = ['Premium', 'High', 'Medium', 'Basic'];
+        plrFiles.forEach(file => {
+          const score = file.quality_score || 0;
+          let quality = 'Unknown';
+          if (score >= 90) quality = 'Premium';
+          else if (score >= 70) quality = 'High';
+          else if (score >= 50) quality = 'Medium';
+          else if (score > 0) quality = 'Basic';
+          
+          if (!qualityGroups.has(quality)) {
+            qualityGroups.set(quality, []);
+          }
+          qualityGroups.get(quality)?.push({
+            id: file.id,
+            name: file.file_name,
+            path: file.file_path,
+            type: 'file',
+            size: file.file_size,
+            isPlr: true,
+            category: file.category,
+            licenseType: file.license_type,
+            qualityScore: file.quality_score
+          });
+        });
+        
+        nodes = qualityLevels.map(quality => ({
+          id: `quality-${quality}`,
+          name: quality,
+          path: `virtual://${quality}`,
+          type: 'virtual',
+          children: qualityGroups.get(quality) || [],
+          expanded: false
+        }));
+        break;
+    }
+
+    const newView: VirtualView = {
+      id: `view-${viewType}-${Date.now()}`,
+      name: viewType.charAt(0).toUpperCase() + viewType.slice(1),
+      type: viewType,
+      nodes,
+      expanded: false
+    };
+
+    setVirtualViews(prev => [...prev.filter(v => v.type !== viewType), newView]);
+    setActiveView(viewType);
+  };
+
+  // Expand virtual view
+  const expandVirtualView = (viewId: string) => {
+    setVirtualViews(prev => prev.map(view => 
+      view.id === viewId ? { ...view, expanded: true } : view
+    ));
+  };
+
+  // Collapse virtual view
+  const collapseVirtualView = (viewId: string) => {
+    setVirtualViews(prev => prev.map(view => 
+      view.id === viewId ? { ...view, expanded: false } : view
+    ));
+  };
+
   return (
     <FileExplorerContext.Provider
       value={{
+        fileSystem,
+        selectedFolders,
+        expandFolder,
+        collapseFolder,
+        toggleFolderSelection,
+        addDirectoryToFileSystem,
+        isScanning,
+        setIsScanning,
+        scanProgress,
+        setScanProgress,
+        currentScannedFolder,
+        setCurrentScannedFolder,
+        scanResults,
+        saveToDatabase,
+        lastScanId,
+        setLastScanId,
+        activeView,
+        setActiveView,
+        virtualViews,
+        generateVirtualView,
+        expandVirtualView,
+        collapseVirtualView,
+        theme,
+        toggleTheme
         fileSystem,
         selectedFolders,
         expandFolder,
