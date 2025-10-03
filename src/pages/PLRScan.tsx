@@ -147,9 +147,8 @@ const PLRScan = () => {
       ...prev,
       errors: [...prev.errors, error.message || 'Unknown error occurred']
     }));
-    toast('Scan Error', {
-      description: error.message || 'An error occurred during scanning',
-      variant: 'destructive'
+    toast.error('Scan Error', {
+      description: error.message || 'An error occurred during scanning'
     });
     setScanning(false);
     setIsScanning(false);
@@ -285,6 +284,8 @@ const PLRScan = () => {
     setStats({
       filesScanned: newFiles.length,
       foldersProcessed: 1,
+      plrFilesDetected: 0,
+      errors: [],
       totalSize: newFiles.reduce((sum, file) => sum + file.size, 0),
       duplicatesFound: 0,
       elapsedTime: '00:00:00',
