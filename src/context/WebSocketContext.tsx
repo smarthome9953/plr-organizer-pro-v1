@@ -29,10 +29,10 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
     // Handle connection status changes
     newChannel
-      .on('presence_state', () => {
+      .on('presence', { event: 'sync' }, () => {
         setIsConnected(true);
       })
-      .on('presence_diff', () => {
+      .on('presence', { event: 'join' }, () => {
         setIsConnected(true);
       })
       .on('broadcast', { event: 'heartbeat' }, () => {

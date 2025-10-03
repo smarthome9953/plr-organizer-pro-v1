@@ -305,16 +305,13 @@ export const FileExplorerProvider: React.FC<{ children: React.ReactNode }> = ({ 
             .from('plr_files')
             .insert({
               user_id: (await user).data.user?.id,
-              scan_id: scanHistory.id,
               file_name: file.name,
               file_path: file.path,
               file_size: file.size || 0,
               file_type: file.extension || 'unknown',
-              license_type: 'PLR', // Default to PLR since we detected it
+              content_hash: `${file.path}-${file.size || 0}-${file.lastModified?.getTime() || Date.now()}`,
+              license_type: 'PLR',
               confidence_score: file.confidence || 0.0,
-              metadata: file.metadata || {},
-              created_at: file.createdAt?.toISOString() || new Date().toISOString(),
-              updated_at: file.lastModified?.toISOString() || new Date().toISOString()
             });
 
           if (fileError) {
@@ -524,6 +521,7 @@ export const FileExplorerProvider: React.FC<{ children: React.ReactNode }> = ({ 
               file_path: file.file,
               file_size: filesToScan.find((f: any) => f.path === file.file)?.size || 0,
               file_type: file.contentType,
+              content_hash: `${file.file}-${filesToScan.find((f: any) => f.path === file.file)?.size || 0}-${Date.now()}`,
               is_plr: true,
               confidence_score: file.confidence,
               quality_score: file.qualityRating === 'A' ? 90 : file.qualityRating === 'B' ? 70 : file.qualityRating === 'C' ? 50 : 30,
@@ -624,7 +622,7 @@ export const FileExplorerProvider: React.FC<{ children: React.ReactNode }> = ({ 
       case 'category':
         const categories = new Map<string, FileSystemNode[]>();
         plrFiles.forEach(file => {
-          const category = file.category_id || 'Uncategorized';
+          const category = file.category || 'Uncategorized';
           if (!categories.has(category)) {
             categories.set(category, []);
           }
