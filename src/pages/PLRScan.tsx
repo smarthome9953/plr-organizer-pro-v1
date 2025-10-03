@@ -1,7 +1,6 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { useFileExplorer, FileSystemNode } from '@/context/FileExplorerContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { supabase } from '@/integrations/supabase/client';
@@ -15,6 +14,7 @@ import {
   AlertCircle, CheckCircle2, Loader2
 } from 'lucide-react';
 import ScanProgressBar from '@/components/ScanProgressBar';
+import { useFileExplorer } from '@/context/FileExplorerContext';
 
 // No need to redefine interfaces here since they're now in vite-env.d.ts
 
@@ -25,7 +25,6 @@ interface FileItem {
   size: number;
   confidence?: number;
   isPLR?: boolean;
-  lastModified: number;
 }
 
 interface ScanError {
@@ -37,7 +36,6 @@ const PLRScan = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [files, setFiles] = useState<FileItem[]>([]);
-  const { saveToDatabase } = useFileExplorer();
   const [includeSubfolders, setIncludeSubfolders] = useState<boolean>(true);
   const [extractMetadata, setExtractMetadata] = useState<boolean>(true);
   const [generatePreviews, setGeneratePreviews] = useState<boolean>(true);
@@ -88,15 +86,13 @@ const PLRScan = () => {
       { name: 'empty-file.txt', content: '', isPLR: false },
     ];
 
-    const now = Date.now();
     const files: FileItem[] = testFiles.map(file => ({
       name: file.name,
       path: `/test-folder/${file.name}`,
       type: file.name.split('.').pop() || '',
       size: file.content.length,
       isPLR: file.isPLR,
-      confidence: file.isPLR ? 0.95 : 0.1,
-      lastModified: now
+      confidence: file.isPLR ? 0.95 : 0.1
     }));
 
     return files;
@@ -152,7 +148,8 @@ const PLRScan = () => {
       errors: [...prev.errors, error.message || 'Unknown error occurred']
     }));
     toast('Scan Error', {
-      description: error.message || 'An error occurred during scanning'
+      description: error.message || 'An error occurred during scanning',
+      variant: 'destructive'
     });
     setScanning(false);
     setIsScanning(false);
@@ -202,7 +199,6 @@ const PLRScan = () => {
                   path: filePath,
                   type: file.type || getFileExtension(file.name),
                   size: file.size,
-                  lastModified: file.lastModified,
                 });
                 
                 setStats(prev => ({
@@ -275,16 +271,16 @@ const PLRScan = () => {
     
     // Process selected files
     const newFiles: FileItem[] = [];
+    
     Array.from(selectedFiles).forEach((file) => {
       newFiles.push({
         name: file.name,
         path: file.name,
         type: file.type || getFileExtension(file.name),
         size: file.size,
-        lastModified: file.lastModified,
       });
     });
-
+    
     // Update stats
     setStats({
       filesScanned: newFiles.length,
@@ -292,8 +288,6 @@ const PLRScan = () => {
       totalSize: newFiles.reduce((sum, file) => sum + file.size, 0),
       duplicatesFound: 0,
       elapsedTime: '00:00:00',
-      plrFilesDetected: 0,
-      errors: []
     });
     
     // Update files and progress
@@ -335,47 +329,46 @@ const PLRScan = () => {
     setProcessingFiles(true);
     
     try {
-      // Convert files to FileSystemNode format
-      const fileNodes: FileSystemNode[] = files.map(file => ({
-        id: crypto.randomUUID(),
-        name: file.name,
-        path: file.path,
-        type: 'file',
-        size: file.size,
-        extension: file.type.split('/').pop() || '',
-        isPlr: true, // Since these are PLR files we're processing
-        confidence: 0.95, // Default high confidence for manually selected files
-        metadata: {
-          mime_type: file.type,
-          last_modified: file.lastModified
-        },
-        lastModified: new Date(file.lastModified),
-        createdAt: new Date()
-      }));
-
-      // Save to database using FileExplorerContext
-      const { success, errors } = await saveToDatabase(fileNodes);
-
-      if (success) {
-        toast("Processing Complete", {
-          description: `Successfully added ${files.length} files to your PLR library.`,
-        });
-        
-        // Navigate to the PLR dashboard
-        navigate('/dashboard');
-      } else {
-        console.error("Processing errors:", errors);
-        errors.forEach(error => {
-          toast("Processing Error", {
-            description: error
+      // Process files and upload metadata to Supabase
+      let processed = 0;
+      
+      for (const file of files) {
+        // Insert file metadata into Supabase
+        const { error } = await supabase
+          .from('plr_files')
+          .insert({
+            user_id: user.id,
+            file_name: file.name,
+            file_path: file.path,
+            file_type: file.type,
+            file_size: file.size,
+            category_id: null,  // Will be categorized later
+            tags: [],        // Will be tagged later
           });
-        });
+          
+        if (error) {
+          console.error("Error inserting file metadata:", error);
+          toast("Processing Error", {
+            description: `Error processing ${file.name}. Please try again.`,
+          });
+        }
+        
+        processed++;
+        setScanProgress(Math.round((processed / files.length) * 100));
       }
+      
+      toast("Processing Complete", {
+        description: `Successfully added ${processed} files to your PLR library.`,
+      });
+      
+      // Navigate to the PLR dashboard
+      navigate('/dashboard');
     } catch (err) {
       console.error("Error processing files:", err);
       toast("Processing Error", {
-        description: "There was an error processing your files. Please try again."
+        description: "There was an error processing your files. Please try again.",
       });
+    } finally {
       setProcessingFiles(false);
     }
   };
@@ -563,20 +556,6 @@ const PLRScan = () => {
                       <Progress value={scanProgress} className="h-2" />
                     </div>
                   )}
-
-                  {stats.errors.length > 0 && (
-                    <div className="mt-4 p-4 bg-destructive/10 rounded-md border border-destructive">
-                      <h3 className="text-sm font-medium flex items-center text-destructive">
-                        <AlertCircle className="mr-2 h-4 w-4" />
-                        Scan Errors
-                      </h3>
-                      <ul className="mt-2 space-y-1 text-sm text-destructive">
-                        {stats.errors.map((error, index) => (
-                          <li key={index}>{error}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
                 </div>
               </CardContent>
             </Card>
@@ -600,10 +579,6 @@ const PLRScan = () => {
                 <div className="flex justify-between">
                   <span>Total Size:</span>
                   <span className="font-medium">{formatBytes(stats.totalSize)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>PLR Files Detected:</span>
-                  <span className="font-medium">{stats.plrFilesDetected}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Duplicates Found:</span>

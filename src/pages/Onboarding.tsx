@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { useFileExplorer } from '@/context/FileExplorerContext';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,11 +14,9 @@ import { Helmet } from 'react-helmet-async';
 
 const Onboarding = () => {
   const navigate = useNavigate();
-  const { user, completeOnboarding } = useAuth();
-  const { addDirectoryToFileSystem } = useFileExplorer();
+  const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [selectedFolder, setSelectedFolder] = useState('');
   const totalSteps = 4;
 
   const handleNext = () => {
@@ -50,22 +47,15 @@ const Onboarding = () => {
 
       if (error) throw error;
 
-      // Mark onboarding as completed
-      await completeOnboarding();
-
       toast("Welcome to PLR Organizer Pro!", {
         description: "Your workspace is ready. Let's start organizing your content!",
       });
 
-      // Navigate to dashboard after a slight delay
-      setTimeout(() => navigate('/dashboard', { replace: true }), 1000);
+      setTimeout(() => navigate('/plr-dashboard'), 1000);
     } catch (error) {
       console.error('Error completing onboarding:', error);
-      toast("Setup Error", {
-        description: "There was an error completing setup, but you can still continue.",
-      });
       // Continue anyway
-      navigate('/dashboard', { replace: true });
+      navigate('/plr-dashboard');
     } finally {
       setLoading(false);
     }
