@@ -7,6 +7,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { AuthProvider } from '@/context/AuthContext';
 import { FileExplorerProvider } from '@/context/FileExplorerContext';
+import { ElectronProvider } from '@/context/ElectronContext';
 
 // Layouts & Core Components
 import { Toaster } from '@/components/ui/toaster';
@@ -85,12 +86,13 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <ThemeProvider>
-      <HelmetProvider>
-        <QueryClientProvider client={queryClient}>
-          <BrowserRouter>
-            <FileExplorerProvider>
-              <AuthProvider>
-              <Routes>
+      <ElectronProvider>
+        <HelmetProvider>
+          <QueryClientProvider client={queryClient}>
+            <BrowserRouter>
+              <FileExplorerProvider>
+                <AuthProvider>
+                  <Routes>
                  {/* Public Routes */}
                 <Route path="/" element={<Index />} />
                 <Route path="/about" element={<About />} />
@@ -159,13 +161,14 @@ function App() {
 
                 {/* Catch-all route - 404 */}
                 <Route path="*" element={<NotFound />} />
-              </Routes>
-              <Toaster />
-              </AuthProvider>
-            </FileExplorerProvider>
-          </BrowserRouter>
-        </QueryClientProvider>
-      </HelmetProvider>
+                  </Routes>
+                  <Toaster />
+                </AuthProvider>
+              </FileExplorerProvider>
+            </BrowserRouter>
+          </QueryClientProvider>
+        </HelmetProvider>
+      </ElectronProvider>
     </ThemeProvider>
   );
 }

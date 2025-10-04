@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { Folder, FileText, Bookmark, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { WebAppBanner } from '@/components/dashboard/WebAppBanner';
 
 type CategoryStat = {
   category: string | null;
@@ -99,6 +100,8 @@ const PLRDashboard = () => {
       <Header />
       
       <main className="flex-grow container mx-auto px-4 py-8">
+        {/* Web App Banner - Shows "Download Desktop App" when accessing from browser */}
+        <WebAppBanner />
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Your PLR Library</h1>
           <div className="space-x-2">

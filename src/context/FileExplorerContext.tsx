@@ -301,8 +301,18 @@ export const FileExplorerProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
       const maxDepth = scanOptions.scanDepth === 'unlimited' ? 10 : parseInt(scanOptions.scanDepth);
       
-      const rootNode = await FileSystemService.readDirectory(
-        dirHandle,
+      // Check if result is a string (Electron) or FileSystemDirectoryHandle (Browser)
+      let rootNode: FileSystemNode;
+      
+      if (typeof dirHandle === 'string') {
+        // Electron returned a path string - we'll need to handle this differently
+        toast.error('Electron file system scanning not yet implemented for this view');
+        toast.dismiss('reading-dir');
+        return;
+      }
+      
+      rootNode = await FileSystemService.readDirectory(
+        dirHandle as FileSystemDirectoryHandle,
         (progress) => {
           console.log('Reading:', progress.currentPath);
         },

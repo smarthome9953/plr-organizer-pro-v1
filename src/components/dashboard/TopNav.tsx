@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
@@ -17,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Link } from 'react-router-dom';
+import { DesktopAppBadge } from './DesktopAppBadge';
 
 const TopNav: React.FC = () => {
   const { user, signOut } = useAuth();
@@ -44,8 +44,8 @@ const TopNav: React.FC = () => {
   
   return (
     <div className="flex justify-between items-center px-4 py-2 border-b h-16">
-      <div className="flex items-center">
-        <SidebarTrigger className="mr-4" />
+      <div className="flex items-center gap-4">
+        <SidebarTrigger className="mr-2" />
         <div className="relative">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <input 
@@ -54,6 +54,9 @@ const TopNav: React.FC = () => {
             className="pl-9 h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
           />
         </div>
+        
+        {/* Desktop App Badge - Shows when running in Electron */}
+        <DesktopAppBadge />
       </div>
       
       <div className="flex items-center gap-2">
