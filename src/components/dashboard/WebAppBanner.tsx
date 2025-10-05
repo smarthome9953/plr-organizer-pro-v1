@@ -1,4 +1,5 @@
 import { useElectron } from '@/context/ElectronContext';
+import { useNavigate } from 'react-router-dom';
 import { Download, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -9,6 +10,7 @@ import { useState } from 'react';
  */
 export const WebAppBanner = () => {
   const { isElectronApp } = useElectron();
+  const navigate = useNavigate();
   const [dismissed, setDismissed] = useState(() => {
     return localStorage.getItem('desktopAppBannerDismissed') === 'true';
   });
@@ -47,10 +49,7 @@ export const WebAppBanner = () => {
           <Button
             size="sm"
             className="bg-[#6B5CE7] dark:bg-[#7C6FE8] hover:bg-[#5B4CD7] text-white shrink-0"
-            onClick={() => {
-              // Navigate to download page (you'll create this later)
-              window.location.href = '/download';
-            }}
+            onClick={() => navigate('/download')}
           >
             <Download className="w-4 h-4 mr-2" />
             Download Now

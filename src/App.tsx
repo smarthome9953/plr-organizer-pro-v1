@@ -19,6 +19,7 @@ import About from '@/pages/About';
 import Contact from '@/pages/Contact';
 import Auth from '@/pages/Auth';
 import Onboarding from '@/pages/Onboarding';
+import DownloadApp from '@/pages/DownloadApp';
 import Careers from '@/pages/Careers';
 import Affiliates from '@/pages/Affiliates';
 import Blog from '@/pages/Blog';
@@ -99,6 +100,7 @@ function App() {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/onboarding" element={<Onboarding />} />
+                <Route path="/download" element={<DownloadApp />} />
                 <Route path="/careers" element={<Careers />} />
                 <Route path="/affiliates" element={<Affiliates />} />
                 <Route path="/blog" element={<Blog />} />
