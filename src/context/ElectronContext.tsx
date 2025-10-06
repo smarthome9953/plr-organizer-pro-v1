@@ -1,6 +1,5 @@
 /// <reference path="../types/electron.d.ts" />
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
 import AboutModal from '@/components/modals/AboutModal';
 import type { UpdateProgress } from '../../electron/shared/types';
 
@@ -39,7 +38,6 @@ interface ElectronProviderProps {
 }
 
 export const ElectronProvider: React.FC<ElectronProviderProps> = ({ children }) => {
-  const navigate = useNavigate();
   const [isElectronApp, setIsElectronApp] = useState(false);
   const [appVersion, setAppVersion] = useState('');
   const [updateAvailable, setUpdateAvailable] = useState(false);
@@ -113,12 +111,12 @@ export const ElectronProvider: React.FC<ElectronProviderProps> = ({ children }) 
       // Setup menu event listeners
       window.electronAPI.onMenuOpenFolder(() => {
         console.log('Menu: Open Folder triggered');
-        navigate('/scan');
+        window.location.href = '/scan';
       });
 
       window.electronAPI.onMenuSettings(() => {
         console.log('Menu: Settings triggered');
-        navigate('/dashboard');
+        window.location.href = '/dashboard';
       });
 
       window.electronAPI.onMenuAbout(() => {
