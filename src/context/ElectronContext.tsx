@@ -1,5 +1,7 @@
 /// <reference path="../types/electron.d.ts" />
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useNavigate } from 'react-router-dom';
+import AboutModal from '@/components/modals/AboutModal';
 import type { UpdateProgress } from '../../electron/shared/types';
 
 interface ElectronContextType {
@@ -37,6 +39,7 @@ interface ElectronProviderProps {
 }
 
 export const ElectronProvider: React.FC<ElectronProviderProps> = ({ children }) => {
+  const navigate = useNavigate();
   const [isElectronApp, setIsElectronApp] = useState(false);
   const [appVersion, setAppVersion] = useState('');
   const [updateAvailable, setUpdateAvailable] = useState(false);
@@ -44,6 +47,7 @@ export const ElectronProvider: React.FC<ElectronProviderProps> = ({ children }) 
   const [fileWatcherActive, setFileWatcherActive] = useState(false);
   const [updateDownloaded, setUpdateDownloaded] = useState(false);
   const [updateChecking, setUpdateChecking] = useState(false);
+  const [showAboutModal, setShowAboutModal] = useState(false);
 
   useEffect(() => {
     // Check if running in Electron
@@ -109,18 +113,17 @@ export const ElectronProvider: React.FC<ElectronProviderProps> = ({ children }) 
       // Setup menu event listeners
       window.electronAPI.onMenuOpenFolder(() => {
         console.log('Menu: Open Folder triggered');
-        // Trigger folder selection UI
+        navigate('/scan');
       });
 
       window.electronAPI.onMenuSettings(() => {
         console.log('Menu: Settings triggered');
-        // Navigate to settings page
-        window.location.hash = '/settings';
+        navigate('/dashboard');
       });
 
       window.electronAPI.onMenuAbout(() => {
         console.log('Menu: About triggered');
-        // Show about dialog
+        setShowAboutModal(true);
       });
     }
 
@@ -233,5 +236,10 @@ export const ElectronProvider: React.FC<ElectronProviderProps> = ({ children }) 
     syncLibraryToLocal,
   };
 
-  return <ElectronContext.Provider value={value}>{children}</ElectronContext.Provider>;
+  return (
+    <ElectronContext.Provider value={value}>
+      {children}
+      <AboutModal isOpen={showAboutModal} onClose={() => setShowAboutModal(false)} />
+    </ElectronContext.Provider>
+  );
 };

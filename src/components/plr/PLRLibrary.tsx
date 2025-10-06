@@ -32,7 +32,8 @@ import {
   DropdownMenuItem, 
   DropdownMenuTrigger 
 } from '@/components/ui/dropdown-menu';
-import { Search, Plus, MoreHorizontal, FilePlus, FilterIcon, Grid, List, RefreshCcw } from 'lucide-react';
+import { Search, Plus, MoreHorizontal, FilePlus, FilterIcon, Grid, List, RefreshCcw, FolderOpen, Eye, EyeOff } from 'lucide-react';
+import { toast } from 'sonner';
 
 // Mock data for demonstration
 const mockPLRItems = [
@@ -94,7 +95,70 @@ const PLRLibrary = () => {
   const [typeFilter, setTypeFilter] = useState('all');
   const [licenseFilter, setLicenseFilter] = useState('all');
   const [viewMode, setViewMode] = useState('list');
+  const [isWatching, setIsWatching] = useState(false);
+  const [watchedFolder, setWatchedFolder] = useState<string | null>(null);
   
+  // File watching functionality (Electron only)
+  const handleWatchFolder = async () => {
+    if (!window.electronAPI) {
+      toast.error("Desktop App Required", {
+        description: "File watching is only available in the desktop app",
+      });
+      return;
+    }
+
+    try {
+      if (isWatching && watchedFolder) {
+        // Stop watching
+        const result = await window.electronAPI.unwatchFolder(watchedFolder);
+        if (result.success) {
+          setIsWatching(false);
+          setWatchedFolder(null);
+          toast.success("Stopped Watching", {
+            description: "File watching has been stopped",
+          });
+        }
+      } else {
+        // Start watching
+        const folderPath = await window.electronAPI.selectFolder();
+        if (folderPath) {
+          const result = await window.electronAPI.watchFolder(folderPath);
+          if (result.success) {
+            setIsWatching(true);
+            setWatchedFolder(folderPath);
+            toast.success("Watching Folder", {
+              description: `Monitoring ${folderPath} for changes`,
+            });
+
+            // Set up file event listeners
+            window.electronAPI.onFileAdded((event) => {
+              toast.info("New File Detected", {
+                description: `Added: ${event.path}`,
+              });
+            });
+
+            window.electronAPI.onFileChanged((event) => {
+              toast.info("File Changed", {
+                description: `Modified: ${event.path}`,
+              });
+            });
+
+            window.electronAPI.onFileDeleted((event) => {
+              toast.info("File Deleted", {
+                description: `Removed: ${event.path}`,
+              });
+            });
+          }
+        }
+      }
+    } catch (error) {
+      console.error("File watching error:", error);
+      toast.error("Error", {
+        description: "Failed to toggle file watching",
+      });
+    }
+  };
+
   // Filter PLR items based on search and filters
   const filteredItems = mockPLRItems.filter(item => {
     const matchesSearch = 
@@ -113,12 +177,39 @@ const PLRLibrary = () => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">PLR Library</h2>
-          <p className="text-muted-foreground">Manage your PLR content collection.</p>
+          <p className="text-muted-foreground">
+            Manage your PLR content collection
+            {isWatching && watchedFolder && (
+              <span className="ml-2 text-xs text-primary">
+                • Watching: {watchedFolder}
+              </span>
+            )}
+          </p>
         </div>
-        <Button>
-          <FilePlus className="h-4 w-4 mr-2" />
-          Add PLR Content
-        </Button>
+        <div className="flex gap-2">
+          {window.electronAPI && (
+            <Button
+              variant={isWatching ? "default" : "outline"}
+              onClick={handleWatchFolder}
+            >
+              {isWatching ? (
+                <>
+                  <EyeOff className="h-4 w-4 mr-2" />
+                  Stop Watching
+                </>
+              ) : (
+                <>
+                  <Eye className="h-4 w-4 mr-2" />
+                  Watch Folder
+                </>
+              )}
+            </Button>
+          )}
+          <Button>
+            <FilePlus className="h-4 w-4 mr-2" />
+            Add PLR Content
+          </Button>
+        </div>
       </div>
       
       <Tabs defaultValue="all" className="space-y-4">
