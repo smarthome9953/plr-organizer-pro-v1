@@ -7,7 +7,6 @@ import { HelmetProvider } from 'react-helmet-async';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { AuthProvider } from '@/context/AuthContext';
 import { FileExplorerProvider } from '@/context/FileExplorerContext';
-import { ElectronProvider } from '@/context/ElectronContext';
 
 // Layouts & Core Components
 import { Toaster } from '@/components/ui/toaster';
@@ -18,8 +17,6 @@ import Index from '@/pages/Index';
 import About from '@/pages/About';
 import Contact from '@/pages/Contact';
 import Auth from '@/pages/Auth';
-import Onboarding from '@/pages/Onboarding';
-import DownloadApp from '@/pages/DownloadApp';
 import Careers from '@/pages/Careers';
 import Affiliates from '@/pages/Affiliates';
 import Blog from '@/pages/Blog';
@@ -87,20 +84,17 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <ThemeProvider>
-      <ElectronProvider>
-        <HelmetProvider>
-          <QueryClientProvider client={queryClient}>
-            <BrowserRouter>
-              <FileExplorerProvider>
-                <AuthProvider>
+      <HelmetProvider>
+        <QueryClientProvider client={queryClient}>
+          <BrowserRouter>
+            <FileExplorerProvider>
+              <AuthProvider>
                   <Routes>
                  {/* Public Routes */}
                 <Route path="/" element={<Index />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/auth" element={<Auth />} />
-                <Route path="/onboarding" element={<Onboarding />} />
-                <Route path="/download" element={<DownloadApp />} />
                 <Route path="/careers" element={<Careers />} />
                 <Route path="/affiliates" element={<Affiliates />} />
                 <Route path="/blog" element={<Blog />} />
@@ -170,7 +164,6 @@ function App() {
             </BrowserRouter>
           </QueryClientProvider>
         </HelmetProvider>
-      </ElectronProvider>
     </ThemeProvider>
   );
 }
