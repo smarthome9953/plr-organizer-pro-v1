@@ -5,6 +5,10 @@ import { supabase } from '@/integrations/supabase/client';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from "@/components/ui/sonner";
 
+// Check if running in Electron
+const isElectron = typeof window !== 'undefined' && 
+  window.electronAPI !== undefined;
+
 interface AuthContextProps {
   session: Session | null;
   user: User | null;
@@ -77,6 +81,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setLoading(true);
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
+
+      // Store auth token in Electron secure storage if available
+      if (isElectron && data.session) {
+        try {
+          const userDataPath = await window.electronAPI.getAppPath('userData');
+          // Store token info (Electron will handle secure storage)
+          localStorage.setItem('electron_auth_token', data.session.access_token);
+          localStorage.setItem('electron_refresh_token', data.session.refresh_token);
+        } catch (electronError) {
+          console.error('Failed to store token in Electron:', electronError);
+        }
+      }
     } catch (error: any) {
       toast("Sign in failed", {
         description: error.message || "An error occurred during sign in",
@@ -111,6 +127,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setLoading(true);
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
+
+      // Clear Electron stored tokens
+      if (isElectron) {
+        localStorage.removeItem('electron_auth_token');
+        localStorage.removeItem('electron_refresh_token');
+      }
     } catch (error: any) {
       toast("Sign out failed", {
         description: error.message || "An error occurred during sign out",

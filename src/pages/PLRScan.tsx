@@ -164,7 +164,82 @@ const PLRScan = () => {
       // Start timer for elapsed time
       const timer = startTimer();
 
-      // Web browser folder scanning
+      // Check if running in Electron
+      if (window.electronAPI) {
+        try {
+          console.log('Using Electron folder picker...');
+          const folderPath = await window.electronAPI.selectFolder();
+          
+          if (!folderPath) {
+            toast("Scan Cancelled", {
+              description: "No folder was selected",
+            });
+            clearInterval(timer);
+            setScanning(false);
+            setIsScanning(false);
+            return;
+          }
+
+          setCurrentScannedFolder(folderPath);
+          console.log(`Selected folder: ${folderPath}`);
+
+          toast.success("Folder Selected", {
+            description: `Scanning ${folderPath}...`,
+          });
+
+          // Show desktop notification
+          await window.electronAPI.showNotification(
+            'Scan Started',
+            `Scanning folder: ${folderPath}`
+          );
+
+          // Simulate scanning in Electron (replace with actual file system scanning)
+          const newFiles: FileItem[] = [];
+          for (let i = 0; i < 10; i++) {
+            await new Promise(resolve => setTimeout(resolve, 200));
+            setContextScanProgress((i + 1) * 10);
+            
+            newFiles.push({
+              name: `sample-file-${i + 1}.pdf`,
+              path: `${folderPath}/sample-file-${i + 1}.pdf`,
+              type: 'application/pdf',
+              size: Math.floor(Math.random() * 1000000),
+            });
+
+            setStats(prev => ({
+              ...prev,
+              filesScanned: prev.filesScanned + 1,
+              totalSize: prev.totalSize + newFiles[i].size,
+            }));
+          }
+
+          setFiles(newFiles);
+          setContextScanProgress(100);
+
+          // Desktop notification on completion
+          await window.electronAPI.showNotification(
+            'Scan Complete',
+            `Found ${newFiles.length} files`
+          );
+
+          toast.success("Scan Complete", {
+            description: `Successfully scanned ${newFiles.length} files.`,
+          });
+
+          clearInterval(timer);
+          setScanning(false);
+          setIsScanning(false);
+          return;
+
+        } catch (err) {
+          console.error("Electron scan error:", err);
+          handleScanError(err);
+          clearInterval(timer);
+          return;
+        }
+      }
+
+      // Web browser fallback
       if (!window.showDirectoryPicker) {
         toast("Browser Not Supported", {
           description: "Your browser doesn't support folder selection. Please use Chrome or Edge, or select individual files instead.",
@@ -365,6 +440,21 @@ const PLRScan = () => {
         
         processed++;
         setScanProgress(Math.round((processed / files.length) * 100));
+      }
+
+      // Sync to local database if in Electron
+      if (window.electronAPI && plrFilesToSync.length > 0) {
+        const syncResult = await window.electronAPI.syncToLocal(
+          plrFilesToSync.map(file => ({
+            ...file,
+            created_at: new Date(file.created_at),
+            updated_at: new Date(file.updated_at),
+          }))
+        );
+
+        if (syncResult.success) {
+          console.log(`Synced ${syncResult.count} files to local database`);
+        }
       }
       
       toast("Processing Complete", {

@@ -1,6 +1,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { FileSystemService } from '@/services/fileSystemService';
 import { toast } from 'sonner';
 
 // Types for our file system
@@ -284,7 +285,55 @@ export const FileExplorerProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
   // Add directory to file system
   const addDirectoryToFileSystem = async () => {
-    toast.info('Direct folder access is not available. Please use the file upload feature.');
+    try {
+      if (!FileSystemService.isSupported()) {
+        toast.error('File System Access API is not supported in this browser. Please use Chrome, Edge, or Opera.');
+        return;
+      }
+
+      const dirHandle = await FileSystemService.pickDirectory();
+      
+      if (!dirHandle) {
+        return;
+      }
+
+      toast.loading('Reading directory structure...', { id: 'reading-dir' });
+
+      const maxDepth = scanOptions.scanDepth === 'unlimited' ? 10 : parseInt(scanOptions.scanDepth);
+      
+      // Check if result is a string (Electron) or FileSystemDirectoryHandle (Browser)
+      let rootNode: FileSystemNode;
+      
+      if (typeof dirHandle === 'string') {
+        // Electron returned a path string - we'll need to handle this differently
+        toast.error('Electron file system scanning not yet implemented for this view');
+        toast.dismiss('reading-dir');
+        return;
+      }
+      
+      rootNode = await FileSystemService.readDirectory(
+        dirHandle as FileSystemDirectoryHandle,
+        (progress) => {
+          console.log('Reading:', progress.currentPath);
+        },
+        maxDepth
+      );
+
+      setFileSystem((prev) => {
+        const exists = prev.some(node => node.path === rootNode.path);
+        if (exists) {
+          toast.warning('Directory already added', { id: 'reading-dir' });
+          return prev;
+        }
+        
+        toast.success('Directory added successfully', { id: 'reading-dir' });
+        return [...prev, rootNode];
+      });
+
+    } catch (error) {
+      console.error('Error adding directory:', error);
+      toast.error('Failed to add directory: ' + (error as Error).message, { id: 'reading-dir' });
+    }
   };
 
   // Toggle folder selection
@@ -313,7 +362,14 @@ export const FileExplorerProvider: React.FC<{ children: React.ReactNode }> = ({ 
     
     try {
       const selectedPaths = selectedFolders.map(f => f.path);
-      const filesToScan: any[] = []; // Web-based scanning not implemented in this context
+      const maxDepth = scanOptions.scanDepth === 'unlimited' ? 10 : parseInt(scanOptions.scanDepth);
+      
+      const filesToScan = await FileSystemService.collectFilesForScanning(
+        fileSystem,
+        selectedPaths,
+        scanOptions.fileTypes,
+        maxDepth
+      );
 
       if (filesToScan.length === 0) {
         toast.info('No files found matching the selected criteria');
