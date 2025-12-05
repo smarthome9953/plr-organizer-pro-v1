@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   Card, 
   CardContent, 
@@ -32,72 +31,50 @@ import {
   DropdownMenuItem, 
   DropdownMenuTrigger 
 } from '@/components/ui/dropdown-menu';
-import { Search, Plus, MoreHorizontal, FilePlus, FilterIcon, Grid, List, RefreshCcw, FolderOpen, Eye, EyeOff } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { 
+  Search, 
+  MoreHorizontal, 
+  FilePlus, 
+  FilterIcon, 
+  Grid, 
+  List, 
+  RefreshCcw, 
+  Eye, 
+  EyeOff,
+  FileText,
+  Trash2,
+  Edit,
+  Download,
+  FolderOpen
+} from 'lucide-react';
 import { toast } from 'sonner';
-
-// Mock data for demonstration
-const mockPLRItems = [
-  {
-    id: '1',
-    title: 'Complete Social Media Marketing Guide',
-    category: 'Marketing',
-    type: 'eBook',
-    license: 'Private Label Rights',
-    source: 'Premium PLR Hub',
-    addedDate: '2023-10-15',
-    tags: ['social media', 'marketing', 'guide']
-  },
-  {
-    id: '2',
-    title: 'Healthy Keto Recipes Collection',
-    category: 'Health & Wellness',
-    type: 'Recipe Book',
-    license: 'Master Resale Rights',
-    source: 'PLR Health Club',
-    addedDate: '2023-09-28',
-    tags: ['recipes', 'keto', 'health']
-  },
-  {
-    id: '3',
-    title: 'Mindfulness Meditation Audio Series',
-    category: 'Self-Help',
-    type: 'Audio',
-    license: 'Private Label Rights',
-    source: 'Wellness PLR',
-    addedDate: '2023-08-12',
-    tags: ['meditation', 'mindfulness', 'audio']
-  },
-  {
-    id: '4',
-    title: 'AI for Business - Complete Guide',
-    category: 'Technology',
-    type: 'Course',
-    license: 'Resale Rights',
-    source: 'Tech PLR Pro',
-    addedDate: '2023-07-30',
-    tags: ['AI', 'business', 'technology']
-  },
-  {
-    id: '5',
-    title: 'Instagram Growth Strategies',
-    category: 'Marketing',
-    type: 'Report',
-    license: 'Private Label Rights',
-    source: 'Social Media PLR',
-    addedDate: '2023-11-02',
-    tags: ['instagram', 'growth', 'social media']
-  }
-];
+import { usePLRFiles, type PLRFile } from '@/hooks/usePLRFiles';
+import { format } from 'date-fns';
 
 const PLRLibrary = () => {
+  const { files, categories, isLoading, error, refetch, deleteFile } = usePLRFiles();
+  
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [typeFilter, setTypeFilter] = useState('all');
   const [licenseFilter, setLicenseFilter] = useState('all');
-  const [viewMode, setViewMode] = useState('list');
+  const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
   const [isWatching, setIsWatching] = useState(false);
   const [watchedFolder, setWatchedFolder] = useState<string | null>(null);
-  
+
+  // Get unique file types for filter
+  const fileTypes = useMemo(() => {
+    const types = new Set(files.map(f => f.file_type));
+    return Array.from(types).filter(Boolean);
+  }, [files]);
+
+  // Get unique license types for filter
+  const licenseTypes = useMemo(() => {
+    const types = new Set(files.map(f => f.license_type).filter(Boolean));
+    return Array.from(types);
+  }, [files]);
+
   // File watching functionality (Electron only)
   const handleWatchFolder = async () => {
     if (!window.electronAPI) {
@@ -109,7 +86,6 @@ const PLRLibrary = () => {
 
     try {
       if (isWatching && watchedFolder) {
-        // Stop watching
         const result = await window.electronAPI.unwatchFolder(watchedFolder);
         if (result.success) {
           setIsWatching(false);
@@ -119,7 +95,6 @@ const PLRLibrary = () => {
           });
         }
       } else {
-        // Start watching
         const folderPath = await window.electronAPI.selectFolder();
         if (folderPath) {
           const result = await window.electronAPI.watchFolder(folderPath);
@@ -130,7 +105,6 @@ const PLRLibrary = () => {
               description: `Monitoring ${folderPath} for changes`,
             });
 
-            // Set up file event listeners
             window.electronAPI.onFileAdded((event) => {
               toast.info("New File Detected", {
                 description: `Added: ${event.path}`,
@@ -151,26 +125,60 @@ const PLRLibrary = () => {
           }
         }
       }
-    } catch (error) {
-      console.error("File watching error:", error);
+    } catch (err) {
+      console.error("File watching error:", err);
       toast.error("Error", {
         description: "Failed to toggle file watching",
       });
     }
   };
 
-  // Filter PLR items based on search and filters
-  const filteredItems = mockPLRItems.filter(item => {
-    const matchesSearch = 
-      item.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-      item.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+  // Filter PLR files based on search and filters
+  const filteredFiles = useMemo(() => {
+    return files.filter(file => {
+      const matchesSearch = 
+        file.file_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        file.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        file.tags?.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+        
+      const matchesCategory = categoryFilter === 'all' || file.category_id === categoryFilter;
+      const matchesType = typeFilter === 'all' || file.file_type === typeFilter;
+      const matchesLicense = licenseFilter === 'all' || file.license_type === licenseFilter;
       
-    const matchesCategory = categoryFilter === 'all' || item.category === categoryFilter;
-    const matchesType = typeFilter === 'all' || item.type === typeFilter;
-    const matchesLicense = licenseFilter === 'all' || item.license === licenseFilter;
-    
-    return matchesSearch && matchesCategory && matchesType && matchesLicense;
-  });
+      return matchesSearch && matchesCategory && matchesType && matchesLicense;
+    });
+  }, [files, searchTerm, categoryFilter, typeFilter, licenseFilter]);
+
+  const handleDelete = async (id: string) => {
+    if (window.confirm('Are you sure you want to delete this file?')) {
+      await deleteFile(id);
+    }
+  };
+
+  const formatFileSize = (bytes: number): string => {
+    if (bytes === 0) return '0 B';
+    const k = 1024;
+    const sizes = ['B', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+  };
+
+  const getCategoryName = (categoryId: string | null): string => {
+    if (!categoryId) return 'Uncategorized';
+    const cat = categories.find(c => c.id === categoryId);
+    return cat?.name || 'Unknown';
+  };
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center p-12 text-center">
+        <FileText className="w-16 h-16 text-destructive mb-4" />
+        <h3 className="text-xl font-semibold mb-2">Error Loading Library</h3>
+        <p className="text-muted-foreground mb-6">{error}</p>
+        <Button onClick={refetch}>Try Again</Button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -178,7 +186,7 @@ const PLRLibrary = () => {
         <div>
           <h2 className="text-3xl font-bold tracking-tight">PLR Library</h2>
           <p className="text-muted-foreground">
-            Manage your PLR content collection
+            {isLoading ? 'Loading...' : `${files.length} files in your library`}
             {isWatching && watchedFolder && (
               <span className="ml-2 text-xs text-primary">
                 • Watching: {watchedFolder}
@@ -214,10 +222,9 @@ const PLRLibrary = () => {
       
       <Tabs defaultValue="all" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="all">All Items</TabsTrigger>
+          <TabsTrigger value="all">All Items ({files.length})</TabsTrigger>
           <TabsTrigger value="recent">Recently Added</TabsTrigger>
-          <TabsTrigger value="favorites">Favorites</TabsTrigger>
-          <TabsTrigger value="categories">Categories</TabsTrigger>
+          <TabsTrigger value="categories">Categories ({categories.length})</TabsTrigger>
         </TabsList>
         
         <TabsContent value="all" className="space-y-4">
@@ -246,10 +253,9 @@ const PLRLibrary = () => {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Categories</SelectItem>
-                    <SelectItem value="Marketing">Marketing</SelectItem>
-                    <SelectItem value="Health & Wellness">Health & Wellness</SelectItem>
-                    <SelectItem value="Self-Help">Self-Help</SelectItem>
-                    <SelectItem value="Technology">Technology</SelectItem>
+                    {categories.map(cat => (
+                      <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <Select value={typeFilter} onValueChange={setTypeFilter}>
@@ -259,11 +265,9 @@ const PLRLibrary = () => {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Types</SelectItem>
-                    <SelectItem value="eBook">eBook</SelectItem>
-                    <SelectItem value="Course">Course</SelectItem>
-                    <SelectItem value="Audio">Audio</SelectItem>
-                    <SelectItem value="Report">Report</SelectItem>
-                    <SelectItem value="Recipe Book">Recipe Book</SelectItem>
+                    {fileTypes.map(type => (
+                      <SelectItem key={type} value={type}>{type}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <Select value={licenseFilter} onValueChange={setLicenseFilter}>
@@ -273,9 +277,9 @@ const PLRLibrary = () => {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Licenses</SelectItem>
-                    <SelectItem value="Private Label Rights">PLR</SelectItem>
-                    <SelectItem value="Master Resale Rights">MRR</SelectItem>
-                    <SelectItem value="Resale Rights">RR</SelectItem>
+                    {licenseTypes.map(license => (
+                      <SelectItem key={license} value={license || ''}>{license}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <div className="flex gap-2">
@@ -293,39 +297,76 @@ const PLRLibrary = () => {
                   >
                     <Grid className="h-4 w-4" />
                   </Button>
-                  <Button variant="outline" size="icon">
+                  <Button variant="outline" size="icon" onClick={refetch}>
                     <RefreshCcw className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
               
-              {viewMode === 'list' ? (
+              {isLoading ? (
+                <div className="space-y-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Skeleton key={i} className="h-12 w-full" />
+                  ))}
+                </div>
+              ) : filteredFiles.length === 0 ? (
+                <div className="flex flex-col items-center justify-center p-12 text-center">
+                  <FolderOpen className="w-16 h-16 text-muted-foreground mb-4" />
+                  <h3 className="text-xl font-semibold mb-2">No PLR Content Yet</h3>
+                  <p className="text-muted-foreground mb-6 max-w-md">
+                    {searchTerm || categoryFilter !== 'all' || typeFilter !== 'all' 
+                      ? 'No files match your filters. Try adjusting your search.'
+                      : 'Get started by scanning your computer for PLR files or adding content manually.'}
+                  </p>
+                  <Button>
+                    <FilePlus className="h-4 w-4 mr-2" />
+                    Add Your First PLR Content
+                  </Button>
+                </div>
+              ) : viewMode === 'list' ? (
                 <div className="rounded-md border">
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Title</TableHead>
+                        <TableHead>File Name</TableHead>
                         <TableHead>Category</TableHead>
                         <TableHead>Type</TableHead>
                         <TableHead>License</TableHead>
-                        <TableHead>Source</TableHead>
+                        <TableHead>Size</TableHead>
                         <TableHead>Added</TableHead>
                         <TableHead className="w-[80px]">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {filteredItems.map((item) => (
-                        <TableRow key={item.id}>
-                          <TableCell className="font-medium">{item.title}</TableCell>
-                          <TableCell>{item.category}</TableCell>
-                          <TableCell>{item.type}</TableCell>
-                          <TableCell>
-                            <Badge variant="outline" className="capitalize">
-                              {item.license}
-                            </Badge>
+                      {filteredFiles.map((file) => (
+                        <TableRow key={file.id}>
+                          <TableCell className="font-medium">
+                            <div className="flex flex-col">
+                              <span>{file.file_name}</span>
+                              {file.description && (
+                                <span className="text-xs text-muted-foreground truncate max-w-[300px]">
+                                  {file.description}
+                                </span>
+                              )}
+                            </div>
                           </TableCell>
-                          <TableCell>{item.source}</TableCell>
-                          <TableCell>{item.addedDate}</TableCell>
+                          <TableCell>{getCategoryName(file.category_id)}</TableCell>
+                          <TableCell>
+                            <Badge variant="secondary">{file.file_type}</Badge>
+                          </TableCell>
+                          <TableCell>
+                            {file.license_type ? (
+                              <Badge variant="outline">{file.license_type}</Badge>
+                            ) : (
+                              <span className="text-muted-foreground">—</span>
+                            )}
+                          </TableCell>
+                          <TableCell>{formatFileSize(file.file_size)}</TableCell>
+                          <TableCell>
+                            {file.created_at 
+                              ? format(new Date(file.created_at), 'MMM d, yyyy')
+                              : '—'}
+                          </TableCell>
                           <TableCell>
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
@@ -335,10 +376,25 @@ const PLRLibrary = () => {
                                 </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
-                                <DropdownMenuItem>View Details</DropdownMenuItem>
-                                <DropdownMenuItem>Edit</DropdownMenuItem>
-                                <DropdownMenuItem>Download</DropdownMenuItem>
-                                <DropdownMenuItem>Delete</DropdownMenuItem>
+                                <DropdownMenuItem>
+                                  <Eye className="h-4 w-4 mr-2" />
+                                  View Details
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                  <Edit className="h-4 w-4 mr-2" />
+                                  Edit
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                  <Download className="h-4 w-4 mr-2" />
+                                  Open Location
+                                </DropdownMenuItem>
+                                <DropdownMenuItem 
+                                  className="text-destructive"
+                                  onClick={() => handleDelete(file.id)}
+                                >
+                                  <Trash2 className="h-4 w-4 mr-2" />
+                                  Delete
+                                </DropdownMenuItem>
                               </DropdownMenuContent>
                             </DropdownMenu>
                           </TableCell>
@@ -349,27 +405,58 @@ const PLRLibrary = () => {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {filteredItems.map((item) => (
-                    <Card key={item.id}>
+                  {filteredFiles.map((file) => (
+                    <Card key={file.id} className="hover:border-primary transition-colors">
                       <CardHeader className="pb-2">
-                        <CardTitle className="text-lg">{item.title}</CardTitle>
+                        <CardTitle className="text-lg truncate">{file.file_name}</CardTitle>
                         <div className="flex gap-2 mt-1">
-                          <Badge variant="outline">{item.type}</Badge>
-                          <Badge variant="outline">{item.license}</Badge>
+                          <Badge variant="secondary">{file.file_type}</Badge>
+                          {file.license_type && (
+                            <Badge variant="outline">{file.license_type}</Badge>
+                          )}
                         </div>
                       </CardHeader>
                       <CardContent>
-                        <div className="text-sm text-muted-foreground mb-3">
-                          <div>Category: {item.category}</div>
-                          <div>Source: {item.source}</div>
-                          <div>Added: {item.addedDate}</div>
+                        <div className="text-sm text-muted-foreground mb-3 space-y-1">
+                          <div>Category: {getCategoryName(file.category_id)}</div>
+                          <div>Size: {formatFileSize(file.file_size)}</div>
+                          <div>Added: {file.created_at 
+                            ? format(new Date(file.created_at), 'MMM d, yyyy')
+                            : '—'}</div>
                         </div>
-                        <div className="flex flex-wrap gap-1 mt-2">
-                          {item.tags.map((tag) => (
-                            <Badge key={tag} variant="secondary" className="text-xs">
-                              {tag}
-                            </Badge>
-                          ))}
+                        {file.tags && file.tags.length > 0 && (
+                          <div className="flex flex-wrap gap-1 mt-2">
+                            {file.tags.slice(0, 3).map((tag) => (
+                              <Badge key={tag} variant="secondary" className="text-xs">
+                                {tag}
+                              </Badge>
+                            ))}
+                            {file.tags.length > 3 && (
+                              <Badge variant="secondary" className="text-xs">
+                                +{file.tags.length - 3}
+                              </Badge>
+                            )}
+                          </div>
+                        )}
+                        <div className="flex justify-end mt-4">
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="sm">
+                                <MoreHorizontal className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem>View Details</DropdownMenuItem>
+                              <DropdownMenuItem>Edit</DropdownMenuItem>
+                              <DropdownMenuItem>Open Location</DropdownMenuItem>
+                              <DropdownMenuItem 
+                                className="text-destructive"
+                                onClick={() => handleDelete(file.id)}
+                              >
+                                Delete
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
                         </div>
                       </CardContent>
                     </Card>
@@ -389,21 +476,34 @@ const PLRLibrary = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {/* Similar structure to "all" tab but with recent items filter */}
-            </CardContent>
-          </Card>
-        </TabsContent>
-        
-        <TabsContent value="favorites" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Favorite Content</CardTitle>
-              <CardDescription>
-                Your bookmarked PLR items.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {/* Similar structure for favorites */}
+              {isLoading ? (
+                <div className="space-y-4">
+                  {[...Array(3)].map((_, i) => (
+                    <Skeleton key={i} className="h-12 w-full" />
+                  ))}
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {files.slice(0, 10).map(file => (
+                    <div key={file.id} className="flex items-center justify-between p-3 border rounded-lg">
+                      <div>
+                        <p className="font-medium">{file.file_name}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {file.created_at 
+                            ? format(new Date(file.created_at), 'MMM d, yyyy')
+                            : '—'}
+                        </p>
+                      </div>
+                      <Badge variant="secondary">{file.file_type}</Badge>
+                    </div>
+                  ))}
+                  {files.length === 0 && (
+                    <p className="text-muted-foreground text-center py-8">
+                      No recent files found.
+                    </p>
+                  )}
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
@@ -417,7 +517,45 @@ const PLRLibrary = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {/* Category management UI */}
+              {isLoading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {[...Array(6)].map((_, i) => (
+                    <Skeleton key={i} className="h-24 w-full" />
+                  ))}
+                </div>
+              ) : categories.length === 0 ? (
+                <div className="text-center py-8">
+                  <p className="text-muted-foreground mb-4">No categories created yet.</p>
+                  <Button>Create First Category</Button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {categories.map(cat => {
+                    const fileCount = files.filter(f => f.category_id === cat.id).length;
+                    return (
+                      <Card key={cat.id} className="hover:border-primary transition-colors">
+                        <CardHeader className="pb-2">
+                          <div className="flex items-center gap-2">
+                            <div 
+                              className="w-3 h-3 rounded-full" 
+                              style={{ backgroundColor: cat.color || '#8B5CF6' }}
+                            />
+                            <CardTitle className="text-lg">{cat.name}</CardTitle>
+                          </div>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-sm text-muted-foreground">
+                            {cat.description || 'No description'}
+                          </p>
+                          <p className="text-sm font-medium mt-2">
+                            {fileCount} file{fileCount !== 1 ? 's' : ''}
+                          </p>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
