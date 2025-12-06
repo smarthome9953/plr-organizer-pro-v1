@@ -1,126 +1,151 @@
-
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { corsHeaders } from "../_shared/cors.ts";
 
-const openAiApiKey = Deno.env.get("OPENAI_API_KEY");
-const supabaseUrl = Deno.env.get("SUPABASE_URL");
-const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
-    return new Response("ok", { headers: corsHeaders });
+    return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    // Create a Supabase client with the service role key
-    const supabase = createClient(
-      supabaseUrl!,
-      supabaseServiceKey!
-    );
-
-    // Extract the request body
     const { content, targetKeyword } = await req.json();
 
     if (!content) {
       return new Response(
         JSON.stringify({ error: "Content is required" }),
-        {
-          status: 400,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        }
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Skip OpenAI call if no API key
-    if (!openAiApiKey) {
-      console.log("OpenAI API key not found, returning fallback result");
+    if (!LOVABLE_API_KEY) {
       return new Response(
-        JSON.stringify({
-          message: "OpenAI API key not found. Using fallback demo data.",
-          demo: true,
-        }),
-        {
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        }
+        JSON.stringify({ error: "AI API key is not configured" }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Call OpenAI for SEO analysis
-    const openAIResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+    console.log("Calling Lovable AI for SEO analysis");
+
+    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${openAiApiKey}`,
+        Authorization: `Bearer ${LOVABLE_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-4o",
+        model: "google/gemini-2.5-flash",
         messages: [
           {
             role: "system",
-            content: `You are an expert SEO analyzer for PLR content. 
-            Analyze the provided content for SEO effectiveness and provide detailed recommendations.
-            Format your response as a JSON object with the following structure:
-            {
-              "overallScore": [number from 0-100],
-              "keywordDensity": [
-                {
-                  "keyword": [string - main keyword or phrase],
-                  "density": [number - percentage],
-                  "recommendation": [string - suggestion to improve]
-                }
-              ],
-              "readabilityScore": {
-                "score": [number from 0-100],
-                "level": [string - e.g. "Very Easy", "Fairly Easy", "Standard", "Difficult"],
-                "recommendation": [string - suggestion to improve]
-              },
-              "metaTags": {
-                "title": [string - suggested title tag],
-                "description": [string - suggested meta description],
-                "recommendation": [string - suggestion to improve]
-              },
-              "contentLength": {
-                "count": [number - character count],
-                "recommendation": [string - suggestion about length]
-              },
-              "suggestions": [array of strings with specific SEO improvements]
-            }`
+            content: `You are an expert SEO analyzer for PLR content. Analyze the provided content for SEO effectiveness and provide detailed recommendations.`,
           },
           {
             role: "user",
-            content: `Analyze this PLR content for SEO effectiveness. Target keyword: "${targetKeyword || "not specified"}"\n\n${content}`
-          }
+            content: `Analyze this PLR content for SEO effectiveness. Target keyword: "${targetKeyword || "not specified"}"\n\n${content}`,
+          },
         ],
-        temperature: 0.2,
+        tools: [
+          {
+            type: "function",
+            function: {
+              name: "analyze_seo",
+              description: "Analyze content for SEO and return structured results",
+              parameters: {
+                type: "object",
+                properties: {
+                  overallScore: { type: "number", description: "Overall SEO score 0-100" },
+                  keywordDensity: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        keyword: { type: "string" },
+                        density: { type: "number" },
+                        recommendation: { type: "string" },
+                      },
+                      required: ["keyword", "density", "recommendation"],
+                    },
+                  },
+                  readabilityScore: {
+                    type: "object",
+                    properties: {
+                      score: { type: "number" },
+                      level: { type: "string" },
+                      recommendation: { type: "string" },
+                    },
+                    required: ["score", "level", "recommendation"],
+                  },
+                  metaTags: {
+                    type: "object",
+                    properties: {
+                      title: { type: "string" },
+                      description: { type: "string" },
+                      recommendation: { type: "string" },
+                    },
+                    required: ["title", "description", "recommendation"],
+                  },
+                  contentLength: {
+                    type: "object",
+                    properties: {
+                      count: { type: "number" },
+                      recommendation: { type: "string" },
+                    },
+                    required: ["count", "recommendation"],
+                  },
+                  suggestions: {
+                    type: "array",
+                    items: { type: "string" },
+                  },
+                },
+                required: ["overallScore", "keywordDensity", "readabilityScore", "metaTags", "contentLength", "suggestions"],
+                additionalProperties: false,
+              },
+            },
+          },
+        ],
+        tool_choice: { type: "function", function: { name: "analyze_seo" } },
       }),
     });
 
-    if (!openAIResponse.ok) {
-      const error = await openAIResponse.json();
-      throw new Error(JSON.stringify(error));
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Lovable AI API error:", response.status, errorText);
+      
+      if (response.status === 429) {
+        return new Response(
+          JSON.stringify({ error: "Rate limit exceeded. Please try again later." }),
+          { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+      if (response.status === 402) {
+        return new Response(
+          JSON.stringify({ error: "AI credits exhausted. Please add credits to continue." }),
+          { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+      
+      throw new Error(`AI API error: ${response.status}`);
     }
 
-    const result = await openAIResponse.json();
-    const analysis = JSON.parse(result.choices[0].message.content);
+    const data = await response.json();
+    const toolCall = data.choices?.[0]?.message?.tool_calls?.[0];
 
-    return new Response(
-      JSON.stringify(analysis),
-      {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      }
-    );
+    if (!toolCall) {
+      throw new Error("No analysis result returned");
+    }
 
+    const analysis = JSON.parse(toolCall.function.arguments);
+
+    return new Response(JSON.stringify(analysis), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
     console.error("Error in seo-analyzer function:", errorMessage);
     return new Response(
       JSON.stringify({ error: errorMessage }),
-      {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      }
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
 });

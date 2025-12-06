@@ -21,6 +21,13 @@ contextBridge.exposeInMainWorld('electronAPI', {
   },
 
   /**
+   * Open multiple folder picker dialog
+   */
+  selectMultipleFolders: (): Promise<string[]> => {
+    return ipcRenderer.invoke('dialog:openMultipleFolders');
+  },
+
+  /**
    * Read file contents
    */
   readFile: (path: string): Promise<{ success: boolean; content?: string; error?: string }> => {
@@ -32,6 +39,64 @@ contextBridge.exposeInMainWorld('electronAPI', {
    */
   getFileStat: (path: string): Promise<{ success: boolean; stats?: any; error?: string }> => {
     return ipcRenderer.invoke('file:stat', path);
+  },
+
+  /**
+   * Scan a directory for files
+   */
+  scanDirectory: (dirPath: string, fileTypes: string[], maxDepth: number): Promise<{ 
+    success: boolean; 
+    files?: Array<{ path: string; name: string; size: number; type: string }>; 
+    error?: string 
+  }> => {
+    return ipcRenderer.invoke('file:scanDirectory', dirPath, fileTypes, maxDepth);
+  },
+
+  /**
+   * Get folder structure
+   */
+  getFolderStructure: (dirPath: string, maxDepth: number): Promise<{ success: boolean; structure?: any; error?: string }> => {
+    return ipcRenderer.invoke('file:getFolderStructure', dirPath, maxDepth);
+  },
+
+  // ============================================
+  // File Organization
+  // ============================================
+
+  /**
+   * Get default organization folder
+   */
+  getDefaultOrganizationFolder: (): Promise<string> => {
+    return ipcRenderer.invoke('organize:getDefaultFolder');
+  },
+
+  /**
+   * Organize files to niche folders
+   */
+  organizeFiles: (
+    files: Array<{ sourcePath: string; niche: string; subNiche?: string }>,
+    config: { baseFolder: string; action: 'copy' | 'move' }
+  ): Promise<{ 
+    success: boolean; 
+    results?: Array<{ success: boolean; sourcePath: string; destinationPath: string; error?: string }>;
+    summary?: { successful: number; failed: number; total: number };
+    error?: string 
+  }> => {
+    return ipcRenderer.invoke('organize:files', files, config);
+  },
+
+  /**
+   * Select organization destination folder
+   */
+  selectOrganizationDestination: (): Promise<string | null> => {
+    return ipcRenderer.invoke('organize:selectDestination');
+  },
+
+  /**
+   * Listen for organization progress
+   */
+  onOrganizeProgress: (callback: (data: { current: number; total: number; currentFile: string }) => void): void => {
+    ipcRenderer.on('organize:progress', (_, data) => callback(data));
   },
 
   // ============================================
@@ -107,6 +172,20 @@ contextBridge.exposeInMainWorld('electronAPI', {
     return ipcRenderer.invoke('notification:show', title, body);
   },
 
+  /**
+   * Open file in default application
+   */
+  openPath: (filePath: string): Promise<{ success: boolean; error?: string }> => {
+    return ipcRenderer.invoke('shell:openPath', filePath);
+  },
+
+  /**
+   * Show file in folder
+   */
+  showItemInFolder: (filePath: string): Promise<{ success: boolean }> => {
+    return ipcRenderer.invoke('shell:showItemInFolder', filePath);
+  },
+
   // ============================================
   // App Management
   // ============================================
@@ -155,6 +234,20 @@ contextBridge.exposeInMainWorld('electronAPI', {
    */
   deleteLocalFile: (id: string): Promise<{ success: boolean; deleted?: boolean; error?: string }> => {
     return ipcRenderer.invoke('db:deleteLocal', id);
+  },
+
+  /**
+   * Save a setting
+   */
+  saveSetting: (key: string, value: string): Promise<{ success: boolean; error?: string }> => {
+    return ipcRenderer.invoke('db:saveSetting', key, value);
+  },
+
+  /**
+   * Get a setting
+   */
+  getSetting: (key: string): Promise<{ success: boolean; value?: string | null; error?: string }> => {
+    return ipcRenderer.invoke('db:getSetting', key);
   },
 
   // ============================================
@@ -278,8 +371,17 @@ contextBridge.exposeInMainWorld('electronAPI', {
 export interface ElectronAPI {
   // File System
   selectFolder: () => Promise<string | null>;
+  selectMultipleFolders: () => Promise<string[]>;
   readFile: (path: string) => Promise<{ success: boolean; content?: string; error?: string }>;
   getFileStat: (path: string) => Promise<{ success: boolean; stats?: any; error?: string }>;
+  scanDirectory: (dirPath: string, fileTypes: string[], maxDepth: number) => Promise<{ success: boolean; files?: any[]; error?: string }>;
+  getFolderStructure: (dirPath: string, maxDepth: number) => Promise<{ success: boolean; structure?: any; error?: string }>;
+
+  // File Organization
+  getDefaultOrganizationFolder: () => Promise<string>;
+  organizeFiles: (files: any[], config: any) => Promise<any>;
+  selectOrganizationDestination: () => Promise<string | null>;
+  onOrganizeProgress: (callback: (data: any) => void) => void;
 
   // Folder Watching
   watchFolder: (path: string) => Promise<{ success: boolean; message?: string; error?: string }>;
@@ -291,6 +393,8 @@ export interface ElectronAPI {
 
   // Desktop Features
   showNotification: (title: string, body: string) => Promise<{ success: boolean; error?: string }>;
+  openPath: (filePath: string) => Promise<{ success: boolean; error?: string }>;
+  showItemInFolder: (filePath: string) => Promise<{ success: boolean }>;
 
   // App Management
   getVersion: () => Promise<string>;
@@ -301,6 +405,8 @@ export interface ElectronAPI {
   syncToLocal: (files: PLRFile[]) => Promise<{ success: boolean; count?: number; error?: string }>;
   getLocalData: (userId: string) => Promise<{ success: boolean; files?: PLRFile[]; error?: string }>;
   deleteLocalFile: (id: string) => Promise<{ success: boolean; deleted?: boolean; error?: string }>;
+  saveSetting: (key: string, value: string) => Promise<{ success: boolean; error?: string }>;
+  getSetting: (key: string) => Promise<{ success: boolean; value?: string | null; error?: string }>;
 
   // Auto-Updates
   checkForUpdates: () => Promise<{ success: boolean; updateInfo?: any; error?: string }>;

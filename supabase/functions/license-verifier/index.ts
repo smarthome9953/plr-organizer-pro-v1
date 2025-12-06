@@ -1,118 +1,141 @@
-
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { corsHeaders } from "../_shared/cors.ts";
 
-const openAiApiKey = Deno.env.get("OPENAI_API_KEY");
-const supabaseUrl = Deno.env.get("SUPABASE_URL");
-const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
-    return new Response("ok", { headers: corsHeaders });
+    return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    // Create a Supabase client with the service role key
-    const supabase = createClient(
-      supabaseUrl!,
-      supabaseServiceKey!
-    );
-
-    // Extract the request body
     const { licenseText, queryType } = await req.json();
 
     if (!licenseText) {
       return new Response(
         JSON.stringify({ error: "License text is required" }),
-        {
-          status: 400,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        }
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Skip OpenAI call if no API key
-    if (!openAiApiKey) {
-      console.log("OpenAI API key not found, returning fallback result");
+    if (!LOVABLE_API_KEY) {
       return new Response(
-        JSON.stringify({
-          message: "OpenAI API key not found. Using fallback demo data.",
-          demo: true,
-        }),
-        {
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        }
+        JSON.stringify({ error: "AI API key is not configured" }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Call OpenAI for license verification and analysis
-    const openAIResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+    console.log("Calling Lovable AI for license verification");
+
+    const userPrompt = queryType === "verification"
+      ? `Analyze this PLR license text and extract key information about usage rights:\n\n${licenseText}`
+      : `I want to ${queryType} with my PLR content. Is this allowed under this license?\n\n${licenseText}`;
+
+    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${openAiApiKey}`,
+        Authorization: `Bearer ${LOVABLE_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-4o",
+        model: "google/gemini-2.5-flash",
         messages: [
           {
             role: "system",
-            content: `You are an expert PLR license analyzer. 
-            Analyze the provided license text and extract key information about usage rights.
-            Format your response as a JSON object with the following structure:
-            {
-              "licenseType": [string - e.g. "Standard PLR", "MRR", "RR", "Limited PLR", etc.],
-              "rights": {
-                "canSell": [boolean],
-                "canEdit": [boolean],
-                "canDistribute": [boolean],
-                "requiresAttribution": [boolean]
-              },
-              "limitations": [array of strings with specific limitations],
-              "expirationInfo": [string - any details about expiration or time limits],
-              "specialConditions": [array of strings with any special conditions],
-              "recommendedActions": [array of strings with recommended actions],
-              "riskLevel": [string - "Low", "Medium", "High"],
-              "confidence": [number from 0-100]
-            }`
+            content: `You are an expert PLR license analyzer. Analyze the provided license text and extract key information about usage rights.`,
           },
           {
             role: "user",
-            content: queryType === "verification" 
-              ? `Analyze this PLR license text and extract key information about usage rights:\n\n${licenseText}` 
-              : `I want to ${queryType} with my PLR content. Is this allowed under this license?\n\n${licenseText}`
-          }
+            content: userPrompt,
+          },
         ],
-        temperature: 0.2,
+        tools: [
+          {
+            type: "function",
+            function: {
+              name: "analyze_license",
+              description: "Analyze PLR license and return structured results",
+              parameters: {
+                type: "object",
+                properties: {
+                  licenseType: { type: "string", description: "Type of license (Standard PLR, MRR, RR, Limited PLR, etc.)" },
+                  rights: {
+                    type: "object",
+                    properties: {
+                      canSell: { type: "boolean" },
+                      canEdit: { type: "boolean" },
+                      canDistribute: { type: "boolean" },
+                      requiresAttribution: { type: "boolean" },
+                    },
+                    required: ["canSell", "canEdit", "canDistribute", "requiresAttribution"],
+                  },
+                  limitations: {
+                    type: "array",
+                    items: { type: "string" },
+                    description: "Specific limitations",
+                  },
+                  expirationInfo: { type: "string", description: "Any expiration or time limit details" },
+                  specialConditions: {
+                    type: "array",
+                    items: { type: "string" },
+                    description: "Any special conditions",
+                  },
+                  recommendedActions: {
+                    type: "array",
+                    items: { type: "string" },
+                    description: "Recommended actions for the user",
+                  },
+                  riskLevel: { type: "string", enum: ["Low", "Medium", "High"], description: "Risk level assessment" },
+                  confidence: { type: "number", description: "Confidence score 0-100" },
+                },
+                required: ["licenseType", "rights", "limitations", "expirationInfo", "specialConditions", "recommendedActions", "riskLevel", "confidence"],
+                additionalProperties: false,
+              },
+            },
+          },
+        ],
+        tool_choice: { type: "function", function: { name: "analyze_license" } },
       }),
     });
 
-    if (!openAIResponse.ok) {
-      const error = await openAIResponse.json();
-      throw new Error(JSON.stringify(error));
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Lovable AI API error:", response.status, errorText);
+      
+      if (response.status === 429) {
+        return new Response(
+          JSON.stringify({ error: "Rate limit exceeded. Please try again later." }),
+          { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+      if (response.status === 402) {
+        return new Response(
+          JSON.stringify({ error: "AI credits exhausted. Please add credits to continue." }),
+          { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+      
+      throw new Error(`AI API error: ${response.status}`);
     }
 
-    const result = await openAIResponse.json();
-    const analysis = JSON.parse(result.choices[0].message.content);
+    const data = await response.json();
+    const toolCall = data.choices?.[0]?.message?.tool_calls?.[0];
 
-    return new Response(
-      JSON.stringify(analysis),
-      {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      }
-    );
+    if (!toolCall) {
+      throw new Error("No analysis result returned");
+    }
 
+    const analysis = JSON.parse(toolCall.function.arguments);
+
+    return new Response(JSON.stringify(analysis), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
     console.error("Error in license-verifier function:", errorMessage);
     return new Response(
       JSON.stringify({ error: errorMessage }),
-      {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      }
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
 });
