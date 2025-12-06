@@ -3,6 +3,13 @@ import * as fs from 'fs';
 import * as path from 'path';
 import Database from 'better-sqlite3';
 import type { PLRFile } from '../shared/types';
+import {
+  getDefaultBaseFolder,
+  organizeFiles,
+  scanDirectory,
+  getFolderStructure,
+  OrganizationConfig,
+} from './fileOrganizer';
 
 let db: Database.Database | null = null;
 
@@ -27,12 +34,24 @@ function initializeDatabase() {
       license_type TEXT,
       confidence_score REAL,
       tags TEXT,
+      niche TEXT,
+      sub_niche TEXT,
+      organized_path TEXT,
       created_at TEXT NOT NULL,
       updated_at TEXT NOT NULL
     );
     
     CREATE INDEX IF NOT EXISTS idx_user_id ON plr_files(user_id);
     CREATE INDEX IF NOT EXISTS idx_file_path ON plr_files(file_path);
+    CREATE INDEX IF NOT EXISTS idx_niche ON plr_files(niche);
+  `);
+
+  // Create settings table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS settings (
+      key TEXT PRIMARY KEY,
+      value TEXT NOT NULL
+    );
   `);
 
   console.log('Database initialized at:', dbPath);
@@ -46,8 +65,10 @@ export function setupIpcHandlers(mainWindow: BrowserWindow) {
   // Initialize database
   initializeDatabase();
 
+  // ============================================
   // File System Operations
-  
+  // ============================================
+
   /**
    * Open folder picker dialog
    */
@@ -62,6 +83,22 @@ export function setupIpcHandlers(mainWindow: BrowserWindow) {
     }
 
     return result.filePaths[0];
+  });
+
+  /**
+   * Open multiple folder picker dialog
+   */
+  ipcMain.handle('dialog:openMultipleFolders', async () => {
+    const result = await dialog.showOpenDialog(mainWindow, {
+      properties: ['openDirectory', 'multiSelections'],
+      title: 'Select Folders to Scan',
+    });
+
+    if (result.canceled || result.filePaths.length === 0) {
+      return [];
+    }
+
+    return result.filePaths;
   });
 
   /**
@@ -102,7 +139,96 @@ export function setupIpcHandlers(mainWindow: BrowserWindow) {
     }
   });
 
+  /**
+   * Scan a directory for files
+   */
+  ipcMain.handle('file:scanDirectory', async (event, dirPath: string, fileTypes: string[], maxDepth: number) => {
+    try {
+      const files = await scanDirectory(dirPath, fileTypes, maxDepth);
+      return { success: true, files };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to scan directory',
+      };
+    }
+  });
+
+  /**
+   * Get folder structure
+   */
+  ipcMain.handle('file:getFolderStructure', async (event, dirPath: string, maxDepth: number) => {
+    try {
+      const structure = await getFolderStructure(dirPath, maxDepth);
+      return { success: true, structure };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to get folder structure',
+      };
+    }
+  });
+
+  // ============================================
+  // File Organization Operations
+  // ============================================
+
+  /**
+   * Get default organization folder
+   */
+  ipcMain.handle('organize:getDefaultFolder', async () => {
+    return getDefaultBaseFolder();
+  });
+
+  /**
+   * Organize files to niche folders
+   */
+  ipcMain.handle('organize:files', async (
+    event,
+    files: Array<{ sourcePath: string; niche: string; subNiche?: string }>,
+    config: OrganizationConfig
+  ) => {
+    try {
+      const results = await organizeFiles(files, config, (current, total, currentFile) => {
+        mainWindow.webContents.send('organize:progress', { current, total, currentFile });
+      });
+      
+      const successful = results.filter(r => r.success).length;
+      const failed = results.filter(r => !r.success).length;
+      
+      return { 
+        success: true, 
+        results,
+        summary: { successful, failed, total: files.length }
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to organize files',
+      };
+    }
+  });
+
+  /**
+   * Select organization destination folder
+   */
+  ipcMain.handle('organize:selectDestination', async () => {
+    const result = await dialog.showOpenDialog(mainWindow, {
+      properties: ['openDirectory', 'createDirectory'],
+      title: 'Select Destination Folder for Organized PLR',
+      defaultPath: getDefaultBaseFolder(),
+    });
+
+    if (result.canceled || result.filePaths.length === 0) {
+      return null;
+    }
+
+    return result.filePaths[0];
+  });
+
+  // ============================================
   // Local Database Operations
+  // ============================================
 
   /**
    * Sync PLR files to local SQLite database
@@ -115,11 +241,11 @@ export function setupIpcHandlers(mainWindow: BrowserWindow) {
     try {
       const insert = db.prepare(`
         INSERT OR REPLACE INTO plr_files 
-        (id, user_id, file_name, file_path, file_type, file_size, license_type, confidence_score, tags, created_at, updated_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        (id, user_id, file_name, file_path, file_type, file_size, license_type, confidence_score, tags, niche, sub_niche, organized_path, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `);
 
-      const insertMany = db.transaction((files: PLRFile[]) => {
+      const insertMany = db.transaction((files: any[]) => {
         for (const file of files) {
           insert.run(
             file.id,
@@ -131,8 +257,11 @@ export function setupIpcHandlers(mainWindow: BrowserWindow) {
             file.license_type || null,
             file.confidence_score || null,
             file.tags ? JSON.stringify(file.tags) : null,
-            new Date(file.created_at).toISOString(),
-            new Date(file.updated_at).toISOString()
+            file.niche || null,
+            file.sub_niche || null,
+            file.organized_path || null,
+            new Date(file.created_at || Date.now()).toISOString(),
+            new Date(file.updated_at || Date.now()).toISOString()
           );
         }
       });
@@ -169,6 +298,9 @@ export function setupIpcHandlers(mainWindow: BrowserWindow) {
         license_type: row.license_type,
         confidence_score: row.confidence_score,
         tags: row.tags ? JSON.parse(row.tags) : undefined,
+        niche: row.niche,
+        sub_niche: row.sub_niche,
+        organized_path: row.organized_path,
         created_at: new Date(row.created_at),
         updated_at: new Date(row.updated_at),
       }));
@@ -202,7 +334,49 @@ export function setupIpcHandlers(mainWindow: BrowserWindow) {
     }
   });
 
+  /**
+   * Save settings
+   */
+  ipcMain.handle('db:saveSetting', async (event, key: string, value: string) => {
+    if (!db) {
+      return { success: false, error: 'Database not initialized' };
+    }
+
+    try {
+      const stmt = db.prepare('INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)');
+      stmt.run(key, value);
+      return { success: true };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to save setting',
+      };
+    }
+  });
+
+  /**
+   * Get setting
+   */
+  ipcMain.handle('db:getSetting', async (event, key: string) => {
+    if (!db) {
+      return { success: false, error: 'Database not initialized' };
+    }
+
+    try {
+      const stmt = db.prepare('SELECT value FROM settings WHERE key = ?');
+      const row = stmt.get(key) as { value: string } | undefined;
+      return { success: true, value: row?.value || null };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to get setting',
+      };
+    }
+  });
+
+  // ============================================
   // Desktop Features
+  // ============================================
 
   /**
    * Show native OS notification
@@ -224,7 +398,9 @@ export function setupIpcHandlers(mainWindow: BrowserWindow) {
     }
   });
 
+  // ============================================
   // App Management
+  // ============================================
 
   /**
    * Get app version
@@ -246,6 +422,31 @@ export function setupIpcHandlers(mainWindow: BrowserWindow) {
    */
   ipcMain.handle('app:getPath', async (event, name: string) => {
     return app.getPath(name as any);
+  });
+
+  /**
+   * Open file in default application
+   */
+  ipcMain.handle('shell:openPath', async (event, filePath: string) => {
+    const { shell } = require('electron');
+    try {
+      await shell.openPath(filePath);
+      return { success: true };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to open path',
+      };
+    }
+  });
+
+  /**
+   * Show file in folder
+   */
+  ipcMain.handle('shell:showItemInFolder', async (event, filePath: string) => {
+    const { shell } = require('electron');
+    shell.showItemInFolder(filePath);
+    return { success: true };
   });
 }
 
