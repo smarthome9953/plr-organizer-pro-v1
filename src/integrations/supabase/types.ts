@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      brand_profiles: {
+        Row: {
+          accent_color: string | null
+          created_at: string
+          heading_font: string | null
+          id: string
+          logo_url: string | null
+          name: string
+          primary_color: string | null
+          primary_font: string | null
+          secondary_color: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          accent_color?: string | null
+          created_at?: string
+          heading_font?: string | null
+          id?: string
+          logo_url?: string | null
+          name: string
+          primary_color?: string | null
+          primary_font?: string | null
+          secondary_color?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          accent_color?: string | null
+          created_at?: string
+          heading_font?: string | null
+          id?: string
+          logo_url?: string | null
+          name?: string
+          primary_color?: string | null
+          primary_font?: string | null
+          secondary_color?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       file_versions: {
         Row: {
           changes_description: string | null
@@ -54,6 +96,66 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      licenses: {
+        Row: {
+          acquired_date: string
+          associated_content: string[] | null
+          can_distribute: boolean | null
+          can_edit: boolean | null
+          can_sell: boolean | null
+          created_at: string
+          expiration_date: string | null
+          id: string
+          name: string
+          notes: string | null
+          provider: string
+          requires_attribution: boolean | null
+          status: string
+          type: string
+          updated_at: string
+          usage_limitations: string | null
+          user_id: string
+        }
+        Insert: {
+          acquired_date?: string
+          associated_content?: string[] | null
+          can_distribute?: boolean | null
+          can_edit?: boolean | null
+          can_sell?: boolean | null
+          created_at?: string
+          expiration_date?: string | null
+          id?: string
+          name: string
+          notes?: string | null
+          provider: string
+          requires_attribution?: boolean | null
+          status?: string
+          type: string
+          updated_at?: string
+          usage_limitations?: string | null
+          user_id: string
+        }
+        Update: {
+          acquired_date?: string
+          associated_content?: string[] | null
+          can_distribute?: boolean | null
+          can_edit?: boolean | null
+          can_sell?: boolean | null
+          created_at?: string
+          expiration_date?: string | null
+          id?: string
+          name?: string
+          notes?: string | null
+          provider?: string
+          requires_attribution?: boolean | null
+          status?: string
+          type?: string
+          updated_at?: string
+          usage_limitations?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
       plr_categories: {
         Row: {
