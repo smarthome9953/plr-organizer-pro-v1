@@ -5,11 +5,50 @@
 
 import type { PLRFile, FileWatchEvent, UpdateInfo, UpdateProgress } from '../../electron/shared/types';
 
+export interface ScanDirectoryOptions {
+  fileTypes?: string[];
+  maxDepth?: number;
+  includeSubfolders?: boolean;
+}
+
+export interface ScannedFile {
+  path: string;
+  name: string;
+  size: number;
+  type: string;
+}
+
+export interface OrganizationConfig {
+  baseFolder: string;
+  action: 'copy' | 'move';
+}
+
+export interface OrganizationResult {
+  success: boolean;
+  sourcePath: string;
+  destinationPath: string;
+  error?: string;
+}
+
+export interface FileToOrganize {
+  sourcePath: string;
+  niche: string;
+  subNiche?: string;
+}
+
 export interface ElectronAPI {
   // File System
   selectFolder: () => Promise<string | null>;
   readFile: (path: string) => Promise<{ success: boolean; content?: string; error?: string }>;
   getFileStat: (path: string) => Promise<{ success: boolean; stats?: any; error?: string }>;
+  
+  // Directory Scanning
+  scanDirectory: (path: string, options?: ScanDirectoryOptions) => Promise<ScannedFile[]>;
+  
+  // File Organization
+  organizeFiles: (files: FileToOrganize[], config: OrganizationConfig) => Promise<OrganizationResult[]>;
+  getDefaultOrganizationFolder: () => Promise<string>;
+  selectDestinationFolder: () => Promise<string | null>;
 
   // Folder Watching
   watchFolder: (path: string) => Promise<{ success: boolean; message?: string; error?: string }>;
@@ -31,6 +70,8 @@ export interface ElectronAPI {
   syncToLocal: (files: PLRFile[]) => Promise<{ success: boolean; count?: number; error?: string }>;
   getLocalData: (userId: string) => Promise<{ success: boolean; files?: PLRFile[]; error?: string }>;
   deleteLocalFile: (id: string) => Promise<{ success: boolean; deleted?: boolean; error?: string }>;
+  saveSetting: (key: string, value: string) => Promise<{ success: boolean; error?: string }>;
+  getSetting: (key: string) => Promise<{ success: boolean; value?: string; error?: string }>;
 
   // Auto-Updates
   checkForUpdates: () => Promise<{ success: boolean; updateInfo?: any; error?: string }>;
