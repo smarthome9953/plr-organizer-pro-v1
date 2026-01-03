@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 
 export interface UserSettings {
   plr_folder_path: string | null;
-  organization_mode: 'copy' | 'move';
+  organization_mode: 'copy' | 'move' | 'niche' | 'type' | 'date' | 'custom';
   auto_organize: boolean;
   create_niche_folders: boolean;
   create_subniche_folders: boolean;
@@ -13,7 +14,7 @@ export interface UserSettings {
 
 const DEFAULT_SETTINGS: UserSettings = {
   plr_folder_path: null,
-  organization_mode: 'copy',
+  organization_mode: 'niche',
   auto_organize: false,
   create_niche_folders: true,
   create_subniche_folders: true,
@@ -21,21 +22,53 @@ const DEFAULT_SETTINGS: UserSettings = {
   onboarding_completed: false,
 };
 
-const STORAGE_KEY = 'plr_user_settings';
+const LOCAL_STORAGE_KEY = 'plr_user_settings';
 
 export const useUserSettings = () => {
   const { user } = useAuth();
   const [settings, setSettings] = useState<UserSettings | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const getStorageKey = useCallback(() => {
-    return user ? `${STORAGE_KEY}_${user.id}` : STORAGE_KEY;
+  const getLocalStorageKey = useCallback(() => {
+    return user ? `${LOCAL_STORAGE_KEY}_${user.id}` : LOCAL_STORAGE_KEY;
   }, [user]);
 
-  const loadSettings = useCallback(() => {
+  // Load settings from database or localStorage
+  const loadSettings = useCallback(async () => {
     setIsLoading(true);
     try {
-      const stored = localStorage.getItem(getStorageKey());
+      if (user) {
+        // Try to load from database first
+        const { data, error } = await supabase
+          .from('user_settings')
+          .select('*')
+          .eq('user_id', user.id)
+          .maybeSingle();
+
+        if (error && error.code !== 'PGRST116') {
+          console.error('Error loading settings from database:', error);
+        }
+
+        if (data) {
+          const dbSettings: UserSettings = {
+            plr_folder_path: data.plr_folder_path,
+            organization_mode: data.organization_mode as UserSettings['organization_mode'],
+            auto_organize: data.auto_organize,
+            create_niche_folders: data.create_niche_folders,
+            create_subniche_folders: data.create_subniche_folders,
+            scan_subfolders: data.scan_subfolders,
+            onboarding_completed: data.onboarding_completed,
+          };
+          setSettings(dbSettings);
+          // Sync to localStorage as backup
+          localStorage.setItem(getLocalStorageKey(), JSON.stringify(dbSettings));
+          setIsLoading(false);
+          return;
+        }
+      }
+
+      // Fallback to localStorage
+      const stored = localStorage.getItem(getLocalStorageKey());
       if (stored) {
         setSettings(JSON.parse(stored));
       } else {
@@ -43,37 +76,69 @@ export const useUserSettings = () => {
       }
     } catch (err) {
       console.error('Error loading settings:', err);
-      setSettings(null);
+      // Fallback to localStorage on error
+      const stored = localStorage.getItem(getLocalStorageKey());
+      if (stored) {
+        setSettings(JSON.parse(stored));
+      } else {
+        setSettings(null);
+      }
     } finally {
       setIsLoading(false);
     }
-  }, [getStorageKey]);
+  }, [user, getLocalStorageKey]);
 
   useEffect(() => {
     loadSettings();
   }, [loadSettings]);
 
-  const saveSettings = useCallback((newSettings: UserSettings) => {
+  // Save settings to database and localStorage
+  const saveSettings = useCallback(async (newSettings: UserSettings): Promise<boolean> => {
     try {
-      localStorage.setItem(getStorageKey(), JSON.stringify(newSettings));
+      // Always save to localStorage first
+      localStorage.setItem(getLocalStorageKey(), JSON.stringify(newSettings));
       setSettings(newSettings);
+
+      // If user is logged in, save to database
+      if (user) {
+        const { error } = await supabase
+          .from('user_settings')
+          .upsert({
+            user_id: user.id,
+            plr_folder_path: newSettings.plr_folder_path,
+            organization_mode: newSettings.organization_mode,
+            auto_organize: newSettings.auto_organize,
+            create_niche_folders: newSettings.create_niche_folders,
+            create_subniche_folders: newSettings.create_subniche_folders,
+            scan_subfolders: newSettings.scan_subfolders,
+            onboarding_completed: newSettings.onboarding_completed,
+          }, {
+            onConflict: 'user_id'
+          });
+
+        if (error) {
+          console.error('Error saving settings to database:', error);
+          return false;
+        }
+      }
+
       return true;
     } catch (err) {
       console.error('Error saving settings:', err);
       return false;
     }
-  }, [getStorageKey]);
+  }, [user, getLocalStorageKey]);
 
-  const updateSettings = useCallback((updates: Partial<UserSettings>): UserSettings => {
+  const updateSettings = useCallback(async (updates: Partial<UserSettings>): Promise<UserSettings> => {
     const current = settings ?? DEFAULT_SETTINGS;
     const updated = { ...current, ...updates };
-    saveSettings(updated);
+    await saveSettings(updated);
     return updated;
   }, [settings, saveSettings]);
 
-  const initializeSettings = useCallback((initialSettings?: Partial<UserSettings>): UserSettings => {
+  const initializeSettings = useCallback(async (initialSettings?: Partial<UserSettings>): Promise<UserSettings> => {
     const newSettings = { ...DEFAULT_SETTINGS, ...initialSettings };
-    saveSettings(newSettings);
+    await saveSettings(newSettings);
     return newSettings;
   }, [saveSettings]);
 

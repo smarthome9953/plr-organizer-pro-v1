@@ -76,8 +76,8 @@ const Onboarding = () => {
     setLoading(true);
     
     try {
-      // Save user settings
-      initializeSettings({
+      // Save user settings to database
+      await initializeSettings({
         plr_folder_path: plrFolderPath,
         organization_mode: organizationMode,
         auto_organize: autoOrganize,
