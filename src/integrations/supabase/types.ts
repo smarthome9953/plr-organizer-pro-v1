@@ -330,6 +330,48 @@ export type Database = {
         }
         Relationships: []
       }
+      user_settings: {
+        Row: {
+          auto_organize: boolean
+          create_niche_folders: boolean
+          create_subniche_folders: boolean
+          created_at: string
+          id: string
+          onboarding_completed: boolean
+          organization_mode: string
+          plr_folder_path: string | null
+          scan_subfolders: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          auto_organize?: boolean
+          create_niche_folders?: boolean
+          create_subniche_folders?: boolean
+          created_at?: string
+          id?: string
+          onboarding_completed?: boolean
+          organization_mode?: string
+          plr_folder_path?: string | null
+          scan_subfolders?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          auto_organize?: boolean
+          create_niche_folders?: boolean
+          create_subniche_folders?: boolean
+          created_at?: string
+          id?: string
+          onboarding_completed?: boolean
+          organization_mode?: string
+          plr_folder_path?: string | null
+          scan_subfolders?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
