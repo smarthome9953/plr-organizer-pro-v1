@@ -37,8 +37,19 @@ const Auth = () => {
   // Redirect if user is already logged in
   useEffect(() => {
     if (user && !loading) {
-      const from = location.state?.from?.pathname || '/dashboard';
-      navigate(from, { replace: true });
+      // Check if user has completed onboarding
+      const onboardingCompleted = localStorage.getItem('onboarding_completed');
+      const settingsKey = `plr_user_settings_${user.id}`;
+      const userSettings = localStorage.getItem(settingsKey);
+      const hasCompletedSetup = onboardingCompleted === 'true' || 
+        (userSettings && JSON.parse(userSettings).onboarding_completed);
+      
+      if (!hasCompletedSetup) {
+        navigate('/onboarding', { replace: true });
+      } else {
+        const from = location.state?.from?.pathname || '/dashboard';
+        navigate(from, { replace: true });
+      }
     }
   }, [user, loading, navigate, location]);
 

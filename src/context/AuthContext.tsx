@@ -39,15 +39,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         // Only show notifications and redirect for intentional sign-in/sign-out events
         // And only after initial loading is complete
         if (initialized) {
-          if (event === 'SIGNED_IN') {
+          if (event === 'SIGNED_IN' && session?.user) {
             toast("Signed in", {
               description: "You have successfully logged in",
             });
             
-            // Only redirect if not already on dashboard
+            // Check if user has completed onboarding
             if (location.pathname === '/auth') {
-              // Use replace instead of push to prevent back button issues
-              navigate('/dashboard', { replace: true });
+              const onboardingCompleted = localStorage.getItem('onboarding_completed');
+              const settingsKey = `plr_user_settings_${session.user.id}`;
+              const userSettings = localStorage.getItem(settingsKey);
+              const hasCompletedSetup = onboardingCompleted === 'true' || 
+                (userSettings && JSON.parse(userSettings).onboarding_completed);
+              
+              if (!hasCompletedSetup) {
+                navigate('/onboarding', { replace: true });
+              } else {
+                navigate('/dashboard', { replace: true });
+              }
             }
           } else if (event === 'SIGNED_OUT') {
             toast("Signed out", {
