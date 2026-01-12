@@ -26,6 +26,7 @@ import Blog from '@/pages/Blog';
 import BlogPost from '@/pages/BlogPost';
 import BlogCategory from '@/pages/BlogCategory';
 import Landing from '@/pages/Landing';
+import LandingHome from '@/pages/LandingHome';
 import GdprCompliance from '@/pages/GdprCompliance';
 import CookiePolicy from '@/pages/CookiePolicy';
 import PrivacyPolicy from '@/pages/PrivacyPolicy';
@@ -96,6 +97,7 @@ function App() {
                   <Routes>
                  {/* Public Routes */}
                 <Route path="/" element={<Index />} />
+                <Route path="/home" element={<LandingHome />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/auth" element={<Auth />} />
