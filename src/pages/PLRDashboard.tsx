@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { Folder, FileText, Bookmark, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { WebAppBanner } from '@/components/dashboard/WebAppBanner';
+
 
 type CategoryStat = {
   category: string | null;
@@ -100,19 +100,9 @@ const PLRDashboard = () => {
       <Header />
       
       <main className="flex-grow container mx-auto px-4 py-8">
-        {/* Web App Banner - Shows "Download Desktop App" when accessing from browser */}
-        <WebAppBanner />
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Your PLR Library</h1>
           <div className="space-x-2">
-            <Button 
-              variant="outline" 
-              onClick={() => navigate('/scan')}
-              className="flex items-center"
-            >
-              <Folder className="mr-2 h-4 w-4" />
-              Scan PLR Files
-            </Button>
             <Button 
               variant="default"
               onClick={() => navigate('/plr-browser')}
@@ -155,9 +145,6 @@ const PLRDashboard = () => {
               <CardTitle className="text-lg">Quick Actions</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-              <Button variant="outline" className="w-full justify-start" onClick={() => navigate('/scan')}>
-                <Folder className="mr-2 h-4 w-4" /> Scan New Content
-              </Button>
               <Button variant="outline" className="w-full justify-start" onClick={() => navigate('/plr-categories')}>
                 <Bookmark className="mr-2 h-4 w-4" /> Manage Categories
               </Button>
@@ -207,8 +194,8 @@ const PLRDashboard = () => {
                   <p className="mb-6 text-muted-foreground">
                     Start by scanning your PLR content to organize and categorize your digital assets.
                   </p>
-                  <Button onClick={() => navigate('/scan')}>
-                    Scan PLR Content Now
+                  <Button onClick={() => navigate('/plr-browser')}>
+                    Browse PLR Content
                   </Button>
                 </div>
               </CardContent>

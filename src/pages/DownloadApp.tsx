@@ -191,8 +191,8 @@ const DownloadApp = () => {
             <div className="container mx-auto px-4 max-w-6xl">
               <div className="text-center mb-12">
                 <h2 className="text-3xl font-bold mb-4">Desktop-Exclusive Features</h2>
-                <p className="text-muted-foreground max-w-2xl mx-auto">
-                  Get powerful features not available in the web version
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                  Powerful features built into the desktop application
                 </p>
               </div>
 
@@ -214,85 +214,6 @@ const DownloadApp = () => {
             </div>
           </section>
 
-          {/* Desktop vs Web Comparison */}
-          <section className="py-20">
-            <div className="container mx-auto px-4 max-w-4xl">
-              <h2 className="text-3xl font-bold text-center mb-12">Desktop vs Web App</h2>
-              
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b">
-                      <th className="text-left py-4 px-4">Feature</th>
-                      <th className="text-center py-4 px-4">
-                        <Monitor className="h-5 w-5 mx-auto mb-1" />
-                        Desktop
-                      </th>
-                      <th className="text-center py-4 px-4">
-                        <Smartphone className="h-5 w-5 mx-auto mb-1" />
-                        Web
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y">
-                    <tr>
-                      <td className="py-4 px-4">Local file scanning</td>
-                      <td className="text-center py-4 px-4">
-                        <CheckCircle2 className="h-5 w-5 text-green-500 mx-auto" />
-                      </td>
-                      <td className="text-center py-4 px-4">-</td>
-                    </tr>
-                    <tr>
-                      <td className="py-4 px-4">Offline access</td>
-                      <td className="text-center py-4 px-4">
-                        <CheckCircle2 className="h-5 w-5 text-green-500 mx-auto" />
-                      </td>
-                      <td className="text-center py-4 px-4">-</td>
-                    </tr>
-                    <tr>
-                      <td className="py-4 px-4">Auto-updates</td>
-                      <td className="text-center py-4 px-4">
-                        <CheckCircle2 className="h-5 w-5 text-green-500 mx-auto" />
-                      </td>
-                      <td className="text-center py-4 px-4">
-                        <CheckCircle2 className="h-5 w-5 text-green-500 mx-auto" />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="py-4 px-4">Folder watching</td>
-                      <td className="text-center py-4 px-4">
-                        <CheckCircle2 className="h-5 w-5 text-green-500 mx-auto" />
-                      </td>
-                      <td className="text-center py-4 px-4">-</td>
-                    </tr>
-                    <tr>
-                      <td className="py-4 px-4">Native notifications</td>
-                      <td className="text-center py-4 px-4">
-                        <CheckCircle2 className="h-5 w-5 text-green-500 mx-auto" />
-                      </td>
-                      <td className="text-center py-4 px-4">-</td>
-                    </tr>
-                    <tr>
-                      <td className="py-4 px-4">Cloud sync</td>
-                      <td className="text-center py-4 px-4">
-                        <CheckCircle2 className="h-5 w-5 text-green-500 mx-auto" />
-                      </td>
-                      <td className="text-center py-4 px-4">
-                        <CheckCircle2 className="h-5 w-5 text-green-500 mx-auto" />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="py-4 px-4">Access from anywhere</td>
-                      <td className="text-center py-4 px-4">-</td>
-                      <td className="text-center py-4 px-4">
-                        <CheckCircle2 className="h-5 w-5 text-green-500 mx-auto" />
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </section>
 
           {/* System Requirements */}
           {detectedOS !== 'unknown' && (
@@ -407,14 +328,6 @@ const DownloadApp = () => {
                   </CardContent>
                 </Card>
 
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">Can I use both web and desktop versions?</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground">Absolutely! Your data syncs between both versions, so you can use whichever is most convenient.</p>
-                  </CardContent>
-                </Card>
               </div>
             </div>
           </section>

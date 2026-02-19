@@ -26,7 +26,7 @@ import {
 const WARRIOR_PLUS_URL = "https://warriorplus.com/plr-organizer-pro-placeholder";
 
 const tools = [
-  { name: "PLR Scanner", description: "Scan and organize your entire PLR library", icon: Scan, href: "/plr-scanner-tool" },
+  
   { name: "Content Spinner", description: "Make PLR content 100% unique", icon: RefreshCw, href: "/content-spinner-tool" },
   { name: "Uniqueness Meter", description: "Verify content originality", icon: PercentSquare, href: "/uniqueness-meter-tool" },
   { name: "SEO Analyzer", description: "Optimize PLR for search engines", icon: FileSearch, href: "/seo-analyzer-tool" },
