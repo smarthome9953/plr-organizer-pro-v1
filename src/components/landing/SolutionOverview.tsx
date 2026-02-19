@@ -23,8 +23,8 @@ const SolutionOverview = ({ featuresRef }: { featuresRef: React.RefObject<HTMLDi
     },
     {
       icon: <Cloud className="h-6 w-6 text-purple-600" />,
-      title: "Cross-Device Access",
-      description: "Seamless sync between desktop and web interfaces with mobile optimization for managing your PLR library from anywhere"
+      title: "Offline Access",
+      description: "Work with your PLR library even without internet. All data stored locally with automatic backup capabilities"
     }
   ];
 

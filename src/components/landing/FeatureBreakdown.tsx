@@ -28,17 +28,6 @@ const FeatureBreakdown = () => {
       ]
     },
     {
-      title: "Usage History & Deployment Tracking",
-      description: "Know exactly where and when you've used each piece of PLR content across your business with our digital content organizer to prevent duplication and maximize asset utilization.",
-      image: "plr-organizer-usage-tracking.webp",
-      features: [
-        "Publication history log with timestamps and platforms",
-        "Website/platform tracking across all your digital properties",
-        "Modification records showing how content was adapted",
-        "Audience exposure metrics to prevent content fatigue"
-      ]
-    },
-    {
       title: "Advanced Search Across All PLR Content",
       description: "Find exactly what you need in seconds with our powerful PLR content management search engine that indexes the full text of all your private label rights assets.",
       image: "plr-organizer-advanced-search.webp",

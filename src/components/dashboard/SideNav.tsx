@@ -70,14 +70,6 @@ const SideNav: React.FC = () => {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive('/scan')}>
-                  <Link to="/scan">
-                    <FileScan className="mr-2 h-4 w-4" />
-                    <span>PLR Scanner</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={isActive('/blog-management')}>
                   <Link to="/blog-management">
                     <BookOpen className="mr-2 h-4 w-4" />

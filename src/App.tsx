@@ -65,7 +65,7 @@ import PLRSoftwareGuides from '@/pages/PLRSoftwareGuides';
 import PLRSoftwareFAQ from '@/pages/PLRSoftwareFAQ';
 
 // Protected Routes
-import Scan from '@/pages/Scan';
+
 import PLRDashboard from '@/pages/PLRDashboard';
 import PLRBrowser from '@/pages/PLRBrowser';
 import PLRCategories from '@/pages/PLRCategories';
@@ -147,7 +147,7 @@ function App() {
 
                 {/* Protected Routes */}
                 <Route element={<ProtectedRoute />}>
-                  <Route path="/scan" element={<Scan />} />
+                  
                   <Route path="/dashboard" element={<PLRDashboard />} />
                   <Route path="/plr-dashboard" element={<PLRDashboard />} />
                   <Route path="/plr-browser" element={<PLRBrowser />} />

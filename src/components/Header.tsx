@@ -39,14 +39,8 @@ export default function Header({
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
-                  <Link to="/plr-scanner" className={`${navigationMenuTriggerStyle()} text-lg`}>
-                    PLR Scanner
-                  </Link>
-                </NavigationMenuItem>
-                
-                <NavigationMenuItem>
-                  <Link to="/scan" className={`${navigationMenuTriggerStyle()} text-lg`}>
-                    Scan & Organize
+                  <Link to="/download" className={`${navigationMenuTriggerStyle()} text-lg`}>
+                    Download
                   </Link>
                 </NavigationMenuItem>
                 
@@ -99,19 +93,6 @@ export default function Header({
                             </div>
                             <p className="line-clamp-2 text-sm leading-snug text-muted-foreground mt-1">
                               Optimize PLR content for search engines
-                            </p>
-                          </Link>
-                        </NavigationMenuLink>
-                      </li>
-                      <li>
-                        <NavigationMenuLink asChild>
-                          <Link to="/plr-scanner" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
-                            <div className="flex items-center text-sm font-medium leading-none">
-                              <FileScan className="mr-2 h-4 w-4" />
-                              PLR Scanner
-                            </div>
-                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground mt-1">
-                              Find and organize all your PLR content in minutes
                             </p>
                           </Link>
                         </NavigationMenuLink>
