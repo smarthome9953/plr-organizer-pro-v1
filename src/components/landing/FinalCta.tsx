@@ -6,7 +6,7 @@ import { Shield, Clock, Users } from 'lucide-react';
 
 const FinalCta = () => {
   return (
-    <section className="py-16 md:py-24 bg-purple-600 text-primary-foreground">
+    <section className="py-16 md:py-24 bg-primary text-primary-foreground">
       <div className="container px-4 md:px-6 text-center">
         <h2 className="text-3xl font-bold mb-4">Start Organizing Your PLR Content Library Today</h2>
         <p className="mb-6 max-w-[600px] mx-auto opacity-90">
@@ -40,7 +40,7 @@ const FinalCta = () => {
         </div>
 
         <div className="mt-12">
-          <Button variant="outline" className="bg-purple-600 hover:bg-purple-700 border-primary-foreground text-white" asChild>
+          <Button variant="outline" className="bg-primary hover:bg-primary/90 border-primary-foreground text-primary-foreground" asChild>
             <Link to="/resources/plr-software-faq">
               Download Our Free PLR Organization Checklist
             </Link>
