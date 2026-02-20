@@ -14,7 +14,7 @@ import { Toaster } from '@/components/ui/toaster';
 import ProtectedRoute from '@/components/ProtectedRoute';
 
 // Public Pages
-import Index from '@/pages/Index';
+import Index from '@/pages/LandingHome';
 import About from '@/pages/About';
 import Contact from '@/pages/Contact';
 import Auth from '@/pages/Auth';
@@ -26,7 +26,6 @@ import Blog from '@/pages/Blog';
 import BlogPost from '@/pages/BlogPost';
 import BlogCategory from '@/pages/BlogCategory';
 import Landing from '@/pages/Landing';
-import LandingHome from '@/pages/LandingHome';
 import GdprCompliance from '@/pages/GdprCompliance';
 import CookiePolicy from '@/pages/CookiePolicy';
 import PrivacyPolicy from '@/pages/PrivacyPolicy';
@@ -70,7 +69,7 @@ import PLRDashboard from '@/pages/PLRDashboard';
 import PLRBrowser from '@/pages/PLRBrowser';
 import PLRCategories from '@/pages/PLRCategories';
 import PLRLibraryPage from '@/pages/PLRLibraryPage';
-import PLRScan from '@/pages/PLRScan';
+
 import BlogManagementPage from '@/pages/BlogManagementPage';
 import LicenseTracker from '@/pages/LicenseTracker';
 import LicenseTrackerApp from '@/pages/LicenseTrackerApp';
@@ -97,7 +96,7 @@ function App() {
                   <Routes>
                  {/* Public Routes */}
                 <Route path="/" element={<Index />} />
-                <Route path="/home" element={<LandingHome />} />
+                <Route path="/home" element={<Index />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/auth" element={<Auth />} />
@@ -153,7 +152,7 @@ function App() {
                   <Route path="/plr-browser" element={<PLRBrowser />} />
                   <Route path="/plr-categories" element={<PLRCategories />} />
                   <Route path="/plr-library" element={<PLRLibraryPage />} />
-                  <Route path="/plr-scan" element={<PLRScan />} />
+                  
                   <Route path="/blog-management" element={<BlogManagementPage />} />
                   <Route path="/license-tracker" element={<LicenseTracker />} />
                   <Route path="/license-tracker/app" element={<LicenseTrackerApp />} />

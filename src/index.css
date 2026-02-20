@@ -6,24 +6,24 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    --foreground: 213 52% 15%;
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
+    --card-foreground: 213 52% 15%;
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 262.1 83.3% 57.8%;
-    --primary-foreground: 210 20% 98%;
-    --secondary: 220 14.3% 95.9%;
-    --secondary-foreground: 220.9 39.3% 11%;
+    --popover-foreground: 213 52% 15%;
+    --primary: 0 72% 51%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 213 52% 24%;
+    --secondary-foreground: 0 0% 98%;
     --muted: 220 14.3% 95.9%;
-    --muted-foreground: 220 8.9% 46.1%;
+    --muted-foreground: 220 9% 46%;
     --accent: 220 14.3% 95.9%;
-    --accent-foreground: 220.9 39.3% 11%;
+    --accent-foreground: 213 52% 24%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 20% 98%;
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 262.1 83.3% 57.8%;
+    --ring: 0 72% 51%;
     --radius: 0.75rem;
     
     /* Status colors */
@@ -33,36 +33,36 @@
   }
 
   .dark {
-    --background: 240 10% 3.9%;
+    --background: 213 52% 7%;
     --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
+    --card: 213 52% 10%;
     --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
+    --popover: 213 52% 10%;
     --popover-foreground: 0 0% 98%;
-    --primary: 263.4 70% 60%;
-    --primary-foreground: 210 20% 98%;
-    --secondary: 215 27.9% 16.9%;
-    --secondary-foreground: 210 20% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 263.4 70% 15%;
+    --primary: 0 72% 55%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 213 40% 20%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 213 30% 15%;
+    --muted-foreground: 220 9% 65%;
+    --accent: 0 72% 18%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 20% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 263.4 70% 50.4%;
+    --border: 213 30% 18%;
+    --input: 213 30% 18%;
+    --ring: 0 72% 55%;
 
-    /* Enhanced purple accents for dark mode */
-    --purple-accent-1: 263.4 70% 75%;
-    --purple-accent-2: 263.4 70% 55%;
-    --purple-accent-3: 263.4 70% 25%;
-    --purple-accent-4: 263.4 70% 85%;
+    /* Brand accent variables for dark mode */
+    --brand-accent-1: 0 72% 70%;
+    --brand-accent-2: 0 72% 55%;
+    --brand-accent-3: 213 52% 24%;
+    --brand-accent-4: 0 72% 80%;
     
-    /* Additional purple accents for FAQ page */
-    --purple-accent-5: 263.4 70% 20%;
-    --purple-accent-6: 263.4 70% 90%;
-    --purple-accent-7: 263.4 40% 40%;
+    /* Additional accents for dark mode */
+    --brand-accent-5: 213 52% 18%;
+    --brand-accent-6: 0 72% 85%;
+    --brand-accent-7: 220 9% 40%;
   }
 }
 
@@ -84,11 +84,11 @@
   }
   
   .dark .text-primary {
-    color: hsla(var(--purple-accent-1), 1);
+    color: hsla(var(--brand-accent-1), 1);
   }
   
   .dark .hover\:border-primary\/20:hover {
-    border-color: hsla(var(--purple-accent-1), 0.4);
+    border-color: hsla(var(--brand-accent-1), 0.4);
   }
   
   .dark .shadow-sm {
@@ -97,42 +97,42 @@
   
   /* Enhanced buttons in dark mode */
   .dark .bg-primary {
-    background-color: hsla(var(--purple-accent-2), 1);
+    background-color: hsla(var(--brand-accent-2), 1);
   }
   
   .dark .bg-primary:hover {
-    background-color: hsla(var(--purple-accent-1), 1);
+    background-color: hsla(var(--brand-accent-1), 1);
   }
   
   .dark button.bg-secondary:hover {
-    background-color: hsla(var(--purple-accent-3), 0.6);
+    background-color: hsla(var(--brand-accent-3), 0.6);
   }
   
   .dark .border-primary-foreground {
-    border-color: hsla(var(--purple-accent-4), 0.7);
+    border-color: hsla(var(--brand-accent-4), 0.7);
   }
   
   /* Enhanced FAQ page styling for dark mode */
   .dark .accordion-item {
-    border-color: hsla(var(--purple-accent-3), 0.5);
+    border-color: hsla(var(--brand-accent-3), 0.5);
   }
   
   .dark .accordion-trigger:hover {
-    color: hsla(var(--purple-accent-1), 1);
+    color: hsla(var(--brand-accent-1), 1);
   }
   
   .dark .pro-tip {
-    background-color: hsla(var(--purple-accent-5), 0.3);
-    border-color: hsla(var(--purple-accent-1), 0.3);
+    background-color: hsla(var(--brand-accent-5), 0.3);
+    border-color: hsla(var(--brand-accent-1), 0.3);
   }
   
   .dark .cta-section {
-    background-color: hsla(var(--purple-accent-3), 0.7);
+    background-color: hsla(var(--brand-accent-3), 0.7);
   }
   
   .dark .bg-gradient-to-b.from-primary\/10 {
     background-image: linear-gradient(to bottom, 
-      hsla(var(--purple-accent-2), 0.15) 0%, 
+      hsla(var(--brand-accent-2), 0.15) 0%, 
       hsla(var(--background), 1) 100%
     );
   }
@@ -162,11 +162,11 @@
 
 /* Enhanced testimonial styling */
 .testimonial-card {
-  @apply transition-all duration-300 hover:border-primary hover:shadow-md dark:hover:border-purple-500;
+  @apply transition-all duration-300 hover:border-primary hover:shadow-md dark:hover:border-primary;
 }
 
 .dark .testimonial-card:hover {
-  box-shadow: 0 0 20px hsla(var(--purple-accent-1), 0.2);
+  box-shadow: 0 0 20px hsla(var(--brand-accent-1), 0.2);
 }
 
 /* Enhanced dashboard card effects */
@@ -175,14 +175,14 @@
 }
 
 .dark .dashboard-card:hover {
-  border-color: hsla(var(--purple-accent-1), 0.5);
-  box-shadow: 0 0 15px hsla(var(--purple-accent-3), 0.3);
+  border-color: hsla(var(--brand-accent-1), 0.5);
+  box-shadow: 0 0 15px hsla(var(--brand-accent-3), 0.3);
 }
 
 /* Enhanced accordion styling for FAQ page */
 .dark .accordion-content-inner {
-  background-color: hsla(var(--purple-accent-5), 0.1);
-  border-left: 3px solid hsla(var(--purple-accent-2), 0.5);
+  background-color: hsla(var(--brand-accent-5), 0.1);
+  border-left: 3px solid hsla(var(--brand-accent-2), 0.5);
   padding-left: 1rem;
 }
 
@@ -209,43 +209,35 @@
 
 /* Dark mode enhancements */
 .dark button.bg-primary {
-  background-color: hsla(var(--purple-accent-2), 1);
+  background-color: hsla(var(--brand-accent-2), 1);
 }
 
 .dark button.bg-primary:hover {
-  background-color: hsla(var(--purple-accent-1), 0.9);
+  background-color: hsla(var(--brand-accent-1), 0.9);
 }
 
 .dark .bg-card {
-  box-shadow: 0 0 10px hsla(var(--purple-accent-3), 0.1);
+  box-shadow: 0 0 10px hsla(var(--brand-accent-3), 0.1);
 }
 
-/* Additional purple accents for dark mode */
+/* Additional accents for dark mode */
 .dark .bg-muted {
-  background-color: hsla(var(--purple-accent-3), 0.1);
+  background-color: hsla(var(--brand-accent-3), 0.1);
 }
 
 .dark .border {
-  border-color: hsla(var(--purple-accent-3), 0.3);
+  border-color: hsla(var(--brand-accent-3), 0.3);
 }
 
 .dark a:hover {
-  color: hsla(var(--purple-accent-1), 1);
+  color: hsla(var(--brand-accent-1), 1);
 }
 
 /* Enhanced FAQ page styling */
 .dark .accordion-item[data-state="open"] {
-  border-color: hsla(var(--purple-accent-1), 0.5);
+  border-color: hsla(var(--brand-accent-1), 0.5);
 }
 
 .dark .accordion-trigger[data-state="open"] {
-  color: hsla(var(--purple-accent-1), 1);
-}
-
-.dark button.bg-purple-600 {
-  background-color: hsla(var(--purple-accent-2), 0.9);
-}
-
-.dark button.bg-purple-600:hover {
-  background-color: hsla(var(--purple-accent-1), 1);
+  color: hsla(var(--brand-accent-1), 1);
 }
