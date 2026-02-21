@@ -5,32 +5,32 @@ import { Search, Shield, FileText, Folder, Clock, TrendingUp } from 'lucide-reac
 const PainPointsSection = () => {
   const painPoints = [
     {
-      icon: <Search className="h-8 w-8 text-primary" />,
+      icon: <Search className="h-8 w-8 text-purple-600" />,
       title: "Lost in the Shuffle",
       description: "Hours wasted searching for specific PLR assets buried in disorganized folders. Our digital content organizer's intelligent search indexes the full text of all your content for instant retrieval."
     },
     {
-      icon: <Shield className="h-8 w-8 text-primary" />,
+      icon: <Shield className="h-8 w-8 text-purple-600" />,
       title: "Usage Rights Confusion",
       description: "Unclear PLR usage rights and limitations leading to potential legal issues. Our PLR tracking software automatically extracts and monitors license details for every asset in your library."
     },
     {
-      icon: <FileText className="h-8 w-8 text-primary" />,
+      icon: <FileText className="h-8 w-8 text-purple-600" />,
       title: "Content Duplication",
       description: "Accidentally purchasing duplicate PLR products or publishing the same content multiple times. Our system identifies duplicates and tracks where you've already deployed each piece across all your platforms."
     },
     {
-      icon: <Folder className="h-8 w-8 text-primary" />,
+      icon: <Folder className="h-8 w-8 text-purple-600" />,
       title: "Multi-Device Chaos",
       description: "Disorganized folders spread across multiple devices with no central system. Our PLR content management solution synchronizes your entire library across desktop and web interfaces for seamless access."
     },
     {
-      icon: <Clock className="h-8 w-8 text-primary" />,
+      icon: <Clock className="h-8 w-8 text-purple-600" />,
       title: "Deployment Amnesia",
       description: "Forgetting where you've already used specific PLR content in your business. Our deployment tracker creates a complete history for each piece, preventing accidental reuse across your projects."
     },
     {
-      icon: <TrendingUp className="h-8 w-8 text-primary" />,
+      icon: <TrendingUp className="h-8 w-8 text-purple-600" />,
       title: "ROI Mystery",
       description: "Unable to track which PLR investments are actually paying off. Our analytics feature calculates return on investment for each PLR purchase based on your actual usage and revenue data."
     }

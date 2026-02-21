@@ -161,8 +161,8 @@ const DashboardOverview = () => {
         </TabsContent>
       
         <TabsContent value="analytics" className="space-y-4">
-          <Alert className="bg-primary/10 border-primary/20">
-            <InfoIcon className="h-4 w-4 text-primary" />
+          <Alert className="bg-purple-600/10 border-purple-600/20">
+            <InfoIcon className="h-4 w-4 text-purple-600" />
             <AlertTitle>Analytics Dashboard</AlertTitle>
             <AlertDescription>
               Detailed analytics are being loaded. Check back in a few moments.
@@ -171,8 +171,8 @@ const DashboardOverview = () => {
         </TabsContent>
         
         <TabsContent value="reports" className="space-y-4">
-          <Alert className="bg-primary/10 border-primary/20">
-            <InfoIcon className="h-4 w-4 text-primary" />
+          <Alert className="bg-purple-600/10 border-purple-600/20">
+            <InfoIcon className="h-4 w-4 text-purple-600" />
             <AlertTitle>Report Generation</AlertTitle>
             <AlertDescription>
               Reports can be exported as CSV or PDF. Select a date range to generate custom reports.

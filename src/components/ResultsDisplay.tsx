@@ -234,7 +234,7 @@ const ResultsDisplay = () => {
                   </Badge>
                 )}
                 {selectedResult.name.toLowerCase().includes('plugin') && (
-                  <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
+                  <Badge variant="outline" className="bg-purple-500/10 text-purple-600 border-purple-200">
                     <Tag className="h-3 w-3 mr-1" />
                     Plugins & Tools
                   </Badge>
